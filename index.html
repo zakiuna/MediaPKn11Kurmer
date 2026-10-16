@@ -20,8 +20,9 @@
     background:rgba(0,0,0,0.3); backdrop-filter:blur(10px);
     border-bottom:1px solid rgba(255,255,255,0.1); z-index:10;
   }
-  .header h1 { font-size:14px; font-weight:600; color:#ffd700; letter-spacing:0.5px; }
-  .stats { display:flex; gap:8px; font-size:11px; }
+  .header h1 { font-size:13px; font-weight:600; color:#ffd700; letter-spacing:0.3px; }
+  .header .student-info { font-size:9px; color:#aaa; display:block; }
+  .stats { display:flex; gap:6px; font-size:10px; }
   .stat-badge {
     background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.4);
     padding:4px 8px; border-radius:12px; color:#ffd700; font-weight:600; cursor:pointer;
@@ -31,17 +32,36 @@
   .screen.active { display:block; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-  .title-main { text-align:center; margin:30px 0 20px; font-size:22px; font-weight:700; color:#fff; text-shadow:0 0 20px rgba(255,215,0,0.5); }
-  .title-sub { text-align:center; font-size:12px; color:#aaa; margin-bottom:30px; }
+  /* FORM SISWA */
+  .form-box {
+    background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,100,100,0.08));
+    border:2px solid rgba(255,215,0,0.4); border-radius:16px;
+    padding:24px; margin-top:30px;
+  }
+  .form-logo { font-size:60px; text-align:center; margin-bottom:16px; }
+  .form-title { text-align:center; font-size:20px; font-weight:700; color:#ffd700; margin-bottom:6px; }
+  .form-sub { text-align:center; font-size:11px; color:#aaa; margin-bottom:24px; }
+  .form-group { margin-bottom:16px; }
+  .form-label { font-size:12px; color:#ffd700; margin-bottom:6px; display:block; font-weight:600; }
+  .form-input {
+    width:100%; padding:12px 14px; background:rgba(255,255,255,0.08);
+    border:1.5px solid rgba(255,255,255,0.2); border-radius:10px;
+    color:#fff; font-size:14px; font-family:inherit; outline:none; transition:all 0.3s;
+  }
+  .form-input:focus { border-color:#ffd700; background:rgba(255,215,0,0.08); }
+  .form-input::placeholder { color:#666; }
+
+  .title-main { text-align:center; margin:20px 0 20px; font-size:22px; font-weight:700; color:#fff; text-shadow:0 0 20px rgba(255,215,0,0.5); }
+  .title-sub { text-align:center; font-size:12px; color:#aaa; margin-bottom:20px; }
   .semester-card {
     background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,100,100,0.1));
     border:2px solid rgba(255,215,0,0.4); border-radius:16px;
-    padding:24px; margin-bottom:16px; cursor:pointer; transition:all 0.3s; text-align:center;
+    padding:20px; margin-bottom:14px; cursor:pointer; transition:all 0.3s; text-align:center;
   }
   .semester-card:active { transform:scale(0.97); }
   .semester-card h2 { font-size:18px; margin-bottom:8px; color:#ffd700; }
   .semester-card p { font-size:12px; color:#bbb; }
-  .semester-icon { font-size:40px; margin-bottom:12px; }
+  .semester-icon { font-size:40px; margin-bottom:10px; }
 
   .level-map { padding:10px 0; }
   .level-item {
@@ -85,12 +105,32 @@
     width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer;
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
-  .material-title { font-size:14px; font-weight:600; color:#ffd700; }
+  .material-title { font-size:13px; font-weight:600; color:#ffd700; line-height:1.3; }
   .material-content { font-size:13px; line-height:1.7; color:#ddd; }
   .material-content h3 { font-size:14px; color:#ffd700; margin:16px 0 8px; padding-left:8px; border-left:3px solid #ffd700; }
   .material-content p { margin-bottom:10px; text-align:justify; }
   .material-content ul { margin-left:18px; margin-bottom:10px; }
   .material-content li { margin-bottom:6px; }
+
+  .section-box {
+    border-radius:12px; padding:14px; margin:16px 0;
+    border-left:4px solid;
+  }
+  .box-contoh { background:rgba(0,176,255,0.08); border-color:#00b0ff; }
+  .box-contoh .box-title { color:#4fc3f7; }
+  .box-rangkuman { background:rgba(0,230,118,0.08); border-color:#00e676; }
+  .box-rangkuman .box-title { color:#00e676; }
+  .box-refleksi { background:rgba(255,215,0,0.08); border-color:#ffd700; }
+  .box-refleksi .box-title { color:#ffd700; }
+  .box-title {
+    font-size:12px; font-weight:700; margin-bottom:10px;
+    text-transform:uppercase; letter-spacing:0.5px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .box-contoh .box-body, .box-rangkuman .box-body { font-size:12px; line-height:1.6; color:#ccc; }
+  .box-refleksi .box-body { font-size:12px; line-height:1.7; color:#eee; font-style:italic; }
+  .box-refleksi .box-body::before { content:'"'; color:#ffd700; font-size:16px; margin-right:2px; }
+  .box-refleksi .box-body::after { content:'"'; color:#ffd700; font-size:16px; margin-left:2px; }
 
   .btn-primary {
     width:100%; padding:14px; background:linear-gradient(135deg,#ffd700,#ff8c00);
@@ -127,7 +167,7 @@
     display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex-shrink:0;
   }
 
-  .result-box { text-align:center; padding:30px 20px; }
+  .result-box { text-align:center; padding:20px 10px; }
   .result-icon { font-size:60px; margin-bottom:16px; }
   .result-title { font-size:20px; font-weight:700; margin-bottom:8px; }
   .result-text { font-size:13px; color:#bbb; margin-bottom:20px; }
@@ -181,20 +221,72 @@
     margin-bottom:14px; line-height:1.5;
   }
   .info-banner b { color:#fff; }
+
+  /* REKAP NILAI */
+  .rekap-table {
+    width:100%; border-collapse:collapse; font-size:11px; margin-top:10px;
+    background:rgba(255,255,255,0.03); border-radius:10px; overflow:hidden;
+  }
+  .rekap-table th {
+    background:rgba(255,215,0,0.15); color:#ffd700; padding:10px 6px;
+    text-align:left; font-weight:700; font-size:10px; text-transform:uppercase;
+  }
+  .rekap-table td { padding:10px 6px; border-top:1px solid rgba(255,255,255,0.08); color:#ddd; }
+  .rekap-table tr:not(:first-child):hover { background:rgba(255,255,255,0.05); }
+  .rekap-table .score-cell { font-weight:700; }
+  .rekap-table .score-good { color:#00e676; }
+  .rekap-table .score-mid { color:#ffd700; }
+  .rekap-table .score-low { color:#ff5252; }
+  .rekap-summary {
+    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0;
+  }
+  .rekap-stat {
+    background:rgba(255,255,255,0.05); border-radius:10px; padding:12px; text-align:center;
+  }
+  .rekap-stat .val { font-size:22px; font-weight:800; color:#ffd700; }
+  .rekap-stat .lbl { font-size:10px; color:#aaa; margin-top:2px; }
+  .rekap-empty { text-align:center; padding:40px 20px; color:#666; font-size:12px; }
+  .rekap-badge-status {
+    display:inline-block; padding:2px 8px; border-radius:8px; font-size:9px; font-weight:700;
+  }
+  .badge-yes { background:rgba(0,230,118,0.2); color:#00e676; }
+  .badge-no { background:rgba(255,82,82,0.15); color:#ff5252; }
 </style>
 </head>
 <body>
 <div id="app">
   <div class="header">
-    <h1>🎓 PKn Kelas 11</h1>
+    <div>
+      <h1>🎓 PKn Kelas 11</h1>
+      <span class="student-info" id="headerStudent">-</span>
+    </div>
     <div class="stats">
-      <div class="stat-badge" id="xpDisplay">⚡ 0 XP</div>
+      <div class="stat-badge" id="xpDisplay">⚡ 0</div>
       <div class="stat-badge" id="badgeDisplay">🏅 0</div>
+      <div class="stat-badge" id="rekapBtn">📊</div>
     </div>
   </div>
 
-  <!-- SEMESTER -->
-  <div class="screen active" id="screenSemester">
+  <!-- ====== LOGIN SISWA ====== -->
+  <div class="screen active" id="screenLogin">
+    <div class="form-box">
+      <div class="form-logo">🎓</div>
+      <div class="form-title">PKn Kelas 11</div>
+      <div class="form-sub">Kurikulum Merdeka • Gamifikasi Pembelajaran</div>
+      <div class="form-group">
+        <label class="form-label">👤 Nama Siswa</label>
+        <input type="text" class="form-input" id="inputNama" placeholder="Masukkan nama lengkap" maxlength="40" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label class="form-label">🏫 Kelas</label>
+        <input type="text" class="form-input" id="inputKelas" placeholder="Contoh: XI IPA 1" maxlength="20" autocomplete="off">
+      </div>
+      <button class="btn-primary" onclick="handleLogin()">🚀 Mulai Belajar</button>
+    </div>
+  </div>
+
+  <!-- ====== SEMESTER ====== -->
+  <div class="screen" id="screenSemester">
     <div class="title-main">Pilih Semester</div>
     <div class="title-sub">Kurikulum Merdeka - Kelas 11</div>
     <div class="semester-card" onclick="openSemester(1)">
@@ -209,19 +301,19 @@
     </div>
   </div>
 
-  <!-- LEVELS -->
+  <!-- ====== LEVELS ====== -->
   <div class="screen" id="screenLevels">
     <div class="material-header">
       <button class="back-btn" onclick="goTo('screenSemester')">←</button>
       <div class="material-title" id="levelMapTitle">Peta Level</div>
     </div>
     <div class="info-banner">
-      💡 <b>Cukup baca materi</b> untuk membuka bab berikutnya. Kuis opsional — selesaikan untuk dapat XP & 🏅 Badge Pancasila!
+      💡 <b>Cukup baca materi</b> untuk membuka bab berikutnya. Kuis opsional — selesaikan sempurna untuk dapat XP & 🏅 Badge Pancasila!
     </div>
     <div class="level-map" id="levelList"></div>
   </div>
 
-  <!-- MATERIAL -->
+  <!-- ====== MATERIAL ====== -->
   <div class="screen" id="screenMaterial">
     <div class="material-header">
       <button class="back-btn" onclick="backToLevels()">←</button>
@@ -234,7 +326,7 @@
     </div>
   </div>
 
-  <!-- QUIZ -->
+  <!-- ====== QUIZ ====== -->
   <div class="screen" id="screenQuiz">
     <div class="quiz-header">
       <div class="quiz-progress" id="quizProgress">Soal 1/10</div>
@@ -244,7 +336,7 @@
     <div id="quizOptions"></div>
   </div>
 
-  <!-- RESULT -->
+  <!-- ====== RESULT ====== -->
   <div class="screen" id="screenResult">
     <div class="result-box">
       <div class="result-icon" id="resultIcon">🎉</div>
@@ -256,7 +348,7 @@
     </div>
   </div>
 
-  <!-- BADGES -->
+  <!-- ====== BADGES ====== -->
   <div class="screen" id="screenBadges">
     <div class="material-header">
       <button class="back-btn" onclick="goTo('screenSemester')">←</button>
@@ -267,8 +359,18 @@
     </div>
     <div class="badges-grid" id="badgesGrid"></div>
   </div>
+
+  <!-- ====== REKAP NILAI ====== -->
+  <div class="screen" id="screenRekap">
+    <div class="material-header">
+      <button class="back-btn" onclick="goTo('screenSemester')">←</button>
+      <div class="material-title">📊 Rekap Daftar Nilai Kuis</div>
+    </div>
+    <div id="rekapContent"></div>
+  </div>
 </div>
 
+<!-- Modal Reward -->
 <div class="modal-overlay" id="rewardModal">
   <div class="modal-content">
     <div class="modal-title">🏆 Badge Baru!</div>
@@ -279,6 +381,7 @@
   </div>
 </div>
 
+<!-- Feedback WebGL -->
 <div class="feedback-overlay" id="feedbackOverlay">
   <div class="feedback-canvas" id="feedbackCanvas"></div>
   <div class="feedback-text" id="feedbackText"></div>
@@ -287,7 +390,8 @@
 
 <script>
 /* =========================================================
-   DATA MATERI & SOAL PKn KELAS 11
+   DATA MATERI PKn KELAS 11 - LENGKAP DENGAN
+   CONTOH KONKRIT, RANGKUMAN, DAN REFLEKSI
    ========================================================= */
 const DATA = {
   1: [
@@ -305,7 +409,6 @@ const DATA = {
           <li>Dapat dikembangkan sesuai zaman</li>
         </ul>
         <h3>C. Kedudukan Pancasila</h3>
-        <p>Pancasila berkedudukan sebagai:</p>
         <ul>
           <li>Dasar Negara Republik Indonesia</li>
           <li>Pandangan hidup bangsa</li>
@@ -315,6 +418,9 @@ const DATA = {
         <h3>D. Nilai-Nilai Pancasila</h3>
         <p>Pancasila memiliki tiga dimensi: dimensi idealis (nilai dasar), dimensi normatif (nilai instrumental), dan dimensi realitas (nilai praksis).</p>
       `,
+      contoh:`Contoh konkrit: Ketika teknologi digital berkembang pesat, Indonesia tetap berpegang pada Pancasila sambil mengadopsi e-government dan e-learning. Nilai gotong royong (sila ke-3) tetap dipertahankan melalui aplikasi gotong royong digital seperti penggalangan dana bencana online, yang tidak mengubah nilai dasar Pancasila namun menyesuaikan dengan zaman.`,
+      rangkuman:`• Pancasila adalah ideologi terbuka yang dapat menerima perubahan zaman tanpa mengubah nilai dasarnya.<br>• Kedudukan Pancasila: dasar negara, pandangan hidup, ideologi negara, dan sumber segala sumber hukum.<br>• Pancasila memiliki tiga dimensi: idealis, normatif, dan realitas.<br>• Nilai-nilai Pancasila bersifat universal dan dapat dikembangkan sesuai konteks zaman.`,
+      refleksi:`Setelah mempelajari materi ini, renungkanlah: bagaimana saya menerapkan nilai-nilai Pancasila dalam kehidupan sehari-hari di era digital ini? Apakah sikap saya sudah mencerminkan Pancasila sebagai ideologi terbuka yang menghargai kemajuan tanpa melupakan nilai dasar bangsa?`,
       questions:[
         {q:'Ideologi berasal dari kata idea dan logos. Logos berarti...',o:['Gagasan','Ilmu','Keyakinan','Perbuatan'],a:1},
         {q:'Berikut yang BUKAN ciri ideologi terbuka adalah...',o:['Bersifat universal','Isinya tidak langsung operasional','Bersifat kaku dan tertutup','Dapat dikembangkan sesuai zaman'],a:2},
@@ -334,7 +440,6 @@ const DATA = {
         <h3>A. Pengertian Sistem Pemerintahan</h3>
         <p>Sistem pemerintahan adalah cara kerja lembaga-lembaga negara dalam menjalankan kekuasaan untuk mencapai tujuan negara.</p>
         <h3>B. Sistem Pemerintahan Presidensial</h3>
-        <p>Indonesia menganut sistem pemerintahan presidensial, dengan ciri:</p>
         <ul>
           <li>Presiden sebagai kepala negara dan kepala pemerintahan</li>
           <li>Presiden tidak bertanggung jawab kepada parlemen</li>
@@ -342,7 +447,6 @@ const DATA = {
           <li>Presiden dan parlemen dipilih langsung oleh rakyat</li>
         </ul>
         <h3>C. Lembaga Negara Menurut UUD 1945</h3>
-        <p>Lembaga negara Indonesia meliputi:</p>
         <ul>
           <li>MPR (Majelis Permusyawaratan Rakyat)</li>
           <li>DPR (Dewan Perwakilan Rakyat)</li>
@@ -354,6 +458,9 @@ const DATA = {
         <h3>D. Trias Politika</h3>
         <p>Kekuasaan negara dibagi menjadi tiga: eksekutif, legislatif, dan yudikatif, agar tidak terjadi pemusatan kekuasaan.</p>
       `,
+      contoh:`Contoh konkrit: Ketika Presiden Joko Widodo mengeluarkan Peraturan Pemerintah Pengganti Undang-Undang (Perppu), DPR dapat menolak atau menyetujuinya. Ini menunjukkan sistem presidensial dengan checks and balances. Contoh lain: ketika MK membatalkan pasal UU Cipta Kerja, itu menunjukkan fungsi yudikatif mengontrol legislatif.`,
+      rangkuman:`• Indonesia menganut sistem pemerintahan presidensial.<br>• Presiden adalah kepala negara sekaligus kepala pemerintahan.<br>• Lembaga negara: MPR, DPR, DPD, Presiden, MA, MK, KY, dan BPK.<br>• Trias politika membagi kekuasaan menjadi eksekutif, legislatif, dan yudikatif.`,
+      refleksi:`Sebagai warga negara, apakah saya sudah memahami peran lembaga negara? Bagaimana saya bisa berpartisipasi aktif dalam sistem pemerintahan Indonesia, misalnya dengan menggunakan hak pilih atau mengawasi kinerja wakil rakyat?`,
       questions:[
         {q:'Indonesia menganut sistem pemerintahan...',o:['Parlementer','Presidensial','Liberal','Komunis'],a:1},
         {q:'Presiden sebagai kepala negara dan kepala pemerintahan merupakan ciri sistem...',o:['Parlementer','Presidensial','Campuran','Federal'],a:1},
@@ -380,7 +487,6 @@ const DATA = {
           <li>Kesadaran akan persatuan dan kesatuan</li>
         </ul>
         <h3>C. Ancaman terhadap Harmoni</h3>
-        <p>Ancaman terhadap harmoni keberagaman antara lain:</p>
         <ul>
           <li>Radikalisme dan ekstremisme</li>
           <li>SARA (Suku, Agama, Ras, Antargolongan)</li>
@@ -388,8 +494,11 @@ const DATA = {
           <li>Hoaks dan ujaran kebencian</li>
         </ul>
         <h3>D. Upaya Menjaga Harmoni</h3>
-        <p>Upaya menjaga harmoni dilakukan melalui dialog antaragama, pendidikan multikultural, penegakan hukum, dan penguatan nilai-nilai Pancasila.</p>
+        <p>Dialog antaragama, pendidikan multikultural, penegakan hukum, dan penguatan nilai-nilai Pancasila.</p>
       `,
+      contoh:`Contoh konkrit: Di Bali, umat Hindu dan Muslim saling membantu saat Nyepi dan Idul Fitri. Di Ambon, setelah konflik 1999, masyarakat membangun kembali kerukunan melalui "Baileo" (rumah adat) sebagai simbol dialog. Di sekolah, siswa dari berbagai suku bergotong royong dalam kegiatan class meeting.`,
+      rangkuman:`• Indonesia adalah negara majemuk dengan keberagaman suku, agama, ras, dan budaya.<br>• Bhinneka Tunggal Ika menjadi perekat persatuan.<br>• Faktor pendorong harmoni: toleransi, gotong royong, dan saling menghargai.<br>• Ancaman harmoni: radikalisme, SARA, primordialisme, dan hoaks.<br>• Upaya: dialog, pendidikan multikultural, dan penegakan hukum.`,
+      refleksi:`Apakah saya sudah menjadi bagian dari solusi harmoni di lingkungan saya? Bagaimana saya bersikap ketika bertemu dengan orang yang berbeda keyakinan atau suku? Sudahkah saya menghargai perbedaan sebagai kekayaan, bukan ancaman?`,
       questions:[
         {q:'Semboyan yang mempersatukan keberagaman Indonesia adalah...',o:['Bhinneka Tunggal Ika','Tut Wuri Handayani','Rawe-rawe rantas','Ing Ngarso Sung Tulodo'],a:0},
         {q:'Faktor pendorong harmoni dalam keberagaman adalah...',o:['Primordialisme','Toleransi','Radikalisme','Diskriminasi'],a:1},
@@ -409,7 +518,6 @@ const DATA = {
         <h3>A. Hak Asasi Manusia (HAM)</h3>
         <p>HAM adalah hak dasar yang melekat pada diri manusia sejak lahir. Di Indonesia, HAM dijamin dalam UUD 1945 Pasal 28A-28J.</p>
         <h3>B. Kewajiban Warga Negara</h3>
-        <p>Kewajiban warga negara antara lain:</p>
         <ul>
           <li>Menaati hukum dan pemerintahan</li>
           <li>Membayar pajak</li>
@@ -417,10 +525,13 @@ const DATA = {
           <li>Menghormati hak orang lain</li>
         </ul>
         <h3>C. Kasus Pelanggaran HAM di Indonesia</h3>
-        <p>Contoh kasus pelanggaran HAM: kasus Trisakti, kasus Semanggi, pelanggaran HAM berat di masa lalu, serta pelanggaran HAM sehari-hari seperti bullying dan KDRT.</p>
+        <p>Contoh: kasus Trisakti, Semanggi, pelanggaran HAM berat masa lalu, bullying, dan KDRT.</p>
         <h3>D. Upaya Penegakan HAM</h3>
-        <p>Upaya penegakan HAM dilakukan melalui Komnas HAM, pengadilan HAM, serta pendidikan HAM sejak dini.</p>
+        <p>Melalui Komnas HAM, pengadilan HAM, serta pendidikan HAM sejak dini.</p>
       `,
+      contoh:`Contoh konkrit: Kasus bullying di sekolah adalah pelanggaran HAM ringan terhadap hak anak untuk merasa aman. Contoh lainnya: seorang pekerja yang tidak dibayar upahnya melanggar hak asasi di bidang ekonomi. Kasus KDRT melanggar hak hidup dan rasa aman yang dijamin UUD 1945 Pasal 28A.`,
+      rangkuman:`• HAM adalah hak dasar yang melekat sejak lahir dan dijamin UUD 1945 Pasal 28A-28J.<br>• Kewajiban warga negara: menaati hukum, membayar pajak, membela negara, menghormati hak orang lain.<br>• Kasus pelanggaran HAM: Trisakti, Semanggi, bullying, dan KDRT.<br>• Upaya penegakan HAM: Komnas HAM, pengadilan HAM, dan pendidikan HAM.`,
+      refleksi:`Apakah saya sudah melaksanakan kewajiban saya sebagai siswa dan warga negara? Ketika melihat pelanggaran HAM di sekitar saya, apakah saya berani melapor atau membantu korban? Bagaimana saya bisa menjadi pelopor penegakan HAM di lingkungan saya?`,
       questions:[
         {q:'HAM adalah hak yang melekat pada manusia sejak...',o:['Sekolah','Lahir','Dewasa','Menikah'],a:1},
         {q:'Jaminan HAM dalam UUD 1945 terdapat pada pasal...',o:['28A-28J','1-3','30','33'],a:0},
@@ -450,8 +561,11 @@ const DATA = {
           <li>Pendukung Deklarasi Hak Asasi Manusia</li>
         </ul>
         <h3>D. Kerja Sama Internasional</h3>
-        <p>Indonesia terlibat dalam G20, APEC, OKI, dan berbagai organisasi internasional lainnya untuk memperjuangkan kepentingan nasional dan perdamaian dunia.</p>
+        <p>Indonesia terlibat dalam G20, APEC, OKI, dan berbagai organisasi internasional lainnya.</p>
       `,
+      contoh:`Contoh konkrit: Indonesia mengirim Kontingen Garuda ke Lebanon (UNIFIL) dan Kongo (MONUSCO) sebagai pasukan perdamaian PBB. Indonesia juga menjadi tuan rumah KTT G20 di Bali tahun 2022 yang menghasilkan deklarasi bersama pemulihan ekonomi global.`,
+      rangkuman:`• Politik luar negeri Indonesia bersifat bebas aktif.<br>• Indonesia adalah salah satu pendiri ASEAN (8 Agustus 1967).<br>• Peran Indonesia di PBB: anggota tidak tetap DK PBB dan pengirim Kontingen Garuda.<br>• Indonesia aktif di G20, APEC, dan OKI.`,
+      refleksi:`Bagaimana saya bisa berperan sebagai duta bangsa di lingkungan saya? Apakah saya bangga dengan peran Indonesia di dunia internasional? Bagaimana saya memanfaatkan media sosial untuk memperkenalkan budaya Indonesia ke dunia?`,
       questions:[
         {q:'Politik luar negeri Indonesia bersifat...',o:['Bebas aktif','Bebas pasif','Netral pasif','Terikat'],a:0},
         {q:'Indonesia merupakan salah satu pendiri organisasi...',o:['ASEAN','NATO','Uni Eropa','OPEC'],a:0},
@@ -469,7 +583,6 @@ const DATA = {
       id:'bab6', title:'Bab 6: Ancaman terhadap Negara dalam Bingkai Bhinneka Tunggal Ika', short:'Ancaman Negara',
       content:`
         <h3>A. Jenis Ancaman</h3>
-        <p>Ancaman terhadap negara dibagi menjadi:</p>
         <ul>
           <li>Ancaman militer: agresi, spionase, sabotase, terorisme bersenjata</li>
           <li>Ancaman non-militer: ideologi, politik, ekonomi, sosial budaya, teknologi</li>
@@ -479,8 +592,11 @@ const DATA = {
         <h3>C. Ancaman Sosial Budaya</h3>
         <p>Globalisasi membawa ancaman lunturnya budaya lokal, individualisme, dan pergaulan bebas.</p>
         <h3>D. Strategi Menghadapi Ancaman</h3>
-        <p>Strategi menghadapi ancaman dilakukan melalui pertahanan keamanan, penguatan ideologi Pancasila, dan bela negara oleh seluruh warga.</p>
+        <p>Pertahanan keamanan, penguatan ideologi Pancasila, dan bela negara oleh seluruh warga.</p>
       `,
+      contoh:`Contoh konkrit: Serangan siber ke situs pemerintah adalah ancaman non-militer di bidang teknologi. Hoaks di media sosial tentang isu SARA adalah ancaman ideologi dan sosial budaya. Penyelundupan narkoba adalah ancaman non-militer yang merusak generasi muda.`,
+      rangkuman:`• Ancaman dibagi dua: militer dan non-militer.<br>• Ancaman militer: agresi, spionase, sabotase, terorisme.<br>• Ancaman non-militer: ideologi, politik, ekonomi, sosial budaya, teknologi.<br>• Strategi: pertahanan keamanan, penguatan Pancasila, dan bela negara.`,
+      refleksi:`Apakah saya sudah waspada terhadap ancaman hoaks dan radikalisme di media sosial? Bagaimana saya bisa berkontribusi dalam menjaga keutuhan NKRI? Sudahkah saya memahami bahwa bela negara bukan hanya tugas TNI, tetapi seluruh warga?`,
       questions:[
         {q:'Ancaman militer terhadap negara contohnya adalah...',o:['Spionase','Hoaks','Individualisme','Globalisasi'],a:0},
         {q:'Ancaman non-militer di bidang ideologi adalah...',o:['Agresi','Radikalisme','Spionase','Sabotase'],a:1},
@@ -514,8 +630,11 @@ const DATA = {
           <li>Lemahnya penegakan hukum</li>
         </ul>
         <h3>D. Upaya Membangun Integrasi</h3>
-        <p>Upaya integrasi dilakukan melalui pemerataan pembangunan, dialog antarkelompok, pendidikan multikultural, dan penguatan nasionalisme.</p>
+        <p>Pemerataan pembangunan, dialog antarkelompok, pendidikan multikultural, dan penguatan nasionalisme.</p>
       `,
+      contoh:`Contoh konkrit: Program dana desa adalah upaya pemerataan pembangunan untuk memperkuat integrasi nasional. Sumpah Pemuda 1928 menjadi tonggak integrasi melalui bahasa persatuan. Festival budaya seperti "Pekan Kebudayaan Nasional" mempererat persatuan melalui keberagaman.`,
+      rangkuman:`• Integrasi nasional adalah penyatuan berbagai kelompok dalam satu identitas bangsa.<br>• Faktor pendorong: senasib sepenanggungan, bahasa persatuan, Bhinneka Tunggal Ika, Pancasila.<br>• Faktor penghambat: primordialisme, ketidakmerataan, konflik, lemahnya hukum.<br>• Upaya: pemerataan, dialog, pendidikan multikultural, dan nasionalisme.`,
+      refleksi:`Bagaimana saya bisa berkontribusi dalam menjaga integrasi nasional? Apakah saya sudah menggunakan Bahasa Indonesia dengan baik sebagai bahasa persatuan? Sudahkah saya menghargai keberagaman sebagai bagian dari identitas bangsa?`,
       questions:[
         {q:'Integrasi nasional adalah proses...',o:['Pemisahan kelompok','Penyatuan berbagai kelompok','Penyeragaman budaya','Pembatasan wilayah'],a:1},
         {q:'Bahasa Indonesia berfungsi sebagai...',o:['Bahasa daerah','Bahasa persatuan','Bahasa asing','Bahasa resmi daerah'],a:1},
@@ -535,12 +654,14 @@ const DATA = {
 /* =========================================================
    STATE & STORAGE
    ========================================================= */
-const STORAGE_KEY = 'pkn11_gamifikasi_v2';
+const STORAGE_KEY = 'pkn11_gamifikasi_v3';
 let state = {
+  student: { nama:'', kelas:'' },
   xp: 0,
   badges: [],
-  readBabs: {},       // babId: true (hanya baca materi)
-  completed: {},      // babId: true (kuis sempurna)
+  readBabs: {},
+  completed: {},
+  quizHistory: [], // [{babId, babTitle, score, total, date, semester}]
   currentSemester: 1,
   currentBab: null,
   quizIndex: 0,
@@ -559,8 +680,35 @@ function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) { console.warn(e); }
 }
 function updateHeader() {
-  document.getElementById('xpDisplay').textContent = '⚡ ' + state.xp + ' XP';
+  document.getElementById('xpDisplay').textContent = '⚡ ' + state.xp;
   document.getElementById('badgeDisplay').textContent = '🏅 ' + state.badges.length;
+  if (state.student.nama) {
+    document.getElementById('headerStudent').textContent = state.student.nama + (state.student.kelas ? ' • ' + state.student.kelas : '');
+  }
+}
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+function handleLogin() {
+  const nama = document.getElementById('inputNama').value.trim();
+  const kelas = document.getElementById('inputKelas').value.trim();
+  if (!nama) { alert('Silakan isi nama Anda terlebih dahulu!'); return; }
+  if (!kelas) { alert('Silakan isi kelas Anda terlebih dahulu!'); return; }
+  state.student.nama = nama;
+  state.student.kelas = kelas;
+  saveState();
+  updateHeader();
+  goTo('screenSemester');
+}
+
+function logout() {
+  if (!confirm('Keluar dari akun siswa ini?')) return;
+  state.student = {nama:'', kelas:''};
+  saveState();
+  document.getElementById('inputNama').value = '';
+  document.getElementById('inputKelas').value = '';
+  goTo('screenLogin');
 }
 
 /* =========================================================
@@ -584,14 +732,11 @@ function openSemester(sem) {
   renderLevels(sem);
   goTo('screenLevels');
 }
-
-// Unlock hanya berdasarkan readBabs (materi dibaca)
 function isBabUnlocked(sem, index) {
   if (index === 0) return true;
   const prevBab = DATA[sem][index-1];
   return !!state.readBabs[prevBab.id];
 }
-
 function renderLevels(sem) {
   document.getElementById('levelMapTitle').textContent = 'Semester ' + sem + ' • Peta Level';
   const list = document.getElementById('levelList');
@@ -634,9 +779,36 @@ function openBab(sem, index) {
   const bab = DATA[sem][index];
   state.currentBab = {sem, index};
   document.getElementById('materialTitle').textContent = bab.title;
-  document.getElementById('materialContent').innerHTML = bab.content;
 
-  // Update tombol berdasarkan status
+  // Gabungkan materi + contoh konkrit + rangkuman + refleksi
+  let fullContent = bab.content;
+
+  if (bab.contoh) {
+    fullContent += `
+      <div class="section-box box-contoh">
+        <div class="box-title">💡 Contoh Konkrit</div>
+        <div class="box-body">${bab.contoh}</div>
+      </div>
+    `;
+  }
+  if (bab.rangkuman) {
+    fullContent += `
+      <div class="section-box box-rangkuman">
+        <div class="box-title">📋 Rangkuman</div>
+        <div class="box-body">${bab.rangkuman}</div>
+      </div>
+    `;
+  }
+  if (bab.refleksi) {
+    fullContent += `
+      <div class="section-box box-refleksi">
+        <div class="box-title">🤔 Refleksi Diri</div>
+        <div class="box-body">${bab.refleksi}</div>
+      </div>
+    `;
+  }
+  document.getElementById('materialContent').innerHTML = fullContent;
+
   const btnDone = document.getElementById('btnDoneReading');
   const hasRead = !!state.readBabs[bab.id];
   btnDone.textContent = hasRead ? '✅ Materi Sudah Dibaca' : '✅ Selesai Membaca';
@@ -645,29 +817,23 @@ function openBab(sem, index) {
   goTo('screenMaterial');
 }
 
-// Tandai bab sudah dibaca -> buka level berikutnya
 function markAsRead() {
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
 
   if (!state.readBabs[bab.id]) {
     state.readBabs[bab.id] = true;
-    // Bonus XP kecil untuk baca materi
     state.xp += 5;
     saveState();
     updateHeader();
   }
 
-  // Cek apakah masih ada bab selanjutnya
   const isLast = (index === DATA[sem].length - 1);
   const msg = isLast
-    ? '🎉 Kamu telah menyelesaikan semua materi Semester ' + sem + '!'
-    : '✅ Bab ditandai selesai! Bab berikutnya sudah terbuka.';
-
-  // Tampilkan notifikasi ringan
+    ? '🎉 Semua materi Semester ' + sem + ' telah selesai!'
+    : '✅ Bab selesai! Bab berikutnya terbuka.';
   showToast(msg);
 
-  // Kembali ke peta level
   setTimeout(() => {
     renderLevels(sem);
     goTo('screenLevels');
@@ -700,7 +866,6 @@ function startQuiz() {
   renderQuiz();
   goTo('screenQuiz');
 }
-
 function renderQuiz() {
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
@@ -723,7 +888,6 @@ function renderQuiz() {
   });
   state.quizAnswered = false;
 }
-
 function answerQuestion(selected) {
   if (state.quizAnswered) return;
   state.quizAnswered = true;
@@ -791,12 +955,11 @@ function showFeedback(isCorrect, callback) {
   dir.position.set(2,3,4);
   scene.add(dir);
 
-  // ==== BENDERA ====
+  // Bendera
   const flagGroup = new THREE.Group();
   const poleGeo = new THREE.CylinderGeometry(0.06,0.06,3,16);
   const poleMat = new THREE.MeshStandardMaterial({color:0xcccccc, metalness:0.7, roughness:0.3});
-  const pole = new THREE.Mesh(poleGeo, poleMat);
-  flagGroup.add(pole);
+  flagGroup.add(new THREE.Mesh(poleGeo, poleMat));
 
   const flagWidth = 1.8, flagHeight = 1.2;
   const flagGeo = new THREE.PlaneGeometry(flagWidth, flagHeight, 20, 10);
@@ -816,7 +979,7 @@ function showFeedback(isCorrect, callback) {
   scene.add(flagGroup);
   flagGroup.position.set(-1.2, 0, 0);
 
-  // ==== PANCASILA ====
+  // Pancasila
   const pancasilaGroup = new THREE.Group();
   const shape = new THREE.Shape();
   shape.moveTo(0, 1.4);
@@ -904,10 +1067,18 @@ function finishQuiz() {
   const correct = state.quizCorrect;
   const passed = correct === total;
 
-  // Setiap selesai kuis, materi otomatis dianggap sudah dibaca juga
-  if (!state.readBabs[bab.id]) {
-    state.readBabs[bab.id] = true;
-  }
+  if (!state.readBabs[bab.id]) state.readBabs[bab.id] = true;
+
+  // Simpan riwayat kuis
+  state.quizHistory.push({
+    babId: bab.id,
+    babTitle: bab.title,
+    babShort: bab.short,
+    semester: sem,
+    score: correct,
+    total: total,
+    date: new Date().toISOString()
+  });
 
   if (passed) {
     const alreadyCompleted = !!state.completed[bab.id];
@@ -954,7 +1125,6 @@ function finishQuiz() {
    ========================================================= */
 let rewardRenderer = null;
 let rewardAnimId = null;
-
 function showRewardModal(count) {
   document.getElementById('rewardModal').classList.add('active');
   document.getElementById('rewardDesc').textContent = 'Kamu berhasil menggambar Pancasila secara utuh!';
@@ -1015,7 +1185,6 @@ function showRewardModal(count) {
   }
   animate();
 }
-
 function closeReward() {
   document.getElementById('rewardModal').classList.remove('active');
   if (rewardAnimId) cancelAnimationFrame(rewardAnimId);
@@ -1045,14 +1214,155 @@ function renderBadges() {
 }
 
 /* =========================================================
+   REKAP NILAI
+   ========================================================= */
+function renderRekap() {
+  const container = document.getElementById('rekapContent');
+  const history = state.quizHistory;
+
+  if (history.length === 0) {
+    container.innerHTML = `
+      <div class="info-banner">
+        📊 Belum ada riwayat kuis. Ikuti kuis untuk melihat nilai di sini!
+      </div>
+      <div class="rekap-empty">
+        🎯<br><br>
+        <b>Belum Ada Nilai</b><br>
+        Selesaikan kuis untuk mengisi daftar nilai.
+      </div>
+    `;
+    return;
+  }
+
+  // Urutkan dari yang terbaru
+  const sortedHistory = [...history].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  // Hitung statistik
+  const totalKuis = history.length;
+  const avgScore = Math.round(history.reduce((sum,h) => sum + (h.score/h.total*100), 0) / totalKuis);
+  const bestScore = Math.max(...history.map(h => Math.round(h.score/h.total*100)));
+  const lulusCount = history.filter(h => h.score === h.total).length;
+
+  // Ambil nilai terbaik per bab (untuk rekap unik)
+  const bestPerBab = {};
+  history.forEach(h => {
+    const key = h.babId;
+    if (!bestPerBab[key] || h.score > bestPerBab[key].score) {
+      bestPerBab[key] = h;
+    }
+  });
+  const uniqueBabs = Object.values(bestPerBab).sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  container.innerHTML = `
+    <div class="info-banner">
+      👤 <b>${state.student.nama}</b> • ${state.student.kelas}<br>
+      Total ${totalKuis} percobaan kuis dari ${uniqueBabs.length} bab
+    </div>
+    <div class="rekap-summary">
+      <div class="rekap-stat">
+        <div class="val">${avgScore}</div>
+        <div class="lbl">Rata-rata Nilai</div>
+      </div>
+      <div class="rekap-stat">
+        <div class="val">${bestScore}</div>
+        <div class="lbl">Nilai Tertinggi</div>
+      </div>
+      <div class="rekap-stat">
+        <div class="val">${lulusCount}</div>
+        <div class="lbl">Kuis Lulus Sempurna</div>
+      </div>
+      <div class="rekap-stat">
+        <div class="val">${state.badges.length}</div>
+        <div class="lbl">Badge Diperoleh</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">📝 Nilai Terbaik Per Bab</h3>
+    <table class="rekap-table">
+      <thead>
+        <tr>
+          <th>Bab</th>
+          <th>Nilai</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${uniqueBabs.map(h => {
+          const pct = Math.round(h.score/h.total*100);
+          const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
+          const statusBadge = h.score === h.total
+            ? '<span class="rekap-badge-status badge-yes">✓ LULUS</span>'
+            : '<span class="rekap-badge-status badge-no">✗ ULANG</span>';
+          return `
+            <tr>
+              <td>${h.babShort}<br><span style="font-size:9px;color:#888;">Sem ${h.semester}</span></td>
+              <td class="score-cell ${cls}">${h.score}/${h.total}</td>
+              <td>${statusBadge}</td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+
+    <h3 style="font-size:13px;color:#ffd700;margin:20px 0 8px;">🕒 Riwayat Semua Percobaan</h3>
+    <table class="rekap-table">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Bab</th>
+          <th>Nilai</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sortedHistory.slice(0, 20).map(h => {
+          const d = new Date(h.date);
+          const tgl = d.toLocaleDateString('id-ID', {day:'2-digit', month:'short'}) + ' ' + d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+          const pct = Math.round(h.score/h.total*100);
+          const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
+          return `
+            <tr>
+              <td style="font-size:10px;color:#999;">${tgl}</td>
+              <td>${h.babShort}</td>
+              <td class="score-cell ${cls}">${h.score}/${h.total}</td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+    ${sortedHistory.length > 20 ? '<p style="font-size:10px;color:#666;text-align:center;margin-top:10px;">Menampilkan 20 percobaan terbaru</p>' : ''}
+    <button class="btn-secondary" style="margin-top:20px;" onclick="resetRekap()">🗑️ Hapus Riwayat Nilai</button>
+  `;
+}
+function resetRekap() {
+  if (!confirm('Yakin ingin menghapus semua riwayat nilai kuis? (Badge dan XP tidak akan hilang)')) return;
+  state.quizHistory = [];
+  saveState();
+  renderRekap();
+}
+
+/* =========================================================
    INIT
    ========================================================= */
 function init() {
   loadState();
   updateHeader();
   renderBadges();
+
+  // Jika sudah login, langsung ke semester
+  if (state.student.nama && state.student.kelas) {
+    goTo('screenSemester');
+  } else {
+    goTo('screenLogin');
+  }
+
   document.getElementById('badgeDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
   document.getElementById('xpDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
+  document.getElementById('rekapBtn').onclick = () => { renderRekap(); goTo('screenRekap'); };
+
+  // Enter untuk submit form login
+  document.getElementById('inputKelas').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleLogin();
+  });
 }
 init();
 </script>
