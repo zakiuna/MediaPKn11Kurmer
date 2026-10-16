@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PKn Kelas 11 - Gamifikasi Kurikulum Merdeka</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; font-family:'Segoe UI', Tahoma, sans-serif; overflow:hidden; }
+  body {
+    background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+    color:#fff; display:flex; justify-content:center; align-items:center;
+    max-width:480px; margin:0 auto; position:relative;
+  }
+  #app { width:100%; height:100vh; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+
+  .header {
+    padding:12px 16px; display:flex; justify-content:space-between; align-items:center;
+    background:rgba(0,0,0,0.3); backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,0.1); z-index:10;
+  }
+  .header h1 { font-size:14px; font-weight:600; color:#ffd700; letter-spacing:0.5px; }
+  .stats { display:flex; gap:8px; font-size:11px; }
+  .stat-badge {
+    background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.4);
+    padding:4px 8px; border-radius:12px; color:#ffd700; font-weight:600; cursor:pointer;
+  }
+
+  .screen { display:none; flex:1; overflow-y:auto; padding:16px; animation:fadeIn 0.4s ease; }
+  .screen.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  .title-main { text-align:center; margin:30px 0 20px; font-size:22px; font-weight:700; color:#fff; text-shadow:0 0 20px rgba(255,215,0,0.5); }
+  .title-sub { text-align:center; font-size:12px; color:#aaa; margin-bottom:30px; }
+  .semester-card {
+    background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,100,100,0.1));
+    border:2px solid rgba(255,215,0,0.4); border-radius:16px;
+    padding:24px; margin-bottom:16px; cursor:pointer; transition:all 0.3s; text-align:center;
+  }
+  .semester-card:active { transform:scale(0.97); }
+  .semester-card h2 { font-size:18px; margin-bottom:8px; color:#ffd700; }
+  .semester-card p { font-size:12px; color:#bbb; }
+  .semester-icon { font-size:40px; margin-bottom:12px; }
+
+  .level-map { padding:10px 0; }
+  .level-item {
+    display:flex; align-items:center; gap:14px; padding:14px;
+    background:rgba(255,255,255,0.05); border-radius:12px; margin-bottom:10px;
+    border:1px solid rgba(255,255,255,0.1); transition:all 0.3s; cursor:pointer;
+    position:relative; overflow:hidden;
+  }
+  .level-item.locked { opacity:0.5; cursor:not-allowed; }
+  .level-item.read { border-color:#00b0ff; background:rgba(0,176,255,0.08); }
+  .level-item.completed { border-color:#00e676; background:rgba(0,230,118,0.1); }
+  .level-item:not(.locked):active { transform:scale(0.98); }
+  .level-circle {
+    width:44px; height:44px; border-radius:50%;
+    background:linear-gradient(135deg,#ffd700,#ff8c00);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:16px; color:#1a1a2e; flex-shrink:0;
+  }
+  .level-item.read .level-circle { background:linear-gradient(135deg,#00b0ff,#2979ff); color:#fff; }
+  .level-item.completed .level-circle { background:linear-gradient(135deg,#00e676,#00b0ff); }
+  .level-item.locked .level-circle { background:#555; color:#888; }
+  .level-info { flex:1; }
+  .level-info h3 { font-size:13px; margin-bottom:3px; }
+  .level-info p { font-size:10px; color:#999; }
+  .level-status { font-size:20px; }
+  .progress-bar { height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-top:6px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,#ffd700,#ff8c00); width:0%; transition:width 0.5s; }
+  .level-tag {
+    position:absolute; top:8px; right:10px; font-size:8px; padding:2px 6px;
+    border-radius:6px; font-weight:700; letter-spacing:0.5px;
+  }
+  .tag-read { background:rgba(0,176,255,0.2); color:#4fc3f7; border:1px solid #4fc3f7; }
+  .tag-done { background:rgba(0,230,118,0.2); color:#00e676; border:1px solid #00e676; }
+
+  .material-header {
+    display:flex; align-items:center; gap:10px; margin-bottom:16px;
+    padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .back-btn {
+    background:rgba(255,255,255,0.1); border:none; color:#fff;
+    width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .material-title { font-size:14px; font-weight:600; color:#ffd700; }
+  .material-content { font-size:13px; line-height:1.7; color:#ddd; }
+  .material-content h3 { font-size:14px; color:#ffd700; margin:16px 0 8px; padding-left:8px; border-left:3px solid #ffd700; }
+  .material-content p { margin-bottom:10px; text-align:justify; }
+  .material-content ul { margin-left:18px; margin-bottom:10px; }
+  .material-content li { margin-bottom:6px; }
+
+  .btn-primary {
+    width:100%; padding:14px; background:linear-gradient(135deg,#ffd700,#ff8c00);
+    border:none; border-radius:12px; color:#1a1a2e; font-weight:700;
+    font-size:14px; cursor:pointer; margin-top:20px; transition:all 0.3s;
+  }
+  .btn-primary:active { transform:scale(0.97); }
+  .btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
+  .btn-secondary {
+    width:100%; padding:12px; background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.2); border-radius:12px; color:#fff;
+    font-weight:600; font-size:13px; cursor:pointer; margin-top:10px;
+  }
+  .btn-secondary:active { transform:scale(0.97); }
+
+  .btn-group { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
+  .btn-group .btn-primary, .btn-group .btn-secondary { margin-top:0; }
+
+  .quiz-header { text-align:center; margin-bottom:16px; }
+  .quiz-progress { font-size:11px; color:#aaa; margin-bottom:6px; }
+  .quiz-question { font-size:14px; line-height:1.6; margin-bottom:18px; font-weight:500; }
+  .quiz-bar { height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-bottom:16px; }
+  .quiz-bar-fill { height:100%; background:linear-gradient(90deg,#ffd700,#ff8c00); width:0%; transition:width 0.4s; }
+  .option {
+    background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.15);
+    border-radius:10px; padding:14px; margin-bottom:10px; cursor:pointer;
+    font-size:13px; transition:all 0.3s; display:flex; gap:10px; align-items:center;
+  }
+  .option:active { transform:scale(0.98); }
+  .option.correct { background:rgba(0,230,118,0.2); border-color:#00e676; }
+  .option.wrong { background:rgba(255,82,82,0.2); border-color:#ff5252; }
+  .option-letter {
+    width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.15);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex-shrink:0;
+  }
+
+  .result-box { text-align:center; padding:30px 20px; }
+  .result-icon { font-size:60px; margin-bottom:16px; }
+  .result-title { font-size:20px; font-weight:700; margin-bottom:8px; }
+  .result-text { font-size:13px; color:#bbb; margin-bottom:20px; }
+  .result-score { font-size:36px; font-weight:800; color:#ffd700; margin:16px 0; }
+
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:100;
+    display:none; justify-content:center; align-items:center; padding:20px;
+  }
+  .modal-overlay.active { display:flex; }
+  .modal-content {
+    background:linear-gradient(135deg,#1a1a2e,#0f3460); border:2px solid #ffd700;
+    border-radius:20px; padding:24px; max-width:360px; width:100%; text-align:center;
+    animation:popIn 0.4s ease;
+  }
+  @keyframes popIn { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
+  .modal-title { font-size:18px; color:#ffd700; margin-bottom:10px; font-weight:700; }
+  .modal-desc { font-size:12px; color:#ccc; margin-bottom:16px; }
+  .badge-display { width:120px; height:120px; margin:16px auto; display:flex; align-items:center; justify-content:center; }
+  .badge-display canvas { width:120px; height:120px; }
+
+  .feedback-overlay {
+    position:fixed; inset:0; z-index:200; display:none;
+    justify-content:center; align-items:center; flex-direction:column;
+    background:rgba(0,0,0,0.9);
+  }
+  .feedback-overlay.active { display:flex; }
+  .feedback-canvas { width:100%; height:60vh; max-height:400px; }
+  .feedback-text {
+    font-size:24px; font-weight:800; margin-top:10px; padding:10px 20px;
+    border-radius:10px; animation:popIn 0.4s ease;
+  }
+  .feedback-text.correct { color:#00e676; text-shadow:0 0 20px #00e676; }
+  .feedback-text.wrong { color:#ff5252; text-shadow:0 0 20px #ff5252; }
+  .feedback-sub { font-size:12px; color:#aaa; margin-top:8px; text-align:center; padding:0 20px; }
+
+  .badges-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+  .badge-item {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,215,0,0.2);
+    border-radius:12px; padding:12px 8px; text-align:center; font-size:10px; color:#ccc;
+  }
+  .badge-item.earned { border-color:#ffd700; background:rgba(255,215,0,0.1); color:#ffd700; }
+  .badge-item .bi { font-size:24px; margin-bottom:6px; display:block; }
+
+  .screen::-webkit-scrollbar { width:4px; }
+  .screen::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.3); border-radius:2px; }
+
+  .info-banner {
+    background:rgba(0,176,255,0.12); border:1px solid rgba(0,176,255,0.35);
+    border-radius:10px; padding:10px 12px; font-size:11px; color:#4fc3f7;
+    margin-bottom:14px; line-height:1.5;
+  }
+  .info-banner b { color:#fff; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <h1>🎓 PKn Kelas 11</h1>
+    <div class="stats">
+      <div class="stat-badge" id="xpDisplay">⚡ 0 XP</div>
+      <div class="stat-badge" id="badgeDisplay">🏅 0</div>
+    </div>
+  </div>
+
+  <!-- SEMESTER -->
+  <div class="screen active" id="screenSemester">
+    <div class="title-main">Pilih Semester</div>
+    <div class="title-sub">Kurikulum Merdeka - Kelas 11</div>
+    <div class="semester-card" onclick="openSemester(1)">
+      <div class="semester-icon">📚</div>
+      <h2>Semester 1</h2>
+      <p>4 Bab • 4 Level</p>
+    </div>
+    <div class="semester-card" onclick="openSemester(2)">
+      <div class="semester-icon">📖</div>
+      <h2>Semester 2</h2>
+      <p>3 Bab • 3 Level</p>
+    </div>
+  </div>
+
+  <!-- LEVELS -->
+  <div class="screen" id="screenLevels">
+    <div class="material-header">
+      <button class="back-btn" onclick="goTo('screenSemester')">←</button>
+      <div class="material-title" id="levelMapTitle">Peta Level</div>
+    </div>
+    <div class="info-banner">
+      💡 <b>Cukup baca materi</b> untuk membuka bab berikutnya. Kuis opsional — selesaikan untuk dapat XP & 🏅 Badge Pancasila!
+    </div>
+    <div class="level-map" id="levelList"></div>
+  </div>
+
+  <!-- MATERIAL -->
+  <div class="screen" id="screenMaterial">
+    <div class="material-header">
+      <button class="back-btn" onclick="backToLevels()">←</button>
+      <div class="material-title" id="materialTitle">Materi</div>
+    </div>
+    <div class="material-content" id="materialContent"></div>
+    <div class="btn-group">
+      <button class="btn-primary" id="btnDoneReading" onclick="markAsRead()">✅ Selesai Membaca</button>
+      <button class="btn-secondary" id="btnStartQuiz" onclick="startQuiz()">📝 Ikuti Kuis (Opsional)</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="screenQuiz">
+    <div class="quiz-header">
+      <div class="quiz-progress" id="quizProgress">Soal 1/10</div>
+      <div class="quiz-bar"><div class="quiz-bar-fill" id="quizBarFill"></div></div>
+    </div>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div id="quizOptions"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screenResult">
+    <div class="result-box">
+      <div class="result-icon" id="resultIcon">🎉</div>
+      <div class="result-title" id="resultTitle">Selamat!</div>
+      <div class="result-score" id="resultScore">0/10</div>
+      <div class="result-text" id="resultText"></div>
+      <button class="btn-primary" onclick="backToLevels()">Kembali ke Peta Level</button>
+      <button class="btn-secondary" id="btnRetryQuiz" onclick="startQuiz()">🔄 Coba Lagi</button>
+    </div>
+  </div>
+
+  <!-- BADGES -->
+  <div class="screen" id="screenBadges">
+    <div class="material-header">
+      <button class="back-btn" onclick="goTo('screenSemester')">←</button>
+      <div class="material-title">🏅 Koleksi Badge Pancasila</div>
+    </div>
+    <div class="info-banner">
+      Selesaikan kuis dengan <b>nilai sempurna (10/10)</b> untuk menggambar Pancasila secara utuh dan mendapatkan badge!
+    </div>
+    <div class="badges-grid" id="badgesGrid"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="rewardModal">
+  <div class="modal-content">
+    <div class="modal-title">🏆 Badge Baru!</div>
+    <div class="modal-desc" id="rewardDesc">Kamu berhasil menggambar Pancasila!</div>
+    <div class="badge-display" id="badgeCanvasContainer"></div>
+    <div style="font-size:11px;color:#aaa;margin-bottom:16px;" id="rewardDetail"></div>
+    <button class="btn-primary" onclick="closeReward()">Lanjut</button>
+  </div>
+</div>
+
+<div class="feedback-overlay" id="feedbackOverlay">
+  <div class="feedback-canvas" id="feedbackCanvas"></div>
+  <div class="feedback-text" id="feedbackText"></div>
+  <div class="feedback-sub" id="feedbackSub"></div>
+</div>
+
+<script>
+/* =========================================================
+   DATA MATERI & SOAL PKn KELAS 11
+   ========================================================= */
+const DATA = {
+  1: [
+    {
+      id:'bab1', title:'Bab 1: Pancasila sebagai Ideologi Terbuka', short:'Pancasila & Ideologi Terbuka',
+      content:`
+        <h3>A. Pengertian Ideologi</h3>
+        <p>Ideologi berasal dari kata <em>idea</em> (gagasan) dan <em>logos</em> (ilmu). Ideologi adalah kumpulan gagasan, ide, keyakinan yang menyeluruh dan sistematis, yang menyangkut berbagai bidang kehidupan manusia.</p>
+        <h3>B. Pancasila sebagai Ideologi Terbuka</h3>
+        <p>Pancasila sebagai ideologi terbuka artinya Pancasila dapat menerima perubahan dan perkembangan zaman tanpa mengubah nilai-nilai dasarnya. Ciri-ciri ideologi terbuka:</p>
+        <ul>
+          <li>Nilai-nilainya bersifat universal dan objektif</li>
+          <li>Merupakan kekayaan rohani, moral, dan budaya masyarakat</li>
+          <li>Isinya tidak langsung operasional</li>
+          <li>Dapat dikembangkan sesuai zaman</li>
+        </ul>
+        <h3>C. Kedudukan Pancasila</h3>
+        <p>Pancasila berkedudukan sebagai:</p>
+        <ul>
+          <li>Dasar Negara Republik Indonesia</li>
+          <li>Pandangan hidup bangsa</li>
+          <li>Ideologi negara</li>
+          <li>Sumber dari segala sumber hukum</li>
+        </ul>
+        <h3>D. Nilai-Nilai Pancasila</h3>
+        <p>Pancasila memiliki tiga dimensi: dimensi idealis (nilai dasar), dimensi normatif (nilai instrumental), dan dimensi realitas (nilai praksis).</p>
+      `,
+      questions:[
+        {q:'Ideologi berasal dari kata idea dan logos. Logos berarti...',o:['Gagasan','Ilmu','Keyakinan','Perbuatan'],a:1},
+        {q:'Berikut yang BUKAN ciri ideologi terbuka adalah...',o:['Bersifat universal','Isinya tidak langsung operasional','Bersifat kaku dan tertutup','Dapat dikembangkan sesuai zaman'],a:2},
+        {q:'Pancasila sebagai ideologi terbuka artinya...',o:['Tidak dapat diubah','Dapat menerima perubahan tanpa mengubah nilai dasar','Bebas diubah kapan saja','Hanya berlaku pada zaman tertentu'],a:1},
+        {q:'Kedudukan Pancasila sebagai sumber dari segala sumber hukum berarti...',o:['Hukum tertinggi di Indonesia','Semua peraturan harus bersumber pada Pancasila','Pancasila adalah UUD','Pancasila menggantikan hukum'],a:1},
+        {q:'Dimensi Pancasila yang berisi nilai-nilai dasar disebut dimensi...',o:['Normatif','Realitas','Idealis','Praksis'],a:2},
+        {q:'Nilai instrumental Pancasila terdapat dalam...',o:['Pembukaan UUD 1945','UUD 1945 dan peraturan perundangan','Pidato presiden','Adat istiadat'],a:1},
+        {q:'Pancasila sebagai pandangan hidup bangsa berarti...',o:['Dasar negara','Pedoman dalam kehidupan bermasyarakat','Sumber hukum','Lambang negara'],a:1},
+        {q:'Sifat ideologi tertutup adalah...',o:['Terbuka terhadap perubahan','Bersifat totaliter dan otoriter','Bersifat universal','Menghargai perbedaan'],a:1},
+        {q:'Jumlah sila dalam Pancasila adalah...',o:['3','4','5','6'],a:2},
+        {q:'Manfaat Pancasila sebagai ideologi terbuka adalah...',o:['Membuat Indonesia tertutup','Mampu menghadapi perkembangan zaman','Membatasi kebebasan','Menolak globalisasi'],a:1}
+      ]
+    },
+    {
+      id:'bab2', title:'Bab 2: Sistem Pemerintahan Indonesia', short:'Sistem Pemerintahan',
+      content:`
+        <h3>A. Pengertian Sistem Pemerintahan</h3>
+        <p>Sistem pemerintahan adalah cara kerja lembaga-lembaga negara dalam menjalankan kekuasaan untuk mencapai tujuan negara.</p>
+        <h3>B. Sistem Pemerintahan Presidensial</h3>
+        <p>Indonesia menganut sistem pemerintahan presidensial, dengan ciri:</p>
+        <ul>
+          <li>Presiden sebagai kepala negara dan kepala pemerintahan</li>
+          <li>Presiden tidak bertanggung jawab kepada parlemen</li>
+          <li>Menteri diangkat dan bertanggung jawab kepada presiden</li>
+          <li>Presiden dan parlemen dipilih langsung oleh rakyat</li>
+        </ul>
+        <h3>C. Lembaga Negara Menurut UUD 1945</h3>
+        <p>Lembaga negara Indonesia meliputi:</p>
+        <ul>
+          <li>MPR (Majelis Permusyawaratan Rakyat)</li>
+          <li>DPR (Dewan Perwakilan Rakyat)</li>
+          <li>DPD (Dewan Perwakilan Daerah)</li>
+          <li>Presiden dan Wakil Presiden</li>
+          <li>MA, MK, dan KY (Kekuasaan Kehakiman)</li>
+          <li>BPK (Badan Pemeriksa Keuangan)</li>
+        </ul>
+        <h3>D. Trias Politika</h3>
+        <p>Kekuasaan negara dibagi menjadi tiga: eksekutif, legislatif, dan yudikatif, agar tidak terjadi pemusatan kekuasaan.</p>
+      `,
+      questions:[
+        {q:'Indonesia menganut sistem pemerintahan...',o:['Parlementer','Presidensial','Liberal','Komunis'],a:1},
+        {q:'Presiden sebagai kepala negara dan kepala pemerintahan merupakan ciri sistem...',o:['Parlementer','Presidensial','Campuran','Federal'],a:1},
+        {q:'Lembaga yang berwenang mengubah UUD adalah...',o:['DPR','MPR','DPD','Presiden'],a:1},
+        {q:'Anggota DPD mewakili...',o:['Partai politik','Daerah provinsi','Kabupaten','Organisasi massa'],a:1},
+        {q:'Lembaga yang menguji undang-undang terhadap UUD adalah...',o:['MA','MK','KY','BPK'],a:1},
+        {q:'Trias politika membagi kekuasaan menjadi...',o:['2','3','4','5'],a:1},
+        {q:'Lembaga yang bertugas memeriksa keuangan negara adalah...',o:['BPK','KY','MA','MPR'],a:0},
+        {q:'Kekuasaan eksekutif dijalankan oleh...',o:['DPR','Presiden','MA','BPK'],a:1},
+        {q:'Menteri diangkat dan bertanggung jawab kepada...',o:['DPR','Presiden','MPR','Rakyat'],a:1},
+        {q:'Sistem pemerintahan parlementer memiliki ciri...',o:['Presiden sebagai kepala pemerintahan','Perdana menteri sebagai kepala pemerintahan','Tidak ada parlemen','Kekuasaan tunggal'],a:1}
+      ]
+    },
+    {
+      id:'bab3', title:'Bab 3: Harmoni dalam Keberagaman', short:'Harmoni Keberagaman',
+      content:`
+        <h3>A. Keberagaman Indonesia</h3>
+        <p>Indonesia adalah negara majemuk dengan keberagaman suku, agama, ras, bahasa, dan budaya. Semboyan <em>Bhinneka Tunggal Ika</em> menjadi perekat persatuan.</p>
+        <h3>B. Faktor Pendorong Harmoni</h3>
+        <ul>
+          <li>Toleransi antarumat beragama</li>
+          <li>Sikap saling menghargai perbedaan</li>
+          <li>Gotong royong dan solidaritas</li>
+          <li>Kesadaran akan persatuan dan kesatuan</li>
+        </ul>
+        <h3>C. Ancaman terhadap Harmoni</h3>
+        <p>Ancaman terhadap harmoni keberagaman antara lain:</p>
+        <ul>
+          <li>Radikalisme dan ekstremisme</li>
+          <li>SARA (Suku, Agama, Ras, Antargolongan)</li>
+          <li>Primordialisme berlebihan</li>
+          <li>Hoaks dan ujaran kebencian</li>
+        </ul>
+        <h3>D. Upaya Menjaga Harmoni</h3>
+        <p>Upaya menjaga harmoni dilakukan melalui dialog antaragama, pendidikan multikultural, penegakan hukum, dan penguatan nilai-nilai Pancasila.</p>
+      `,
+      questions:[
+        {q:'Semboyan yang mempersatukan keberagaman Indonesia adalah...',o:['Bhinneka Tunggal Ika','Tut Wuri Handayani','Rawe-rawe rantas','Ing Ngarso Sung Tulodo'],a:0},
+        {q:'Faktor pendorong harmoni dalam keberagaman adalah...',o:['Primordialisme','Toleransi','Radikalisme','Diskriminasi'],a:1},
+        {q:'SARA merupakan ancaman karena...',o:['Mempererat persatuan','Memicu konflik antarkelompok','Meningkatkan toleransi','Menguatkan persaudaraan'],a:1},
+        {q:'Pendidikan multikultural bertujuan untuk...',o:['Menyeragamkan budaya','Menumbuhkan sikap menghargai perbedaan','Menghapus budaya lokal','Memisahkan suku'],a:1},
+        {q:'Sikap primordialisme yang berlebihan dapat menyebabkan...',o:['Persatuan','Etnosentrisme','Toleransi','Kerukunan'],a:1},
+        {q:'Gotong royong merupakan wujud nilai Pancasila sila ke...',o:['1','2','3','4'],a:2},
+        {q:'Upaya menjaga harmoni antaragama dapat dilakukan dengan...',o:['Dialog antaragama','Menjauhi pemeluk agama lain','Memaksakan keyakinan','Mengucilkan minoritas'],a:0},
+        {q:'Ujaran kebencian di media sosial dapat memicu...',o:['Persatuan','Konflik sosial','Kemajuan','Kerukunan'],a:1},
+        {q:'Keberagaman Indonesia merupakan...',o:['Ancaman','Kekayaan bangsa','Kelemahan','Beban'],a:1},
+        {q:'Sikap yang harus dihindari dalam keberagaman adalah...',o:['Toleransi','Diskriminasi','Menghargai','Menghormati'],a:1}
+      ]
+    },
+    {
+      id:'bab4', title:'Bab 4: Kasus-Kasus Pelanggaran Hak dan Pengingkaran Kewajiban', short:'Hak & Kewajiban',
+      content:`
+        <h3>A. Hak Asasi Manusia (HAM)</h3>
+        <p>HAM adalah hak dasar yang melekat pada diri manusia sejak lahir. Di Indonesia, HAM dijamin dalam UUD 1945 Pasal 28A-28J.</p>
+        <h3>B. Kewajiban Warga Negara</h3>
+        <p>Kewajiban warga negara antara lain:</p>
+        <ul>
+          <li>Menaati hukum dan pemerintahan</li>
+          <li>Membayar pajak</li>
+          <li>Membela negara</li>
+          <li>Menghormati hak orang lain</li>
+        </ul>
+        <h3>C. Kasus Pelanggaran HAM di Indonesia</h3>
+        <p>Contoh kasus pelanggaran HAM: kasus Trisakti, kasus Semanggi, pelanggaran HAM berat di masa lalu, serta pelanggaran HAM sehari-hari seperti bullying dan KDRT.</p>
+        <h3>D. Upaya Penegakan HAM</h3>
+        <p>Upaya penegakan HAM dilakukan melalui Komnas HAM, pengadilan HAM, serta pendidikan HAM sejak dini.</p>
+      `,
+      questions:[
+        {q:'HAM adalah hak yang melekat pada manusia sejak...',o:['Sekolah','Lahir','Dewasa','Menikah'],a:1},
+        {q:'Jaminan HAM dalam UUD 1945 terdapat pada pasal...',o:['28A-28J','1-3','30','33'],a:0},
+        {q:'Berikut yang merupakan kewajiban warga negara adalah...',o:['Mendapat pendidikan','Membayar pajak','Mendapat pekerjaan','Mendapat perlindungan'],a:1},
+        {q:'Lembaga yang menangani HAM di Indonesia adalah...',o:['Komnas HAM','KPK','BPK','KY'],a:0},
+        {q:'Contoh pelanggaran HAM ringan adalah...',o:['Genosida','Bullying','Kejahatan perang','Pembersihan etnis'],a:1},
+        {q:'KDRT merupakan pelanggaran HAM karena...',o:['Melanggar hak asasi','Melindungi korban','Menegakkan hukum','Mendidik'],a:0},
+        {q:'Pengadilan HAM di Indonesia dibentuk berdasarkan...',o:['UU No. 26 Tahun 2000','UUD 1945','UU No. 39 Tahun 1999','Tap MPR'],a:0},
+        {q:'Membela negara merupakan kewajiban yang diatur dalam UUD 1945 pasal...',o:['27','30','31','33'],a:1},
+        {q:'Pendidikan HAM penting untuk...',o:['Mencegah pelanggaran HAM','Meningkatkan pelanggaran','Membatasi hak','Mengurangi kesadaran'],a:0},
+        {q:'Hak dan kewajiban warga negara harus dilaksanakan secara...',o:['Terpisah','Seimbang','Satu arah','Bebas'],a:1}
+      ]
+    }
+  ],
+  2: [
+    {
+      id:'bab5', title:'Bab 5: Peran Indonesia dalam Hubungan Internasional', short:'Hubungan Internasional',
+      content:`
+        <h3>A. Politik Luar Negeri Indonesia</h3>
+        <p>Politik luar negeri Indonesia bersifat bebas aktif, artinya tidak memihak blok mana pun dan aktif menjaga perdamaian dunia.</p>
+        <h3>B. Peran Indonesia di ASEAN</h3>
+        <p>Indonesia merupakan salah satu pendiri ASEAN dan berperan aktif dalam berbagai kerja sama ekonomi, politik, dan sosial budaya.</p>
+        <h3>C. Peran Indonesia di PBB</h3>
+        <ul>
+          <li>Anggota tidak tetap Dewan Keamanan PBB</li>
+          <li>Pengirim pasukan perdamaian (Kontingen Garuda)</li>
+          <li>Pendukung Deklarasi Hak Asasi Manusia</li>
+        </ul>
+        <h3>D. Kerja Sama Internasional</h3>
+        <p>Indonesia terlibat dalam G20, APEC, OKI, dan berbagai organisasi internasional lainnya untuk memperjuangkan kepentingan nasional dan perdamaian dunia.</p>
+      `,
+      questions:[
+        {q:'Politik luar negeri Indonesia bersifat...',o:['Bebas aktif','Bebas pasif','Netral pasif','Terikat'],a:0},
+        {q:'Indonesia merupakan salah satu pendiri organisasi...',o:['ASEAN','NATO','Uni Eropa','OPEC'],a:0},
+        {q:'Kontingen Garuda adalah pasukan Indonesia untuk...',o:['Perang','Misi perdamaian PBB','Latihan militer','Pertahanan dalam negeri'],a:1},
+        {q:'Sifat bebas aktif dalam politik luar negeri berarti...',o:['Tidak memihak blok manapun','Ikut blok Barat','Ikut blok Timur','Netral total'],a:0},
+        {q:'Indonesia pernah menjadi anggota tidak tetap Dewan Keamanan PBB sebanyak...',o:['1 kali','3 kali','5 kali','Belum pernah'],a:1},
+        {q:'G20 adalah forum kerja sama di bidang...',o:['Ekonomi','Militer','Olahraga','Budaya'],a:0},
+        {q:'Tujuan politik luar negeri Indonesia adalah...',o:['Menjajah negara lain','Mewujudkan perdamaian dunia','Memperluas wilayah','Mendominasi kawasan'],a:1},
+        {q:'ASEAN didirikan pada tanggal...',o:['8 Agustus 1967','17 Agustus 1945','1 Juni 1945','10 November 1945'],a:0},
+        {q:'Indonesia bergabung dalam OKI karena...',o:['Negara Islam','Solidaritas negara Muslim','Kepentingan ekonomi','Tekanan negara lain'],a:1},
+        {q:'Manfaat kerja sama internasional bagi Indonesia adalah...',o:['Isolasi','Kemajuan pembangunan','Konflik','Ketergantungan'],a:1}
+      ]
+    },
+    {
+      id:'bab6', title:'Bab 6: Ancaman terhadap Negara dalam Bingkai Bhinneka Tunggal Ika', short:'Ancaman Negara',
+      content:`
+        <h3>A. Jenis Ancaman</h3>
+        <p>Ancaman terhadap negara dibagi menjadi:</p>
+        <ul>
+          <li>Ancaman militer: agresi, spionase, sabotase, terorisme bersenjata</li>
+          <li>Ancaman non-militer: ideologi, politik, ekonomi, sosial budaya, teknologi</li>
+        </ul>
+        <h3>B. Ancaman Ideologi</h3>
+        <p>Ancaman ideologi berupa masuknya paham yang bertentangan dengan Pancasila seperti komunisme, liberalisme ekstrem, dan radikalisme.</p>
+        <h3>C. Ancaman Sosial Budaya</h3>
+        <p>Globalisasi membawa ancaman lunturnya budaya lokal, individualisme, dan pergaulan bebas.</p>
+        <h3>D. Strategi Menghadapi Ancaman</h3>
+        <p>Strategi menghadapi ancaman dilakukan melalui pertahanan keamanan, penguatan ideologi Pancasila, dan bela negara oleh seluruh warga.</p>
+      `,
+      questions:[
+        {q:'Ancaman militer terhadap negara contohnya adalah...',o:['Spionase','Hoaks','Individualisme','Globalisasi'],a:0},
+        {q:'Ancaman non-militer di bidang ideologi adalah...',o:['Agresi','Radikalisme','Spionase','Sabotase'],a:1},
+        {q:'Terorisme merupakan ancaman...',o:['Militer','Non-militer','Sosial','Budaya'],a:0},
+        {q:'Globalisasi dapat mengancam budaya lokal berupa...',o:['Pelestarian budaya','Lunturnya budaya lokal','Penguatan tradisi','Kemajuan budaya'],a:1},
+        {q:'Sikap individualisme bertentangan dengan nilai...',o:['Gotong royong','Egoisme','Materialisme','Liberalisme'],a:0},
+        {q:'Bela negara merupakan kewajiban...',o:['TNI saja','Polri saja','Seluruh warga negara','Pejabat'],a:2},
+        {q:'Ancaman terhadap ideologi Pancasila dapat dicegah dengan...',o:['Penguatan pendidikan Pancasila','Membiarkan','Menolak Pancasila','Mengikuti paham asing'],a:0},
+        {q:'Pergaulan bebas merupakan ancaman di bidang...',o:['Politik','Sosial budaya','Ekonomi','Militer'],a:1},
+        {q:'Sistem pertahanan keamanan negara Indonesia bersifat...',o:['Sentralistik','Semesta','Parsial','Tertutup'],a:1},
+        {q:'Bhinneka Tunggal Ika menjadi perekat dalam menghadapi...',o:['Ancaman perpecahan','Kemajuan','Kerja sama','Pembangunan'],a:0}
+      ]
+    },
+    {
+      id:'bab7', title:'Bab 7: Integrasi Nasional', short:'Integrasi Nasional',
+      content:`
+        <h3>A. Pengertian Integrasi Nasional</h3>
+        <p>Integrasi nasional adalah proses penyatuan berbagai kelompok sosial budaya dalam satu kesatuan wilayah dan identitas nasional.</p>
+        <h3>B. Faktor Pendorong Integrasi</h3>
+        <ul>
+          <li>Rasa senasib sepenanggungan</li>
+          <li>Bahasa Indonesia sebagai bahasa persatuan</li>
+          <li>Semboyan Bhinneka Tunggal Ika</li>
+          <li>Pancasila sebagai dasar negara</li>
+        </ul>
+        <h3>C. Faktor Penghambat Integrasi</h3>
+        <ul>
+          <li>Primordialisme berlebihan</li>
+          <li>Ketidakmerataan pembangunan</li>
+          <li>Konflik antaretnis</li>
+          <li>Lemahnya penegakan hukum</li>
+        </ul>
+        <h3>D. Upaya Membangun Integrasi</h3>
+        <p>Upaya integrasi dilakukan melalui pemerataan pembangunan, dialog antarkelompok, pendidikan multikultural, dan penguatan nasionalisme.</p>
+      `,
+      questions:[
+        {q:'Integrasi nasional adalah proses...',o:['Pemisahan kelompok','Penyatuan berbagai kelompok','Penyeragaman budaya','Pembatasan wilayah'],a:1},
+        {q:'Bahasa Indonesia berfungsi sebagai...',o:['Bahasa daerah','Bahasa persatuan','Bahasa asing','Bahasa resmi daerah'],a:1},
+        {q:'Faktor pendorong integrasi nasional adalah...',o:['Primordialisme','Rasa senasib sepenanggungan','Konflik','Diskriminasi'],a:1},
+        {q:'Primordialisme berlebihan dapat menghambat integrasi karena...',o:['Mempererat persatuan','Mengutamakan kelompok sendiri','Meningkatkan toleransi','Memperkuat nasionalisme'],a:1},
+        {q:'Upaya membangun integrasi nasional dapat dilakukan dengan...',o:['Pemerataan pembangunan','Membatasi komunikasi','Menutup diri','Mengisolasi daerah'],a:0},
+        {q:'Pancasila sebagai dasar negara berfungsi untuk...',o:['Memecah belah','Mempersatukan bangsa','Membatasi hak','Menghambat kemajuan'],a:1},
+        {q:'Konflik antaretnis merupakan faktor...',o:['Pendorong integrasi','Penghambat integrasi','Pemersatu','Penguat persatuan'],a:1},
+        {q:'Nasionalisme adalah sikap...',o:['Cinta tanah air','Membenci negara lain','Individualisme','Egoisme'],a:0},
+        {q:'Pendidikan multikultural penting untuk...',o:['Menyeragamkan budaya','Menghargai keberagaman','Memisahkan suku','Menolak perbedaan'],a:1},
+        {q:'Tujuan utama integrasi nasional adalah...',o:['Perpecahan','Persatuan dan kesatuan bangsa','Dominasi satu kelompok','Konflik'],a:1}
+      ]
+    }
+  ]
+};
+
+/* =========================================================
+   STATE & STORAGE
+   ========================================================= */
+const STORAGE_KEY = 'pkn11_gamifikasi_v2';
+let state = {
+  xp: 0,
+  badges: [],
+  readBabs: {},       // babId: true (hanya baca materi)
+  completed: {},      // babId: true (kuis sempurna)
+  currentSemester: 1,
+  currentBab: null,
+  quizIndex: 0,
+  quizCorrect: 0,
+  quizAnswered: false,
+  pancasilaProgress: 0
+};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) state = {...state, ...JSON.parse(saved)};
+  } catch(e) { console.warn(e); }
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) { console.warn(e); }
+}
+function updateHeader() {
+  document.getElementById('xpDisplay').textContent = '⚡ ' + state.xp + ' XP';
+  document.getElementById('badgeDisplay').textContent = '🏅 ' + state.badges.length;
+}
+
+/* =========================================================
+   NAVIGASI
+   ========================================================= */
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+}
+function backToLevels() {
+  renderLevels(state.currentSemester);
+  goTo('screenLevels');
+}
+
+/* =========================================================
+   SEMESTER & LEVEL
+   ========================================================= */
+function openSemester(sem) {
+  state.currentSemester = sem;
+  saveState();
+  renderLevels(sem);
+  goTo('screenLevels');
+}
+
+// Unlock hanya berdasarkan readBabs (materi dibaca)
+function isBabUnlocked(sem, index) {
+  if (index === 0) return true;
+  const prevBab = DATA[sem][index-1];
+  return !!state.readBabs[prevBab.id];
+}
+
+function renderLevels(sem) {
+  document.getElementById('levelMapTitle').textContent = 'Semester ' + sem + ' • Peta Level';
+  const list = document.getElementById('levelList');
+  const babs = DATA[sem];
+  list.innerHTML = '';
+  babs.forEach((bab, i) => {
+    const unlocked = isBabUnlocked(sem, i);
+    const hasRead = !!state.readBabs[bab.id];
+    const completed = !!state.completed[bab.id];
+    const div = document.createElement('div');
+    let cls = 'level-item';
+    if (!unlocked) cls += ' locked';
+    else if (completed) cls += ' completed';
+    else if (hasRead) cls += ' read';
+    div.className = cls;
+
+    let tag = '';
+    if (completed) tag = '<div class="level-tag tag-done">✓ KUIS LULUS</div>';
+    else if (hasRead) tag = '<div class="level-tag tag-read">✓ SUDAH DIBACA</div>';
+
+    div.innerHTML = `
+      ${tag}
+      <div class="level-circle">${unlocked ? (completed ? '🏆' : (hasRead ? '✓' : i+1)) : '🔒'}</div>
+      <div class="level-info">
+        <h3>Level ${i+1}: ${bab.short}</h3>
+        <p>${bab.title}</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:${completed?100:(hasRead?50:0)}%"></div></div>
+      </div>
+      <div class="level-status">${unlocked ? '▶' : ''}</div>
+    `;
+    if (unlocked) div.onclick = () => openBab(sem, i);
+    list.appendChild(div);
+  });
+}
+
+/* =========================================================
+   MATERI
+   ========================================================= */
+function openBab(sem, index) {
+  const bab = DATA[sem][index];
+  state.currentBab = {sem, index};
+  document.getElementById('materialTitle').textContent = bab.title;
+  document.getElementById('materialContent').innerHTML = bab.content;
+
+  // Update tombol berdasarkan status
+  const btnDone = document.getElementById('btnDoneReading');
+  const hasRead = !!state.readBabs[bab.id];
+  btnDone.textContent = hasRead ? '✅ Materi Sudah Dibaca' : '✅ Selesai Membaca';
+  btnDone.disabled = hasRead;
+
+  goTo('screenMaterial');
+}
+
+// Tandai bab sudah dibaca -> buka level berikutnya
+function markAsRead() {
+  const {sem, index} = state.currentBab;
+  const bab = DATA[sem][index];
+
+  if (!state.readBabs[bab.id]) {
+    state.readBabs[bab.id] = true;
+    // Bonus XP kecil untuk baca materi
+    state.xp += 5;
+    saveState();
+    updateHeader();
+  }
+
+  // Cek apakah masih ada bab selanjutnya
+  const isLast = (index === DATA[sem].length - 1);
+  const msg = isLast
+    ? '🎉 Kamu telah menyelesaikan semua materi Semester ' + sem + '!'
+    : '✅ Bab ditandai selesai! Bab berikutnya sudah terbuka.';
+
+  // Tampilkan notifikasi ringan
+  showToast(msg);
+
+  // Kembali ke peta level
+  setTimeout(() => {
+    renderLevels(sem);
+    goTo('screenLevels');
+  }, 900);
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = `
+    position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+    background:rgba(0,230,118,0.95); color:#0a0a14; padding:14px 20px;
+    border-radius:12px; font-weight:700; font-size:13px; z-index:999;
+    max-width:80%; text-align:center; box-shadow:0 0 30px rgba(0,230,118,0.6);
+    animation:popIn 0.3s ease;
+  `;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.4s'; }, 1400);
+  setTimeout(() => t.remove(), 1900);
+}
+
+/* =========================================================
+   KUIS
+   ========================================================= */
+function startQuiz() {
+  if (!state.currentBab) return;
+  state.quizIndex = 0;
+  state.quizCorrect = 0;
+  state.quizAnswered = false;
+  renderQuiz();
+  goTo('screenQuiz');
+}
+
+function renderQuiz() {
+  const {sem, index} = state.currentBab;
+  const bab = DATA[sem][index];
+  const q = bab.questions[state.quizIndex];
+  const total = bab.questions.length;
+
+  document.getElementById('quizProgress').textContent = `Soal ${state.quizIndex+1}/${total}`;
+  document.getElementById('quizBarFill').style.width = ((state.quizIndex)/total*100) + '%';
+  document.getElementById('quizQuestion').textContent = q.q;
+
+  const optContainer = document.getElementById('quizOptions');
+  optContainer.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.o.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = `<div class="option-letter">${letters[i]}</div><div>${opt}</div>`;
+    div.onclick = () => answerQuestion(i);
+    optContainer.appendChild(div);
+  });
+  state.quizAnswered = false;
+}
+
+function answerQuestion(selected) {
+  if (state.quizAnswered) return;
+  state.quizAnswered = true;
+  const {sem, index} = state.currentBab;
+  const bab = DATA[sem][index];
+  const q = bab.questions[state.quizIndex];
+  const options = document.querySelectorAll('#quizOptions .option');
+  options.forEach((opt, i) => {
+    if (i === q.a) opt.classList.add('correct');
+    if (i === selected && i !== q.a) opt.classList.add('wrong');
+  });
+  const isCorrect = selected === q.a;
+  if (isCorrect) state.quizCorrect++;
+
+  showFeedback(isCorrect, () => {
+    if (!isCorrect) {
+      setTimeout(() => {
+        alert('❌ Jawaban salah! Kamu harus mengulang kuis dari awal.');
+        startQuiz();
+      }, 200);
+    } else {
+      state.quizIndex++;
+      if (state.quizIndex >= bab.questions.length) finishQuiz();
+      else renderQuiz();
+    }
+  });
+}
+
+/* =========================================================
+   FEEDBACK WEBGL
+   ========================================================= */
+let feedbackRenderer = null;
+let feedbackAnimId = null;
+
+function showFeedback(isCorrect, callback) {
+  const overlay = document.getElementById('feedbackOverlay');
+  const container = document.getElementById('feedbackCanvas');
+  const textEl = document.getElementById('feedbackText');
+  const subEl = document.getElementById('feedbackSub');
+
+  overlay.classList.add('active');
+  textEl.textContent = isCorrect ? '✓ BENAR!' : '✗ SALAH!';
+  textEl.className = 'feedback-text ' + (isCorrect ? 'correct' : 'wrong');
+  subEl.textContent = isCorrect
+    ? 'Pancasila & bendera berkibar!'
+    : 'Pancasila disilang, bendera tidak berkibar. Kamu harus mengulang!';
+
+  if (feedbackRenderer) { feedbackRenderer.dispose(); container.innerHTML = ''; }
+  const width = container.clientWidth || window.innerWidth;
+  const height = container.clientHeight || 300;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0a0a14);
+  const camera = new THREE.PerspectiveCamera(50, width/height, 0.1, 100);
+  camera.position.z = 5;
+
+  const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+  feedbackRenderer = renderer;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const dir = new THREE.DirectionalLight(0xffffff, 1);
+  dir.position.set(2,3,4);
+  scene.add(dir);
+
+  // ==== BENDERA ====
+  const flagGroup = new THREE.Group();
+  const poleGeo = new THREE.CylinderGeometry(0.06,0.06,3,16);
+  const poleMat = new THREE.MeshStandardMaterial({color:0xcccccc, metalness:0.7, roughness:0.3});
+  const pole = new THREE.Mesh(poleGeo, poleMat);
+  flagGroup.add(pole);
+
+  const flagWidth = 1.8, flagHeight = 1.2;
+  const flagGeo = new THREE.PlaneGeometry(flagWidth, flagHeight, 20, 10);
+  const flagMat = new THREE.MeshStandardMaterial({color:0xffffff, side:THREE.DoubleSide, roughness:0.8});
+  const flag = new THREE.Mesh(flagGeo, flagMat);
+  flag.position.set(flagWidth/2 + 0.05, 0.9, 0);
+  flagGroup.add(flag);
+
+  const colors = [];
+  const pos = flagGeo.attributes.position;
+  for (let i=0; i<pos.count; i++) {
+    const y = pos.getY(i);
+    if (y > 0) colors.push(1,0.1,0.1); else colors.push(1,1,1);
+  }
+  flagGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors,3));
+  flagMat.vertexColors = true;
+  scene.add(flagGroup);
+  flagGroup.position.set(-1.2, 0, 0);
+
+  // ==== PANCASILA ====
+  const pancasilaGroup = new THREE.Group();
+  const shape = new THREE.Shape();
+  shape.moveTo(0, 1.4);
+  shape.bezierCurveTo(1.1, 1.4, 1.4, 0.4, 1.4, -0.2);
+  shape.bezierCurveTo(1.4, -1.0, 0.6, -1.5, 0, -1.6);
+  shape.bezierCurveTo(-0.6, -1.5, -1.4, -1.0, -1.4, -0.2);
+  shape.bezierCurveTo(-1.4, 0.4, -1.1, 1.4, 0, 1.4);
+  const shieldGeo = new THREE.ExtrudeGeometry(shape, {depth:0.15, bevelEnabled:true, bevelSize:0.05, bevelThickness:0.05, bevelSegments:3});
+  const shieldMat = new THREE.MeshStandardMaterial({color:0xffd700, metalness:0.6, roughness:0.3, emissive:0x553300, emissiveIntensity:0.3});
+  pancasilaGroup.add(new THREE.Mesh(shieldGeo, shieldMat));
+
+  const starShape = new THREE.Shape();
+  const spikes = 5, outerR = 0.45, innerR = 0.18;
+  for (let i=0; i<spikes*2; i++) {
+    const r = i%2===0 ? outerR : innerR;
+    const ang = (i/(spikes*2))*Math.PI*2 - Math.PI/2;
+    const x = Math.cos(ang)*r, y = Math.sin(ang)*r;
+    if (i===0) starShape.moveTo(x,y); else starShape.lineTo(x,y);
+  }
+  starShape.closePath();
+  const starGeo = new THREE.ExtrudeGeometry(starShape, {depth:0.12, bevelEnabled:true, bevelSize:0.03, bevelThickness:0.03, bevelSegments:2});
+  const starMat = new THREE.MeshStandardMaterial({color:0xffffff, metalness:0.5, roughness:0.3, emissive:0xffffcc, emissiveIntensity:0.4});
+  const star = new THREE.Mesh(starGeo, starMat);
+  star.position.set(0,0,0.15);
+  pancasilaGroup.add(star);
+
+  let crossGroup = null;
+  if (!isCorrect) {
+    crossGroup = new THREE.Group();
+    const barGeo = new THREE.BoxGeometry(2.2, 0.25, 0.25);
+    const barMat = new THREE.MeshStandardMaterial({color:0xff2222, emissive:0x880000, emissiveIntensity:0.8});
+    const bar1 = new THREE.Mesh(barGeo, barMat); bar1.rotation.z = Math.PI/4;
+    const bar2 = new THREE.Mesh(barGeo, barMat); bar2.rotation.z = -Math.PI/4;
+    crossGroup.add(bar1); crossGroup.add(bar2);
+    crossGroup.position.set(0,0,0.4);
+    pancasilaGroup.add(crossGroup);
+  }
+  pancasilaGroup.position.set(1.2, 0, 0);
+  scene.add(pancasilaGroup);
+
+  let time = 0;
+  function animate() {
+    feedbackAnimId = requestAnimationFrame(animate);
+    time += 0.05;
+    if (isCorrect) {
+      const positions = flagGeo.attributes.position;
+      for (let i=0; i<positions.count; i++) {
+        const x = positions.getX(i);
+        const z = Math.sin((x+time)*4) * 0.12 * (x/flagWidth + 0.5);
+        positions.setZ(i, z);
+      }
+      positions.needsUpdate = true;
+    }
+    pancasilaGroup.rotation.y = Math.sin(time*0.5) * 0.3;
+    flagGroup.rotation.y = Math.sin(time*0.3) * 0.1;
+    if (crossGroup) crossGroup.rotation.z = Math.sin(time*2) * 0.05;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  const duration = isCorrect ? 2000 : 2600;
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    cancelAnimationFrame(feedbackAnimId);
+    scene.traverse(obj => {
+      if (obj.geometry) obj.geometry.dispose();
+      if (obj.material) {
+        if (Array.isArray(obj.material)) obj.material.forEach(m=>m.dispose());
+        else obj.material.dispose();
+      }
+    });
+    renderer.dispose();
+    container.innerHTML = '';
+    if (callback) callback();
+  }, duration);
+}
+
+/* =========================================================
+   FINISH QUIZ & REWARD
+   ========================================================= */
+function finishQuiz() {
+  const {sem, index} = state.currentBab;
+  const bab = DATA[sem][index];
+  const total = bab.questions.length;
+  const correct = state.quizCorrect;
+  const passed = correct === total;
+
+  // Setiap selesai kuis, materi otomatis dianggap sudah dibaca juga
+  if (!state.readBabs[bab.id]) {
+    state.readBabs[bab.id] = true;
+  }
+
+  if (passed) {
+    const alreadyCompleted = !!state.completed[bab.id];
+    state.completed[bab.id] = true;
+    if (!alreadyCompleted) {
+      state.xp += total * 10;
+      state.pancasilaProgress = (state.pancasilaProgress || 0) + 1;
+      const badgeId = 'pancasila_' + state.pancasilaProgress;
+      if (!state.badges.find(b => b.id === badgeId)) {
+        state.badges.push({
+          id: badgeId,
+          name: 'Pancasila Lengkap #' + state.pancasilaProgress,
+          date: new Date().toISOString()
+        });
+      }
+    }
+    saveState();
+    updateHeader();
+
+    document.getElementById('resultIcon').textContent = '🎉';
+    document.getElementById('resultTitle').textContent = 'Sempurna!';
+    document.getElementById('resultScore').textContent = correct + '/' + total;
+    document.getElementById('resultText').textContent = alreadyCompleted
+      ? 'Kuis sudah pernah diselesaikan sebelumnya. Tetap hebat!'
+      : 'Kamu mendapatkan ' + (total*10) + ' XP dan badge Pancasila!';
+    document.getElementById('btnRetryQuiz').style.display = 'block';
+    goTo('screenResult');
+
+    if (!alreadyCompleted) setTimeout(() => showRewardModal(state.pancasilaProgress), 500);
+  } else {
+    saveState();
+    updateHeader();
+    document.getElementById('resultIcon').textContent = '😅';
+    document.getElementById('resultTitle').textContent = 'Belum Sempurna';
+    document.getElementById('resultScore').textContent = correct + '/' + total;
+    document.getElementById('resultText').textContent = 'Untuk dapat badge Pancasila, kamu harus menjawab semua soal dengan benar. Coba lagi ya!';
+    document.getElementById('btnRetryQuiz').style.display = 'block';
+    goTo('screenResult');
+  }
+}
+
+/* =========================================================
+   MODAL REWARD
+   ========================================================= */
+let rewardRenderer = null;
+let rewardAnimId = null;
+
+function showRewardModal(count) {
+  document.getElementById('rewardModal').classList.add('active');
+  document.getElementById('rewardDesc').textContent = 'Kamu berhasil menggambar Pancasila secara utuh!';
+  document.getElementById('rewardDetail').textContent = 'Badge Pancasila #' + count + ' telah dikoleksi. Total: ' + state.badges.length + ' badge.';
+
+  const container = document.getElementById('badgeCanvasContainer');
+  container.innerHTML = '';
+  const size = 120;
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0f3460);
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  camera.position.z = 3;
+  const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+  renderer.setSize(size, size);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+  rewardRenderer = renderer;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const dir = new THREE.DirectionalLight(0xffffff, 1);
+  dir.position.set(2,3,4);
+  scene.add(dir);
+
+  const group = new THREE.Group();
+  const shape = new THREE.Shape();
+  shape.moveTo(0, 1.2);
+  shape.bezierCurveTo(1.0, 1.2, 1.2, 0.3, 1.2, -0.2);
+  shape.bezierCurveTo(1.2, -0.9, 0.5, -1.3, 0, -1.4);
+  shape.bezierCurveTo(-0.5, -1.3, -1.2, -0.9, -1.2, -0.2);
+  shape.bezierCurveTo(-1.2, 0.3, -1.0, 1.2, 0, 1.2);
+  const shieldGeo = new THREE.ExtrudeGeometry(shape, {depth:0.12, bevelEnabled:true, bevelSize:0.04, bevelThickness:0.04, bevelSegments:2});
+  const shieldMat = new THREE.MeshStandardMaterial({color:0xffd700, metalness:0.7, roughness:0.2, emissive:0x553300, emissiveIntensity:0.4});
+  group.add(new THREE.Mesh(shieldGeo, shieldMat));
+
+  const starShape = new THREE.Shape();
+  const spikes = 5, outerR = 0.4, innerR = 0.16;
+  for (let i=0; i<spikes*2; i++) {
+    const r = i%2===0 ? outerR : innerR;
+    const ang = (i/(spikes*2))*Math.PI*2 - Math.PI/2;
+    const x = Math.cos(ang)*r, y = Math.sin(ang)*r;
+    if (i===0) starShape.moveTo(x,y); else starShape.lineTo(x,y);
+  }
+  starShape.closePath();
+  const starGeo = new THREE.ExtrudeGeometry(starShape, {depth:0.1, bevelEnabled:true, bevelSize:0.03, bevelThickness:0.03, bevelSegments:2});
+  const starMat = new THREE.MeshStandardMaterial({color:0xffffff, metalness:0.5, roughness:0.3, emissive:0xffffcc, emissiveIntensity:0.5});
+  const star = new THREE.Mesh(starGeo, starMat);
+  star.position.set(0,0,0.13);
+  group.add(star);
+  scene.add(group);
+
+  let t = 0;
+  function animate() {
+    rewardAnimId = requestAnimationFrame(animate);
+    t += 0.05;
+    group.rotation.y = t;
+    group.rotation.x = Math.sin(t*0.7) * 0.15;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+function closeReward() {
+  document.getElementById('rewardModal').classList.remove('active');
+  if (rewardAnimId) cancelAnimationFrame(rewardAnimId);
+  if (rewardRenderer) {
+    rewardRenderer.dispose();
+    document.getElementById('badgeCanvasContainer').innerHTML = '';
+  }
+  renderBadges();
+  backToLevels();
+}
+
+/* =========================================================
+   BADGES SCREEN
+   ========================================================= */
+function renderBadges() {
+  const grid = document.getElementById('badgesGrid');
+  grid.innerHTML = '';
+  const totalBabs = DATA[1].length + DATA[2].length;
+  for (let i=1; i<=totalBabs; i++) {
+    const badgeId = 'pancasila_' + i;
+    const earned = state.badges.find(b => b.id === badgeId);
+    const div = document.createElement('div');
+    div.className = 'badge-item' + (earned ? ' earned' : '');
+    div.innerHTML = `<span class="bi">${earned ? '🏅' : '🔒'}</span>Pancasila #${i}`;
+    grid.appendChild(div);
+  }
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+function init() {
+  loadState();
+  updateHeader();
+  renderBadges();
+  document.getElementById('badgeDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
+  document.getElementById('xpDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
+}
+init();
+</script>
+</body>
+</html>
