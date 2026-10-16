@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PKn Kelas 11 - Gamifikasi Kurikulum Merdeka</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { height:100%; font-family:'Segoe UI', Tahoma, sans-serif; overflow:hidden; }
@@ -32,9 +33,7 @@
       display:grid;
       grid-template-columns: 340px 1fr;
       grid-template-rows: auto 1fr;
-      grid-template-areas:
-        "header header"
-        "sidebar main";
+      grid-template-areas: "header header" "sidebar main";
     }
     .header { grid-area: header; }
     .screen { grid-area: main; }
@@ -49,24 +48,63 @@
   @media (max-width: 767px) { .desktop-sidebar { display:none; } }
 
   .header {
-    padding:12px 16px;
+    padding:10px 16px;
     display:flex; justify-content:space-between; align-items:center;
     background:rgba(0,0,0,0.3); backdrop-filter:blur(10px);
     border-bottom:1px solid rgba(255,255,255,0.1);
     z-index:10; flex-shrink:0;
+    gap:8px;
   }
-  .header h1 { font-size:13px; font-weight:600; color:#ffd700; letter-spacing:0.3px; }
-  .header .teacher-info { font-size:9px; color:#aaa; display:block; margin-top:1px; }
-  .stats { display:flex; gap:6px; font-size:10px; }
+  .header-left {
+    display:flex; align-items:center; gap:8px;
+    flex:1; min-width:0;
+  }
+  .header-logo {
+    width:36px; height:36px; border-radius:8px;
+    background:rgba(255,255,255,0.1);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; flex-shrink:0;
+    border:1.5px solid rgba(255,215,0,0.4);
+  }
+  .header-logo img { width:100%; height:100%; object-fit:cover; }
+  .header-logo .placeholder { font-size:18px; color:#ffd700; }
+  .header-title-block { min-width:0; flex:1; }
+  .header h1 {
+    font-size:13px; font-weight:600; color:#ffd700;
+    letter-spacing:0.3px; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis;
+  }
+  .header .school-name {
+    font-size:9px; color:#4fc3f7; display:block; margin-top:1px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    font-weight:600;
+  }
+  .header .teacher-info {
+    font-size:9px; color:#aaa; display:block; margin-top:1px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .header-teacher-photo {
+    width:32px; height:32px; border-radius:50%;
+    background:rgba(255,215,0,0.15);
+    border:1.5px solid rgba(255,215,0,0.5);
+    overflow:hidden; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px;
+  }
+  .header-teacher-photo img { width:100%; height:100%; object-fit:cover; }
+  .stats { display:flex; gap:5px; font-size:10px; flex-shrink:0; align-items:center; }
   .stat-badge {
     background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.4);
-    padding:4px 8px; border-radius:12px; color:#ffd700; font-weight:600;
-    cursor:pointer; transition:all 0.3s;
+    padding:3px 7px; border-radius:12px; color:#ffd700; font-weight:600;
+    cursor:pointer; transition:all 0.3s; font-size:10px;
   }
   .stat-badge:hover { background:rgba(255,215,0,0.25); }
   @media (max-width: 380px) {
     .header h1 { font-size:11px; }
-    .stat-badge { padding:3px 6px; font-size:9px; }
+    .header .school-name { font-size:8px; }
+    .stat-badge { padding:2px 5px; font-size:9px; }
+    .header-logo { width:30px; height:30px; }
+    .header-teacher-photo { width:28px; height:28px; }
   }
 
   .desktop-sidebar-title {
@@ -74,6 +112,38 @@
     text-transform:uppercase; letter-spacing:1px;
     margin-bottom:14px; padding-bottom:10px;
     border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-profile {
+    display:flex; flex-direction:column; align-items:center;
+    padding:14px; margin-bottom:14px;
+    background:rgba(255,215,0,0.06);
+    border:1px solid rgba(255,215,0,0.2);
+    border-radius:12px;
+  }
+  .sidebar-logo-lg {
+    width:60px; height:60px; border-radius:14px;
+    background:rgba(255,255,255,0.1);
+    border:2px solid rgba(255,215,0,0.5);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; margin-bottom:8px;
+  }
+  .sidebar-logo-lg img { width:100%; height:100%; object-fit:cover; }
+  .sidebar-logo-lg .placeholder { font-size:28px; color:#ffd700; }
+  .sidebar-school-name {
+    font-size:11px; color:#ffd700; font-weight:700;
+    text-align:center; margin-bottom:10px; line-height:1.3;
+  }
+  .sidebar-teacher-photo-lg {
+    width:50px; height:50px; border-radius:50%;
+    background:rgba(255,215,0,0.15);
+    border:2px solid rgba(255,215,0,0.5);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; margin-bottom:6px;
+  }
+  .sidebar-teacher-photo-lg img { width:100%; height:100%; object-fit:cover; }
+  .sidebar-teacher-photo-lg .placeholder { font-size:22px; }
+  .sidebar-teacher-name {
+    font-size:12px; color:#fff; font-weight:700; text-align:center;
   }
   .sidebar-info {
     background:rgba(255,215,0,0.08);
@@ -114,12 +184,12 @@
     padding:24px; margin-top:20px;
   }
   @media (min-width: 768px) {
-    .form-box { max-width:560px; margin:30px auto 20px; padding:28px; }
+    .form-box { max-width:620px; margin:20px auto; padding:28px; }
   }
-  .form-logo { font-size:60px; text-align:center; margin-bottom:16px; }
-  .form-title { text-align:center; font-size:20px; font-weight:700; color:#ffd700; margin-bottom:6px; }
-  .form-sub { text-align:center; font-size:11px; color:#aaa; margin-bottom:24px; }
-  .form-group { margin-bottom:16px; }
+  .form-logo { font-size:50px; text-align:center; margin-bottom:12px; }
+  .form-title { text-align:center; font-size:19px; font-weight:700; color:#ffd700; margin-bottom:6px; }
+  .form-sub { text-align:center; font-size:11px; color:#aaa; margin-bottom:20px; }
+  .form-group { margin-bottom:14px; }
   .form-label { font-size:12px; color:#ffd700; margin-bottom:6px; display:block; font-weight:600; }
   .form-input, .form-select {
     width:100%; padding:12px 14px; background:rgba(255,255,255,0.08);
@@ -129,10 +199,145 @@
   .form-input:focus, .form-select:focus { border-color:#ffd700; background:rgba(255,215,0,0.08); }
   .form-input::placeholder { color:#666; }
   .form-select option { background:#1a1a2e; color:#fff; }
-  .form-input:disabled, .form-select:disabled {
-    background:rgba(255,215,0,0.1); color:#ffd700; cursor:not-allowed;
-    border-color:rgba(255,215,0,0.3); font-weight:600;
+
+  .auth-tabs {
+    display:flex; gap:6px; margin-bottom:18px;
+    background:rgba(0,0,0,0.25); padding:5px; border-radius:12px;
   }
+  .auth-tab {
+    flex:1; padding:10px; text-align:center;
+    border-radius:8px; font-size:12px; font-weight:700;
+    cursor:pointer; transition:all 0.3s;
+    color:#aaa;
+  }
+  .auth-tab.active {
+    background:linear-gradient(135deg,#ffd700,#ff8c00);
+    color:#1a1a2e;
+    box-shadow:0 4px 12px rgba(255,215,0,0.3);
+  }
+
+  .role-tabs {
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    margin-bottom:18px;
+  }
+  .role-tab {
+    padding:14px 10px; text-align:center;
+    background:rgba(255,255,255,0.05);
+    border:2px solid rgba(255,255,255,0.15);
+    border-radius:12px; cursor:pointer; transition:all 0.3s;
+    font-size:12px; font-weight:700; color:#aaa;
+  }
+  .role-tab .rt-icon { font-size:24px; display:block; margin-bottom:4px; }
+  .role-tab.active {
+    background:rgba(255,215,0,0.15);
+    border-color:#ffd700; color:#ffd700;
+    transform:translateY(-2px);
+  }
+
+  .upload-section {
+    display:grid; grid-template-columns: 1fr 1fr;
+    gap:12px; margin-bottom:14px;
+  }
+  .upload-item {
+    background:rgba(255,255,255,0.05);
+    border:1.5px dashed rgba(255,215,0,0.4);
+    border-radius:12px; padding:14px 10px;
+    text-align:center; cursor:pointer; transition:all 0.3s;
+    position:relative;
+  }
+  .upload-item:hover { background:rgba(255,215,0,0.08); border-color:#ffd700; }
+  .upload-item input[type="file"] { display:none; }
+  .upload-preview {
+    width:70px; height:70px; margin:0 auto 8px;
+    border-radius:50%; background:rgba(255,255,255,0.1);
+    border:2px solid rgba(255,215,0,0.3);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; position:relative;
+  }
+  .upload-preview.school { border-radius:12px; }
+  .upload-preview img { width:100%; height:100%; object-fit:cover; }
+  .upload-preview .placeholder { font-size:24px; color:#ffd700; opacity:0.6; }
+  .upload-label { font-size:10px; color:#ffd700; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; }
+  .upload-hint { font-size:9px; color:#888; margin-top:2px; }
+  .upload-item.has-image {
+    border-style:solid; border-color:#00e676;
+    background:rgba(0,230,118,0.06);
+  }
+  .upload-item.has-image .upload-label { color:#00e676; }
+  .remove-img-btn {
+    position:absolute; top:6px; right:6px;
+    background:rgba(255,82,82,0.9); color:#fff; border:none;
+    width:22px; height:22px; border-radius:50%;
+    font-size:12px; cursor:pointer; display:none;
+    align-items:center; justify-content:center; z-index:2;
+  }
+  .upload-item.has-image .remove-img-btn { display:flex; }
+
+  .form-divider {
+    display:flex; align-items:center; gap:10px;
+    margin:18px 0 14px;
+    font-size:10px; color:#ffd700; font-weight:700;
+    text-transform:uppercase; letter-spacing:1px;
+  }
+  .form-divider::before, .form-divider::after {
+    content:''; flex:1; height:1px; background:rgba(255,215,0,0.3);
+  }
+
+  .class-selector {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+    gap:10px; margin-bottom:16px;
+  }
+  .class-card {
+    padding:14px; background:rgba(255,255,255,0.05);
+    border:2px solid rgba(255,255,255,0.15);
+    border-radius:12px; text-align:center; cursor:pointer;
+    transition:all 0.3s;
+  }
+  .class-card:hover { background:rgba(255,215,0,0.08); border-color:rgba(255,215,0,0.5); }
+  .class-card.active {
+    background:linear-gradient(135deg,rgba(255,215,0,0.2),rgba(255,140,0,0.15));
+    border-color:#ffd700; color:#ffd700;
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(255,215,0,0.3);
+  }
+  .class-card .cc-name { font-size:13px; font-weight:800; margin-bottom:4px; }
+  .class-card .cc-count { font-size:10px; color:#aaa; }
+  .class-card.active .cc-count { color:#ffd700; }
+
+  .welcome-card {
+    background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(0,176,255,0.1));
+    border:2px solid rgba(255,215,0,0.4);
+    border-radius:16px; padding:18px; margin-bottom:16px;
+    display:flex; align-items:center; gap:14px;
+    flex-wrap:wrap;
+  }
+  .welcome-logo {
+    width:60px; height:60px; border-radius:12px;
+    background:rgba(255,255,255,0.1);
+    border:2px solid rgba(255,215,0,0.5);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; flex-shrink:0;
+  }
+  .welcome-logo img { width:100%; height:100%; object-fit:cover; }
+  .welcome-logo .placeholder { font-size:26px; color:#ffd700; }
+  .welcome-info { flex:1; min-width:0; }
+  .welcome-school {
+    font-size:13px; color:#ffd700; font-weight:800;
+    margin-bottom:4px; line-height:1.3;
+  }
+  .welcome-teacher {
+    font-size:11px; color:#ddd;
+    display:flex; align-items:center; gap:6px;
+  }
+  .welcome-teacher-photo {
+    width:22px; height:22px; border-radius:50%;
+    background:rgba(255,215,0,0.15);
+    border:1.5px solid rgba(255,215,0,0.5);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; flex-shrink:0;
+  }
+  .welcome-teacher-photo img { width:100%; height:100%; object-fit:cover; }
+  .welcome-teacher-photo .placeholder { font-size:11px; }
 
   .student-count-info {
     font-size:11px; color:#4fc3f7; margin-top:6px;
@@ -150,7 +355,6 @@
   }
   .title-sub { text-align:center; font-size:12px; color:#aaa; margin-bottom:20px; }
 
-  /* Info kelas yang aktif */
   .active-class-banner {
     background:linear-gradient(135deg,rgba(0,176,255,0.15),rgba(255,215,0,0.1));
     border:1.5px solid rgba(0,176,255,0.5);
@@ -262,7 +466,7 @@
   .btn-primary {
     width:100%; padding:14px; background:linear-gradient(135deg,#ffd700,#ff8c00);
     border:none; border-radius:12px; color:#1a1a2e; font-weight:700;
-    font-size:14px; cursor:pointer; margin-top:20px; transition:all 0.3s;
+    font-size:14px; cursor:pointer; margin-top:16px; transition:all 0.3s;
   }
   .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,215,0,0.4); }
   .btn-primary:active { transform:scale(0.97); }
@@ -274,6 +478,12 @@
   }
   .btn-secondary:hover { background:rgba(255,255,255,0.15); }
   .btn-secondary:active { transform:scale(0.97); }
+  .btn-success {
+    width:100%; padding:12px; background:linear-gradient(135deg,#00e676,#00b0ff);
+    border:none; border-radius:12px; color:#0a0a14; font-weight:700;
+    font-size:13px; cursor:pointer; margin-top:10px; transition:all 0.3s;
+  }
+  .btn-success:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,230,118,0.4); }
   .btn-danger {
     width:100%; padding:10px; background:rgba(255,82,82,0.15);
     border:1px solid rgba(255,82,82,0.4); border-radius:10px; color:#ff5252;
@@ -363,6 +573,8 @@
   }
   .info-banner b { color:#fff; }
   .info-banner.warning { background:rgba(255,215,0,0.12); border-color:rgba(255,215,0,0.4); color:#ffd700; }
+  .info-banner.success { background:rgba(0,230,118,0.12); border-color:rgba(0,230,118,0.4); color:#00e676; }
+  .info-banner.danger { background:rgba(255,82,82,0.12); border-color:rgba(255,82,82,0.4); color:#ff5252; }
 
   .rekap-table {
     width:100%; border-collapse:collapse; font-size:11px; margin-top:10px;
@@ -462,12 +674,14 @@
     transition:all 0.3s;
   }
   .student-list-item:hover { border-color:rgba(255,215,0,0.3); }
-  .student-list-item .num-badge {
-    width:28px; height:28px; border-radius:50%;
-    background:rgba(255,215,0,0.15); color:#ffd700;
+  .student-avatar-sm {
+    width:34px; height:34px; border-radius:50%;
+    background:rgba(255,215,0,0.15);
+    border:1.5px solid rgba(255,215,0,0.4);
     display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:11px; flex-shrink:0;
+    overflow:hidden; flex-shrink:0; font-size:14px;
   }
+  .student-avatar-sm img { width:100%; height:100%; object-fit:cover; }
   .student-list-item .info { flex:1; min-width:0; }
   .student-list-item .name { font-size:13px; font-weight:600; color:#fff; }
   .student-list-item .nisn { font-size:10px; color:#4fc3f7; margin-top:2px; }
@@ -494,7 +708,6 @@
   .desktop-sidebar::-webkit-scrollbar { width:4px; }
   .desktop-sidebar::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.3); border-radius:2px; }
 
-  /* Badge kelas di header */
   .class-active-badge {
     display:inline-block;
     background:linear-gradient(135deg,#00b0ff,#00e676);
@@ -507,86 +720,197 @@
 <body>
 <div id="app">
   <div class="header">
-    <div>
-      <h1>🎓 PKn Kelas 11 <span class="class-active-badge" id="headerClassBadge">-</span></h1>
-      <span class="teacher-info" id="headerTeacher">Belum login</span>
+    <div class="header-left">
+      <div class="header-logo" id="headerLogo">
+        <span class="placeholder">🏫</span>
+      </div>
+      <div class="header-title-block">
+        <h1 id="headerTitle">🎓 PKn Kelas 11 <span class="class-active-badge" id="headerClassBadge">-</span></h1>
+        <span class="school-name" id="headerSchoolName">-</span>
+        <span class="teacher-info" id="headerTeacher">Belum login</span>
+      </div>
     </div>
     <div class="stats">
+      <div class="header-teacher-photo" id="headerTeacherPhoto">
+        <span class="placeholder">👤</span>
+      </div>
       <div class="stat-badge" id="xpDisplay">⚡ 0</div>
       <div class="stat-badge" id="badgeDisplay">🏅 0</div>
-      <div class="stat-badge" id="rekapBtn">📊</div>
+      <div class="stat-badge" id="logoutBtn">🚪</div>
     </div>
   </div>
 
   <aside class="desktop-sidebar" id="desktopSidebar">
-    <div class="desktop-sidebar-title">📋 Panel Guru</div>
+    <div class="desktop-sidebar-title" id="sidebarTitle">📋 Panel</div>
+    <div class="sidebar-profile">
+      <div class="sidebar-logo-lg" id="sidebarLogo">
+        <span class="placeholder">🏫</span>
+      </div>
+      <div class="sidebar-school-name" id="sidebarSchoolName">-</div>
+      <div class="sidebar-teacher-photo-lg" id="sidebarTeacherPhoto">
+        <span class="placeholder">👤</span>
+      </div>
+      <div class="sidebar-teacher-name" id="sidebarTeacherName">-</div>
+    </div>
     <div class="sidebar-info">
-      <div class="label">Nama Guru</div>
-      <div class="value" id="sidebarTeacherName">-</div>
       <div class="label">Kelas Aktif</div>
       <div class="value"><span class="kelas-badge" id="sidebarTeacherClass">-</span></div>
       <div class="label">Jumlah Siswa</div>
       <div class="value" id="sidebarStudentCount">0</div>
     </div>
-    <div class="sidebar-menu">
-      <div class="sidebar-menu-item" onclick="goTo('screenSemester')">
-        <span class="icon">🏠</span><span>Beranda</span>
-      </div>
-      <div class="sidebar-menu-item" onclick="renderManageStudents();goTo('screenManageStudents')">
-        <span class="icon">👥</span><span>Tambah / Kelola Siswa</span>
-      </div>
-      <div class="sidebar-menu-item" onclick="renderRekap();goTo('screenRekap')">
-        <span class="icon">📊</span><span>Rekap Nilai</span>
-      </div>
-      <div class="sidebar-menu-item" onclick="renderBadges();goTo('screenBadges')">
-        <span class="icon">🏅</span><span>Koleksi Badge</span>
-      </div>
-      <div class="sidebar-menu-item" onclick="handleLogout()">
-        <span class="icon">🚪</span><span>Ganti Kelas / Keluar</span>
-      </div>
-    </div>
+    <div class="sidebar-menu" id="sidebarMenu"></div>
   </aside>
 
-  <!-- ====== LOGIN GURU (WAJIB SETIAP MASUK) ====== -->
-  <div class="screen active" id="screenLoginGuru">
+  <!-- AUTH -->
+  <div class="screen active" id="screenAuth">
     <div class="form-box">
-      <div class="form-logo">👨‍🏫</div>
-      <div class="form-title">Selamat Datang, Guru!</div>
-      <div class="form-sub">PKn Kelas 11 • Kurikulum Merdeka</div>
-      <div class="info-banner warning" style="text-align:left;">
-        ⚠️ <b>Wajib diisi setiap login.</b> Setiap kelas memiliki data siswa, nilai, dan badge yang terpisah.
+      <div class="form-logo">🎓</div>
+      <div class="form-title">PKn Kelas 11</div>
+      <div class="form-sub">Kurikulum Merdeka • Gamifikasi Pembelajaran</div>
+
+      <div class="auth-tabs" id="authTabs">
+        <div class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">🔐 Masuk</div>
+        <div class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">📝 Daftar Guru</div>
       </div>
-      <div class="form-group">
-        <label class="form-label">👤 Nama Guru</label>
-        <input type="text" class="form-input" id="inputNamaGuru" placeholder="Masukkan nama guru" maxlength="40" autocomplete="off">
-      </div>
-      <div class="form-group">
-        <label class="form-label">🏫 Kelas yang Diajar</label>
-        <select class="form-select" id="inputKelasAjar">
-          <option value="">-- Pilih Kelas --</option>
-          <option value="XI MIPA 1">XI MIPA 1</option>
-          <option value="XI MIPA 2">XI MIPA 2</option>
-          <option value="XI MIPA 3">XI MIPA 3</option>
-          <option value="XI MIPA 4">XI MIPA 4</option>
-          <option value="XI MIPA 5">XI MIPA 5</option>
-        </select>
-        <div class="student-count-info" id="studentCountInfo" style="display:none;">
-          <span>👥 Siswa terdaftar di kelas ini:</span> <span class="num" id="studentCountNum">0</span>
+
+      <div id="loginSection">
+        <div class="role-tabs">
+          <div class="role-tab active" id="roleTabGuru" onclick="switchRole('guru')">
+            <span class="rt-icon">👨‍🏫</span>
+            Masuk sebagai Guru
+          </div>
+          <div class="role-tab" id="roleTabSiswa" onclick="switchRole('siswa')">
+            <span class="rt-icon">👨‍🎓</span>
+            Masuk sebagai Siswa
+          </div>
+        </div>
+
+        <div id="loginGuruForm">
+          <div class="form-group">
+            <label class="form-label">🏫 Nama Sekolah</label>
+            <input type="text" class="form-input" id="loginGuruSekolah" placeholder="Nama sekolah yang terdaftar" maxlength="60" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">👤 Nama Guru</label>
+            <input type="text" class="form-input" id="loginGuruNama" placeholder="Nama guru" maxlength="40" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">🔑 Password</label>
+            <input type="password" class="form-input" id="loginGuruPassword" placeholder="Password" autocomplete="off">
+          </div>
+          <button class="btn-primary" onclick="handleLoginGuru()">🚀 Masuk sebagai Guru</button>
+        </div>
+
+        <div id="loginSiswaForm" style="display:none;">
+          <div class="info-banner">
+            💡 Siswa tidak perlu daftar. Gunakan <b>Nama</b> dan <b>NISN</b> yang sudah diinput guru.
+          </div>
+          <div class="form-group">
+            <label class="form-label">🏫 Nama Sekolah</label>
+            <input type="text" class="form-input" id="loginSiswaSekolah" placeholder="Nama sekolah" maxlength="60" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">👤 Nama Siswa</label>
+            <input type="text" class="form-input" id="loginSiswaNama" placeholder="Nama lengkap" maxlength="40" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">🔢 NISN</label>
+            <input type="text" class="form-input" id="loginSiswaNisn" placeholder="NISN" maxlength="15" inputmode="numeric" autocomplete="off">
+          </div>
+          <button class="btn-primary" onclick="handleLoginSiswa()">🚀 Masuk sebagai Siswa</button>
         </div>
       </div>
-      <button class="btn-primary" onclick="handleLoginGuru()">🚀 Masuk Kelas</button>
+
+      <div id="registerSection" style="display:none;">
+        <div class="info-banner warning" style="text-align:left;">
+          📝 Daftarkan akun guru & sekolah. Setelah berhasil, Anda bisa login dengan akun tersebut.
+        </div>
+
+        <div class="form-divider">🏫 Data Sekolah</div>
+        <div class="form-group">
+          <label class="form-label">🏫 Nama Sekolah *</label>
+          <input type="text" class="form-input" id="regNamaSekolah" placeholder="Contoh: SMA Negeri 1 Jakarta" maxlength="60" autocomplete="off">
+        </div>
+
+        <div class="upload-section">
+          <div class="upload-item" id="regUploadLogoItem" onclick="document.getElementById('regLogoFile').click()">
+            <button class="remove-img-btn" onclick="event.stopPropagation();removeLogoReg()" title="Hapus">×</button>
+            <div class="upload-preview school" id="regUploadLogoPreview">
+              <span class="placeholder">🏫</span>
+            </div>
+            <div class="upload-label">Logo Sekolah</div>
+            <div class="upload-hint">Klik untuk upload</div>
+            <input type="file" id="regLogoFile" accept="image/*" onchange="handleLogoUploadReg(event)">
+          </div>
+        </div>
+
+        <div class="form-divider">👨‍🏫 Data Guru</div>
+        <div class="upload-section">
+          <div class="upload-item" id="regUploadTeacherItem" onclick="document.getElementById('regTeacherFile').click()">
+            <button class="remove-img-btn" onclick="event.stopPropagation();removeTeacherPhotoReg()" title="Hapus">×</button>
+            <div class="upload-preview" id="regUploadTeacherPreview">
+              <span class="placeholder">👨‍🏫</span>
+            </div>
+            <div class="upload-label">Foto Guru</div>
+            <div class="upload-hint">Klik untuk upload</div>
+            <input type="file" id="regTeacherFile" accept="image/*" onchange="handleTeacherUploadReg(event)">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">👤 Nama Guru *</label>
+          <input type="text" class="form-input" id="regNamaGuru" placeholder="Nama guru" maxlength="40" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">📧 Email (opsional)</label>
+          <input type="email" class="form-input" id="regEmail" placeholder="email@example.com" maxlength="60" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🔑 Password *</label>
+          <input type="password" class="form-input" id="regPassword" placeholder="Min. 4 karakter" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🔑 Ulangi Password *</label>
+          <input type="password" class="form-input" id="regPassword2" placeholder="Ulangi password" autocomplete="off">
+        </div>
+
+        <button class="btn-primary" onclick="handleRegisterGuru()">📝 Daftar Sekarang</button>
+        <button class="btn-secondary" onclick="switchAuthTab('login')">Sudah punya akun? Masuk</button>
+      </div>
     </div>
   </div>
 
-  <!-- ====== SEMESTER ====== -->
+  <!-- PILIH KELAS -->
+  <div class="screen" id="screenPilihKelas">
+    <div class="form-box">
+      <div class="form-logo">🏫</div>
+      <div class="form-title">Pilih Kelas yang Diajar</div>
+      <div class="form-sub" id="pilihKelasSub">Pilih kelas untuk memulai pembelajaran</div>
+      <div class="class-selector" id="classSelector"></div>
+      <button class="btn-primary" onclick="confirmPilihKelas()">✅ Masuk ke Kelas</button>
+    </div>
+  </div>
+
+  <!-- SEMESTER GURU -->
   <div class="screen" id="screenSemester">
+    <div class="welcome-card">
+      <div class="welcome-logo" id="welcomeLogo"><span class="placeholder">🏫</span></div>
+      <div class="welcome-info">
+        <div class="welcome-school" id="welcomeSchool">-</div>
+        <div class="welcome-teacher">
+          <div class="welcome-teacher-photo" id="welcomeTeacherPhoto"><span class="placeholder">👨‍🏫</span></div>
+          <span id="welcomeTeacherName">-</span>
+        </div>
+      </div>
+    </div>
+
     <div class="active-class-banner">
       <div>
         <div class="label">🏫 Kelas Aktif</div>
         <div class="class-name" id="activeClassName">-</div>
         <div class="meta" id="activeClassMeta">-</div>
       </div>
-      <button class="btn-secondary" style="width:auto;margin:0;padding:8px 12px;font-size:11px;" onclick="handleLogout()">🔄 Ganti Kelas</button>
+      <button class="btn-secondary" style="width:auto;margin:0;padding:8px 12px;font-size:11px;" onclick="goTo('screenPilihKelas')">🔄 Ganti Kelas</button>
     </div>
 
     <div class="title-main">Pilih Semester</div>
@@ -610,17 +934,52 @@
     </div>
   </div>
 
-  <!-- ====== MANAGE STUDENTS ====== -->
+  <!-- SEMESTER SISWA -->
+  <div class="screen" id="screenSemesterSiswa">
+    <div class="welcome-card">
+      <div class="welcome-logo" id="welcomeLogoSiswa"><span class="placeholder">🏫</span></div>
+      <div class="welcome-info">
+        <div class="welcome-school" id="welcomeSchoolSiswa">-</div>
+        <div class="welcome-teacher">
+          <div class="welcome-teacher-photo" id="welcomeStudentPhoto"><span class="placeholder">👨‍🎓</span></div>
+          <span id="welcomeStudentName">-</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="active-class-banner">
+      <div>
+        <div class="label">🏫 Kelas</div>
+        <div class="class-name" id="siswaClassName">-</div>
+        <div class="meta" id="siswaClassMeta">-</div>
+      </div>
+    </div>
+
+    <div class="title-main">Pilih Semester</div>
+    <div class="title-sub">Kurikulum Merdeka - Kelas 11</div>
+    <div class="semester-grid">
+      <div class="semester-card" onclick="openSemesterSiswa(1)">
+        <div class="semester-icon">📚</div>
+        <h2>Semester 1</h2>
+        <p>4 Bab • 4 Level</p>
+      </div>
+      <div class="semester-card" onclick="openSemesterSiswa(2)">
+        <div class="semester-icon">📖</div>
+        <h2>Semester 2</h2>
+        <p>3 Bab • 3 Level</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGE STUDENTS -->
   <div class="screen" id="screenManageStudents">
     <div class="material-header">
       <button class="back-btn" onclick="goTo('screenSemester')">←</button>
       <div class="material-title">👥 Tambah / Kelola Siswa</div>
     </div>
-
     <div class="info-banner">
-      📚 Kelas Aktif: <b id="manageStudentsClass">-</b> • Tambahkan siswa dengan <b>Nama</b> dan <b>NISN</b>. Data ini terpisah untuk setiap kelas.
+      📚 Kelas Aktif: <b id="manageStudentsClass">-</b> • Tambahkan siswa dengan <b>Nama</b> dan <b>NISN</b>.
     </div>
-
     <div class="student-form-inline">
       <div class="row">
         <div>
@@ -634,25 +993,23 @@
       </div>
       <div class="row" style="grid-template-columns:1fr;">
         <div>
-          <label class="label-sm">Kelas (Otomatis dari login guru)</label>
+          <label class="label-sm">Kelas (Otomatis)</label>
           <input type="text" class="input-sm" id="inputSiswaKelas" disabled>
         </div>
       </div>
       <button class="btn-add" onclick="addStudent()">➕ Tambah Siswa</button>
     </div>
-
     <div class="student-list-header">
       <div style="font-size:12px;color:#ffd700;font-weight:700;">📋 Daftar Siswa</div>
       <div class="count-badge" id="studentListCount">0 Siswa</div>
     </div>
-
     <div class="student-list" id="studentListContainer"></div>
   </div>
 
-  <!-- ====== LEVELS ====== -->
+  <!-- LEVELS -->
   <div class="screen" id="screenLevels">
     <div class="material-header">
-      <button class="back-btn" onclick="goTo('screenSemester')">←</button>
+      <button class="back-btn" id="btnBackFromLevels" onclick="goTo('screenSemester')">←</button>
       <div class="material-title" id="levelMapTitle">Peta Level</div>
     </div>
     <div class="info-banner">
@@ -661,7 +1018,7 @@
     <div class="level-map" id="levelList"></div>
   </div>
 
-  <!-- ====== MATERIAL ====== -->
+  <!-- MATERIAL -->
   <div class="screen" id="screenMaterial">
     <div class="material-header">
       <button class="back-btn" onclick="backToLevels()">←</button>
@@ -670,46 +1027,17 @@
     <div class="material-content" id="materialContent"></div>
     <div class="btn-group">
       <button class="btn-primary" id="btnDoneReading" onclick="markAsRead()">✅ Selesai Membaca</button>
-      <button class="btn-secondary" id="btnStartQuiz" onclick="promptStudentData()">📝 Ikuti Kuis (Opsional)</button>
+      <button class="btn-secondary" id="btnStartQuiz" onclick="promptStudentData()">📝 Ikuti Kuis</button>
     </div>
   </div>
 
-  <!-- ====== FORM SISWA SEBELUM KUIS ====== -->
-  <div class="screen" id="screenFormSiswa">
-    <div class="material-header">
-      <button class="back-btn" onclick="goTo('screenMaterial')">←</button>
-      <div class="material-title">📝 Pilih Data Siswa</div>
-    </div>
-    <div class="form-box" style="margin-top:0;">
-      <div class="form-logo">👨‍🎓</div>
-      <div class="form-title">Pilih Siswa yang Mengerjakan</div>
-      <div class="form-sub">Data sesuai dengan kelas yang Anda ajar</div>
-      <div class="form-group">
-        <label class="form-label">🏫 Kelas</label>
-        <input type="text" class="form-input" id="formSiswaKelasDisplay" disabled>
-      </div>
-      <div class="form-group">
-        <label class="form-label">👤 Nama Siswa</label>
-        <select class="form-select" id="selectNamaSiswa">
-          <option value="">-- Pilih Nama Siswa --</option>
-        </select>
-        <div class="student-count-info">
-          <span>NISN:</span> <span class="num" id="formSiswaNisnDisplay">-</span>
-        </div>
-      </div>
-      <button class="btn-primary" onclick="handleStartQuiz()">📝 Mulai Kuis Sekarang</button>
-      <button class="btn-secondary" onclick="renderManageStudents();goTo('screenManageStudents')">👥 Kelola Daftar Siswa</button>
-    </div>
-  </div>
-
-  <!-- ====== QUIZ ====== -->
+  <!-- QUIZ -->
   <div class="screen" id="screenQuiz">
     <div class="student-info-box" id="quizStudentInfo">
       <div>
         👤 <span class="name" id="quizStudentName">Siswa</span> • <span id="quizStudentClass">Kelas</span>
         <div style="font-size:9px;color:#888;margin-top:2px;">NISN: <span id="quizStudentNisn">-</span></div>
       </div>
-      <button class="change-btn" onclick="promptStudentData()">Ubah</button>
     </div>
     <div class="quiz-header">
       <div class="quiz-progress" id="quizProgress">Soal 1/10</div>
@@ -719,22 +1047,22 @@
     <div id="quizOptions"></div>
   </div>
 
-  <!-- ====== RESULT ====== -->
+  <!-- RESULT -->
   <div class="screen" id="screenResult">
     <div class="result-box">
       <div class="result-icon" id="resultIcon">🎉</div>
       <div class="result-title" id="resultTitle">Selamat!</div>
       <div class="result-score" id="resultScore">0/10</div>
       <div class="result-text" id="resultText"></div>
-      <button class="btn-primary" onclick="backToLevels()">Kembali ke Peta Level</button>
+      <button class="btn-primary" id="btnResultBack" onclick="backToLevels()">Kembali ke Peta Level</button>
       <button class="btn-secondary" id="btnRetryQuiz" onclick="startQuizDirect()">🔄 Coba Lagi</button>
     </div>
   </div>
 
-  <!-- ====== BADGES ====== -->
+  <!-- BADGES -->
   <div class="screen" id="screenBadges">
     <div class="material-header">
-      <button class="back-btn" onclick="goTo('screenSemester')">←</button>
+      <button class="back-btn" id="btnBackFromBadges" onclick="goTo('screenSemester')">←</button>
       <div class="material-title">🏅 Koleksi Badge Pancasila</div>
     </div>
     <div class="info-banner">
@@ -743,13 +1071,82 @@
     <div class="badges-grid" id="badgesGrid"></div>
   </div>
 
-  <!-- ====== REKAP ====== -->
+  <!-- REKAP -->
   <div class="screen" id="screenRekap">
     <div class="material-header">
       <button class="back-btn" onclick="goTo('screenSemester')">←</button>
       <div class="material-title">📊 Rekap Daftar Nilai Kuis</div>
     </div>
     <div id="rekapContent"></div>
+  </div>
+
+  <!-- PROFIL -->
+  <div class="screen" id="screenProfile">
+    <div class="material-header">
+      <button class="back-btn" onclick="backFromProfile()">←</button>
+      <div class="material-title">⚙️ Pengaturan Profil</div>
+    </div>
+
+    <div class="info-banner" id="profileInfoBanner">
+      💡 Ubah data profil Anda di sini.
+    </div>
+
+    <div class="form-box" style="margin-top:0;">
+      <div class="upload-section" style="grid-template-columns:1fr; max-width:200px; margin:0 auto 16px;">
+        <div class="upload-item" id="profileUploadItem" onclick="document.getElementById('profilePhotoFile').click()">
+          <button class="remove-img-btn" onclick="event.stopPropagation();removeProfilePhoto()" title="Hapus">×</button>
+          <div class="upload-preview" id="profileUploadPreview">
+            <span class="placeholder" id="profilePhotoPlaceholder">👤</span>
+          </div>
+          <div class="upload-label">Foto Profil</div>
+          <div class="upload-hint">Klik untuk ganti</div>
+          <input type="file" id="profilePhotoFile" accept="image/*" onchange="handleProfilePhotoUpload(event)">
+        </div>
+      </div>
+
+      <div id="profileGuruForm">
+        <div class="form-divider">🏫 Data Sekolah</div>
+        <div class="form-group">
+          <label class="form-label">🏫 Nama Sekolah</label>
+          <input type="text" class="form-input" id="profNamaSekolah" maxlength="60" autocomplete="off">
+        </div>
+        <div class="form-divider">👨‍🏫 Data Guru</div>
+        <div class="form-group">
+          <label class="form-label">👤 Nama Guru</label>
+          <input type="text" class="form-input" id="profNamaGuru" maxlength="40" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">📧 Email</label>
+          <input type="email" class="form-input" id="profEmailGuru" maxlength="60" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🔑 Password Baru (kosongkan jika tidak diubah)</label>
+          <input type="password" class="form-input" id="profPasswordGuru" placeholder="Password baru" autocomplete="off">
+        </div>
+      </div>
+
+      <div id="profileSiswaForm" style="display:none;">
+        <div class="form-divider">👨‍🎓 Data Siswa</div>
+        <div class="form-group">
+          <label class="form-label">👤 Nama Siswa</label>
+          <input type="text" class="form-input" id="profNamaSiswa" maxlength="40" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🔢 NISN</label>
+          <input type="text" class="form-input" id="profNisnSiswa" maxlength="15" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🏫 Kelas</label>
+          <input type="text" class="form-input" id="profKelasSiswa" disabled>
+        </div>
+        <div class="form-group">
+          <label class="form-label">📧 Email (opsional)</label>
+          <input type="email" class="form-input" id="profEmailSiswa" maxlength="60" autocomplete="off">
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="saveProfile()">💾 Simpan Perubahan</button>
+    </div>
   </div>
 </div>
 
@@ -771,7 +1168,7 @@
 
 <script>
 /* =========================================================
-   DATA MATERI PKn KELAS 11
+   DATA MATERI PKn KELAS 11 KURIKULUM MERDEKA
    ========================================================= */
 const DATA = {
   1: [
@@ -1032,40 +1429,26 @@ const DATA = {
 };
 
 /* =========================================================
-   STATE & STORAGE - DATA TERPISAH PER KELAS
+   STATE & STORAGE - MULTI USER
    ========================================================= */
-const STORAGE_KEY = 'pkn11_gamifikasi_v7';
+const STORAGE_KEY = 'pkn11_gamifikasi_v1';
 const ALL_CLASSES = ['XI MIPA 1','XI MIPA 2','XI MIPA 3','XI MIPA 4','XI MIPA 5'];
 
-// Struktur data: setiap kelas punya data sendiri
-function createEmptyClassData() {
-  return {
-    xp: 0,
-    badges: [],
-    readBabs: {},
-    completed: {},
-    quizHistory: [],
-    students: [], // [{nama, nisn}]
-    pancasilaProgress: 0
-  };
-}
-
 let state = {
-  teacher: { nama:'', kelasAjar:'' },
-  currentStudent: { nama:'', kelas:'', nisn:'' },
-  currentSemester: 1,
+  teachers: [],
+  students: [],
+  classData: {},
+  session: null,
   currentBab: null,
+  currentSemester: 1,
   quizIndex: 0,
   quizCorrect: 0,
   quizAnswered: false,
-  // Data terpisah per kelas
-  classData: {
-    'XI MIPA 1': createEmptyClassData(),
-    'XI MIPA 2': createEmptyClassData(),
-    'XI MIPA 3': createEmptyClassData(),
-    'XI MIPA 4': createEmptyClassData(),
-    'XI MIPA 5': createEmptyClassData()
-  }
+  authTab: 'login',
+  authRole: 'guru',
+  selectedKelasForLogin: '',
+  tempRegLogo: '',
+  tempRegTeacherPhoto: ''
 };
 
 function loadState() {
@@ -1074,203 +1457,450 @@ function loadState() {
     if (saved) {
       const parsed = JSON.parse(saved);
       state = {...state, ...parsed};
-      // Pastikan semua kelas ada
-      ALL_CLASSES.forEach(k => {
-        if (!state.classData[k]) state.classData[k] = createEmptyClassData();
-        // Pastikan field lengkap
-        const def = createEmptyClassData();
-        Object.keys(def).forEach(f => {
-          if (state.classData[k][f] === undefined) state.classData[k][f] = def[f];
-        });
-      });
     }
   } catch(e) { console.warn(e); }
 }
 function saveState() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) { console.warn(e); }
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      teachers: state.teachers,
+      students: state.students,
+      classData: state.classData,
+      session: state.session
+    }));
+  } catch(e) { console.warn('Save error:', e); alert('Gagal menyimpan! Data mungkin terlalu besar.'); }
 }
 
-// Ambil data kelas aktif
+function generateId() {
+  return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
+}
+
+function getClassKey(teacherId, kelas) {
+  return teacherId + '|' + kelas;
+}
+
+function createEmptyClassData() {
+  return {
+    xp: 0, badges: [], readBabs: {}, completed: {},
+    quizHistory: [], students: [], pancasilaProgress: 0
+  };
+}
+
 function getActiveClassData() {
-  const kelas = state.teacher.kelasAjar;
-  if (!kelas) return createEmptyClassData();
-  if (!state.classData[kelas]) state.classData[kelas] = createEmptyClassData();
-  return state.classData[kelas];
+  if (!state.session) return createEmptyClassData();
+  if (state.session.role === 'guru') {
+    const key = getClassKey(state.session.userId, state.session.kelas);
+    if (!state.classData[key]) state.classData[key] = createEmptyClassData();
+    return state.classData[key];
+  } else {
+    const key = getClassKey(state.session.teacherId, state.session.kelas);
+    if (!state.classData[key]) state.classData[key] = createEmptyClassData();
+    return state.classData[key];
+  }
 }
 
+function getCurrentTeacher() {
+  if (!state.session) return null;
+  if (state.session.role === 'guru') return state.teachers.find(t => t.id === state.session.userId);
+  if (state.session.role === 'siswa') return state.teachers.find(t => t.id === state.session.teacherId);
+  return null;
+}
+
+function getCurrentStudent() {
+  if (!state.session || state.session.role !== 'siswa') return null;
+  return state.students.find(s => s.id === state.session.userId);
+}
+
+/* =========================================================
+   UPDATE HEADER & SIDEBAR
+   ========================================================= */
 function updateHeader() {
   const cd = getActiveClassData();
+  const teacher = getCurrentTeacher();
+  const student = getCurrentStudent();
+
   document.getElementById('xpDisplay').textContent = '⚡ ' + (cd.xp || 0);
   document.getElementById('badgeDisplay').textContent = '🏅 ' + (cd.badges.length || 0);
 
-  if (state.teacher.nama && state.teacher.kelasAjar) {
-    document.getElementById('headerTeacher').textContent = '👨‍🏫 ' + state.teacher.nama;
-    document.getElementById('headerClassBadge').textContent = state.teacher.kelasAjar;
+  const headerLogo = document.getElementById('headerLogo');
+  if (teacher && teacher.sekolah && teacher.sekolah.logo) {
+    headerLogo.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
+  } else {
+    headerLogo.innerHTML = `<span class="placeholder">🏫</span>`;
+  }
 
+  document.getElementById('headerSchoolName').textContent = (teacher && teacher.sekolah) ? teacher.sekolah.nama : '-';
+
+  const headerPhoto = document.getElementById('headerTeacherPhoto');
+  if (state.session && state.session.role === 'guru' && teacher && teacher.foto) {
+    headerPhoto.innerHTML = `<img src="${teacher.foto}" alt="Guru">`;
+  } else if (state.session && state.session.role === 'siswa' && student && student.foto) {
+    headerPhoto.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
+  } else {
+    headerPhoto.innerHTML = `<span class="placeholder">${state.session && state.session.role === 'siswa' ? '👨‍🎓' : '👨‍🏫'}</span>`;
+  }
+
+  if (state.session) {
+    let infoText = '';
+    let classText = '-';
+    if (state.session.role === 'guru' && teacher) {
+      infoText = '👨‍🏫 ' + teacher.nama;
+      classText = state.session.kelas || '-';
+    } else if (state.session.role === 'siswa' && student) {
+      infoText = '👨‍🎓 ' + student.nama;
+      classText = student.kelas || '-';
+    }
+    document.getElementById('headerTeacher').textContent = infoText;
+    document.getElementById('headerClassBadge').textContent = classText;
+
+    document.getElementById('sidebarTitle').textContent = state.session.role === 'guru' ? '📋 Panel Guru' : '📋 Panel Siswa';
     const sName = document.getElementById('sidebarTeacherName');
     const sClass = document.getElementById('sidebarTeacherClass');
     const sCount = document.getElementById('sidebarStudentCount');
-    if (sName) sName.textContent = state.teacher.nama;
-    if (sClass) sClass.textContent = state.teacher.kelasAjar;
-    if (sCount) sCount.textContent = (cd.students || []).length + ' siswa';
+    if (state.session.role === 'guru') sName.textContent = teacher.nama;
+    else sName.textContent = student.nama;
+    sClass.textContent = state.session.kelas || '-';
+    sCount.textContent = (cd.students || []).length + ' siswa';
 
-    // Update active class banner
-    const an = document.getElementById('activeClassName');
-    const am = document.getElementById('activeClassMeta');
-    if (an) an.textContent = state.teacher.kelasAjar;
-    if (am) am.textContent = (cd.students || []).length + ' siswa • ' + (cd.quizHistory || []).length + ' percobaan kuis';
+    const sidebarLogo = document.getElementById('sidebarLogo');
+    if (teacher && teacher.sekolah && teacher.sekolah.logo) {
+      sidebarLogo.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
+    } else {
+      sidebarLogo.innerHTML = `<span class="placeholder">🏫</span>`;
+    }
+    document.getElementById('sidebarSchoolName').textContent = (teacher && teacher.sekolah) ? teacher.sekolah.nama : '-';
+
+    const sidebarPhoto = document.getElementById('sidebarTeacherPhoto');
+    if (state.session.role === 'guru' && teacher && teacher.foto) {
+      sidebarPhoto.innerHTML = `<img src="${teacher.foto}" alt="Guru">`;
+    } else if (state.session.role === 'siswa' && student && student.foto) {
+      sidebarPhoto.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
+    } else {
+      sidebarPhoto.innerHTML = `<span class="placeholder">${state.session.role === 'siswa' ? '👨‍🎓' : '👨‍🏫'}</span>`;
+    }
+
+    renderSidebarMenu();
   } else {
     document.getElementById('headerTeacher').textContent = 'Belum login';
     document.getElementById('headerClassBadge').textContent = '-';
   }
 }
 
+function renderSidebarMenu() {
+  const menu = document.getElementById('sidebarMenu');
+  if (!state.session) { menu.innerHTML = ''; return; }
+
+  if (state.session.role === 'guru') {
+    menu.innerHTML = `
+      <div class="sidebar-menu-item" onclick="goTo('screenSemester')"><span class="icon">🏠</span><span>Beranda</span></div>
+      <div class="sidebar-menu-item" onclick="renderManageStudents();goTo('screenManageStudents')"><span class="icon">👥</span><span>Kelola Siswa</span></div>
+      <div class="sidebar-menu-item" onclick="renderRekap();goTo('screenRekap')"><span class="icon">📊</span><span>Rekap Nilai</span></div>
+      <div class="sidebar-menu-item" onclick="renderBadges();goTo('screenBadges')"><span class="icon">🏅</span><span>Koleksi Badge</span></div>
+      <div class="sidebar-menu-item" onclick="renderProfile();goTo('screenProfile')"><span class="icon">👤</span><span>Profil Guru</span></div>
+      <div class="sidebar-menu-item" onclick="handleLogout()"><span class="icon">🚪</span><span>Keluar</span></div>
+    `;
+  } else {
+    menu.innerHTML = `
+      <div class="sidebar-menu-item" onclick="goTo('screenSemesterSiswa')"><span class="icon">🏠</span><span>Beranda</span></div>
+      <div class="sidebar-menu-item" onclick="renderBadges();goTo('screenBadges')"><span class="icon">🏅</span><span>Koleksi Badge</span></div>
+      <div class="sidebar-menu-item" onclick="renderProfile();goTo('screenProfile')"><span class="icon">👤</span><span>Profil Saya</span></div>
+      <div class="sidebar-menu-item" onclick="handleLogout()"><span class="icon">🚪</span><span>Keluar</span></div>
+    `;
+  }
+}
+
 /* =========================================================
-   LOGIN GURU (WAJIB SETIAP MASUK)
+   AUTH
+   ========================================================= */
+function switchAuthTab(tab) {
+  state.authTab = tab;
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.getElementById('loginSection').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerSection').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+function switchRole(role) {
+  state.authRole = role;
+  document.getElementById('roleTabGuru').classList.toggle('active', role === 'guru');
+  document.getElementById('roleTabSiswa').classList.toggle('active', role === 'siswa');
+  document.getElementById('loginGuruForm').style.display = role === 'guru' ? 'block' : 'none';
+  document.getElementById('loginSiswaForm').style.display = role === 'siswa' ? 'block' : 'none';
+}
+
+/* =========================================================
+   REGISTRASI GURU
+   ========================================================= */
+function handleLogoUploadReg(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  processImage(file, 300, (dataUrl) => {
+    state.tempRegLogo = dataUrl;
+    updateUploadPreview('regUploadLogoPreview', 'regUploadLogoItem', dataUrl, '🏫');
+  });
+}
+function removeLogoReg() {
+  state.tempRegLogo = '';
+  updateUploadPreview('regUploadLogoPreview', 'regUploadLogoItem', '', '🏫');
+  document.getElementById('regLogoFile').value = '';
+}
+function handleTeacherUploadReg(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  processImage(file, 300, (dataUrl) => {
+    state.tempRegTeacherPhoto = dataUrl;
+    updateUploadPreview('regUploadTeacherPreview', 'regUploadTeacherItem', dataUrl, '👨‍🏫');
+  });
+}
+function removeTeacherPhotoReg() {
+  state.tempRegTeacherPhoto = '';
+  updateUploadPreview('regUploadTeacherPreview', 'regUploadTeacherItem', '', '👨‍🏫');
+  document.getElementById('regTeacherFile').value = '';
+}
+
+function handleRegisterGuru() {
+  const sekolah = document.getElementById('regNamaSekolah').value.trim();
+  const nama = document.getElementById('regNamaGuru').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pwd = document.getElementById('regPassword').value;
+  const pwd2 = document.getElementById('regPassword2').value;
+
+  if (!sekolah) { alert('Nama sekolah harus diisi!'); return; }
+  if (!nama) { alert('Nama guru harus diisi!'); return; }
+  if (!pwd || pwd.length < 4) { alert('Password minimal 4 karakter!'); return; }
+  if (pwd !== pwd2) { alert('Password tidak sama!'); return; }
+
+  const existing = state.teachers.find(t =>
+    t.nama.toLowerCase() === nama.toLowerCase() &&
+    t.sekolah.nama.toLowerCase() === sekolah.toLowerCase()
+  );
+  if (existing) { alert('Guru dengan nama "' + nama + '" di sekolah "' + sekolah + '" sudah terdaftar!'); return; }
+
+  state.teachers.push({
+    id: generateId(),
+    nama, email, password: pwd,
+    sekolah: { nama: sekolah, logo: state.tempRegLogo || '' },
+    foto: state.tempRegTeacherPhoto || '',
+    createdAt: new Date().toISOString()
+  });
+  saveState();
+
+  document.getElementById('regNamaSekolah').value = '';
+  document.getElementById('regNamaGuru').value = '';
+  document.getElementById('regEmail').value = '';
+  document.getElementById('regPassword').value = '';
+  document.getElementById('regPassword2').value = '';
+  removeLogoReg();
+  removeTeacherPhotoReg();
+  state.tempRegLogo = '';
+  state.tempRegTeacherPhoto = '';
+
+  alert('✅ Registrasi berhasil!\n\nLogin dengan:\nSekolah: ' + sekolah + '\nNama: ' + nama);
+  switchAuthTab('login');
+  switchRole('guru');
+  document.getElementById('loginGuruSekolah').value = sekolah;
+  document.getElementById('loginGuruNama').value = nama;
+}
+
+/* =========================================================
+   LOGIN GURU
    ========================================================= */
 function handleLoginGuru() {
-  const nama = document.getElementById('inputNamaGuru').value.trim();
-  const kelas = document.getElementById('inputKelasAjar').value;
-  if (!nama) { alert('Silakan isi nama guru terlebih dahulu!'); return; }
-  if (!kelas) { alert('Silakan pilih kelas yang diajar!'); return; }
+  const sekolah = document.getElementById('loginGuruSekolah').value.trim();
+  const nama = document.getElementById('loginGuruNama').value.trim();
+  const pwd = document.getElementById('loginGuruPassword').value;
 
-  state.teacher.nama = nama;
-  state.teacher.kelasAjar = kelas;
+  if (!sekolah) { alert('Nama sekolah harus diisi!'); return; }
+  if (!nama) { alert('Nama guru harus diisi!'); return; }
+  if (!pwd) { alert('Password harus diisi!'); return; }
+
+  const teacher = state.teachers.find(t =>
+    t.nama.toLowerCase() === nama.toLowerCase() &&
+    t.sekolah.nama.toLowerCase() === sekolah.toLowerCase() &&
+    t.password === pwd
+  );
+
+  if (!teacher) { alert('❌ Login gagal! Nama, sekolah, atau password salah.'); return; }
+
+  state.session = { role:'guru', userId: teacher.id, kelas:'' };
+  saveState();
+  updateHeader();
+  document.getElementById('loginGuruPassword').value = '';
+
+  renderPilihKelas();
+  goTo('screenPilihKelas');
+}
+
+/* =========================================================
+   LOGIN SISWA
+   ========================================================= */
+function handleLoginSiswa() {
+  const sekolah = document.getElementById('loginSiswaSekolah').value.trim();
+  const nama = document.getElementById('loginSiswaNama').value.trim();
+  const nisn = document.getElementById('loginSiswaNisn').value.trim();
+
+  if (!sekolah) { alert('Nama sekolah harus diisi!'); return; }
+  if (!nama) { alert('Nama siswa harus diisi!'); return; }
+  if (!nisn) { alert('NISN harus diisi!'); return; }
+
+  let foundStudent = null;
+  let foundTeacher = null;
+  let foundKelas = null;
+
+  for (const teacher of state.teachers) {
+    if (teacher.sekolah.nama.toLowerCase() === sekolah.toLowerCase()) {
+      for (const kelas of ALL_CLASSES) {
+        const key = getClassKey(teacher.id, kelas);
+        const cd = state.classData[key];
+        if (cd && cd.students) {
+          const s = cd.students.find(st => st.nama.toLowerCase() === nama.toLowerCase() && st.nisn === nisn);
+          if (s) { foundStudent = s; foundTeacher = teacher; foundKelas = kelas; break; }
+        }
+      }
+    }
+    if (foundStudent) break;
+  }
+
+  if (!foundStudent) {
+    alert('❌ Login gagal! Nama & NISN tidak ditemukan di sekolah "' + sekolah + '".');
+    return;
+  }
+
+  let studentAccount = state.students.find(s =>
+    s.nama.toLowerCase() === nama.toLowerCase() && s.nisn === nisn && s.teacherId === foundTeacher.id
+  );
+
+  if (!studentAccount) {
+    studentAccount = {
+      id: generateId(), nama: foundStudent.nama, nisn: foundStudent.nisn,
+      sekolah, kelas: foundKelas, teacherId: foundTeacher.id,
+      foto: '', email: '', createdAt: new Date().toISOString()
+    };
+    state.students.push(studentAccount);
+  }
+
+  state.session = { role:'siswa', userId: studentAccount.id, teacherId: foundTeacher.id, kelas: foundKelas };
   saveState();
   updateHeader();
 
-  // Reset filter kelas saat login
-  currentFilterKelas = 'all';
+  document.getElementById('loginSiswaSekolah').value = '';
+  document.getElementById('loginSiswaNama').value = '';
+  document.getElementById('loginSiswaNisn').value = '';
 
-  goTo('screenSemester');
+  renderSemesterSiswa();
+  goTo('screenSemesterSiswa');
 }
 
 function handleLogout() {
-  if (!confirm('Keluar dari kelas ini?\n\nData siswa dan nilai di kelas ' + state.teacher.kelasAjar + ' tetap tersimpan.')) return;
-  state.teacher = {nama:'', kelasAjar:''};
-  state.currentStudent = {nama:'', kelas:'', nisn:''};
+  if (!confirm('Keluar dari aplikasi?')) return;
+  state.session = null;
   saveState();
-
-  document.getElementById('inputNamaGuru').value = '';
-  document.getElementById('inputKelasAjar').value = '';
-  document.getElementById('studentCountInfo').style.display = 'none';
-
-  updateHeader();
-  goTo('screenLoginGuru');
+  ['loginGuruSekolah','loginGuruNama','loginGuruPassword','loginSiswaSekolah','loginSiswaNama','loginSiswaNisn'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  switchAuthTab('login');
+  switchRole('guru');
+  goTo('screenAuth');
 }
 
 /* =========================================================
-   NAVIGASI
+   PILIH KELAS
    ========================================================= */
-function goTo(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
+function renderPilihKelas() {
+  const teacher = getCurrentTeacher();
+  if (!teacher) return;
+  document.getElementById('pilihKelasSub').textContent = 'Login: ' + teacher.nama + ' • ' + teacher.sekolah.nama;
+  const container = document.getElementById('classSelector');
+  container.innerHTML = ALL_CLASSES.map(kelas => {
+    const key = getClassKey(teacher.id, kelas);
+    const cd = state.classData[key];
+    const count = cd && cd.students ? cd.students.length : 0;
+    const active = state.selectedKelasForLogin === kelas ? ' active' : '';
+    return `<div class="class-card${active}" onclick="selectKelas('${kelas}')"><div class="cc-name">${kelas}</div><div class="cc-count">${count} siswa</div></div>`;
+  }).join('');
 }
-function backToLevels() {
-  renderLevels(state.currentSemester);
+function selectKelas(kelas) { state.selectedKelasForLogin = kelas; renderPilihKelas(); }
+function confirmPilihKelas() {
+  if (!state.selectedKelasForLogin) { alert('Silakan pilih kelas!'); return; }
+  state.session.kelas = state.selectedKelasForLogin;
+  saveState();
+  updateHeader();
+  state.selectedKelasForLogin = '';
+  goTo('screenSemester');
+}
+
+/* =========================================================
+   SISWA - SEMESTER
+   ========================================================= */
+function renderSemesterSiswa() {
+  const teacher = getCurrentTeacher();
+  const student = getCurrentStudent();
+  if (!teacher || !student) return;
+
+  document.getElementById('welcomeSchoolSiswa').textContent = teacher.sekolah.nama;
+  const wls = document.getElementById('welcomeLogoSiswa');
+  if (teacher.sekolah.logo) wls.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
+  else wls.innerHTML = `<span class="placeholder">🏫</span>`;
+
+  const wsp = document.getElementById('welcomeStudentPhoto');
+  if (student.foto) wsp.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
+  else wsp.innerHTML = `<span class="placeholder">👨‍🎓</span>`;
+  document.getElementById('welcomeStudentName').textContent = student.nama;
+
+  const cd = getActiveClassData();
+  document.getElementById('siswaClassName').textContent = student.kelas;
+  document.getElementById('siswaClassMeta').textContent = 'Guru: ' + teacher.nama + ' • ' + (cd.students || []).length + ' siswa di kelas';
+}
+
+function openSemesterSiswa(sem) {
+  state.currentSemester = sem;
+  saveState();
+  renderLevelsSiswa(sem);
   goTo('screenLevels');
 }
 
-/* =========================================================
-   KELOLA SISWA
-   ========================================================= */
-function renderManageStudents() {
-  const kelas = state.teacher.kelasAjar;
-  document.getElementById('manageStudentsClass').textContent = kelas || '-';
-  document.getElementById('inputSiswaKelas').value = kelas || '-';
-  document.getElementById('inputSiswaNama').value = '';
-  document.getElementById('inputSiswaNisn').value = '';
-  renderStudentList();
-}
-
-function renderStudentList() {
+function renderLevelsSiswa(sem) {
+  document.getElementById('levelMapTitle').textContent = 'Semester ' + sem + ' • Materi & Kuis';
+  document.getElementById('btnBackFromLevels').setAttribute('onclick', "goTo('screenSemesterSiswa')");
+  const list = document.getElementById('levelList');
   const cd = getActiveClassData();
-  const kelas = state.teacher.kelasAjar;
-  const students = cd.students || [];
-  const container = document.getElementById('studentListContainer');
-  const countEl = document.getElementById('studentListCount');
+  const babs = DATA[sem];
+  list.innerHTML = '';
+  babs.forEach((bab, i) => {
+    const unlocked = isBabUnlocked(sem, i);
+    const hasRead = !!cd.readBabs[bab.id];
+    const completed = !!cd.completed[bab.id];
+    const div = document.createElement('div');
+    let cls = 'level-item';
+    if (!unlocked) cls += ' locked';
+    else if (completed) cls += ' completed';
+    else if (hasRead) cls += ' read';
+    div.className = cls;
 
-  countEl.textContent = students.length + ' Siswa';
+    let tag = '';
+    if (completed) tag = '<div class="level-tag tag-done">✓ LULUS</div>';
+    else if (hasRead) tag = '<div class="level-tag tag-read">✓ DIBACA</div>';
 
-  if (students.length === 0) {
-    container.innerHTML = `
-      <div class="empty-list">
-        <span class="emoji">👥</span>
-        <b>Belum ada siswa di ${kelas}</b><br>
-        Tambahkan siswa dengan nama dan NISN di atas.
+    div.innerHTML = `
+      ${tag}
+      <div class="level-circle">${unlocked ? (completed ? '🏆' : (hasRead ? '✓' : i+1)) : '🔒'}</div>
+      <div class="level-info">
+        <h3>Level ${i+1}: ${bab.short}</h3>
+        <p>${bab.title}</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:${completed?100:(hasRead?50:0)}%"></div></div>
       </div>
+      <div class="level-status">${unlocked ? '▶' : ''}</div>
     `;
-    return;
-  }
-
-  const sorted = [...students].sort((a, b) => a.nama.localeCompare(b.nama));
-
-  container.innerHTML = sorted.map((s, i) => {
-    const sudahKerja = cd.quizHistory.some(h => h.studentName === s.nama);
-    const doneTag = sudahKerja ? '<span class="done-tag">✓ Sudah Kuis</span>' : '';
-    return `
-      <div class="student-list-item">
-        <div class="num-badge">${i+1}</div>
-        <div class="info">
-          <div class="name">${escapeHtml(s.nama)}${doneTag}</div>
-          <div class="nisn">NISN: ${escapeHtml(s.nisn || '-')}</div>
-        </div>
-        <button class="btn-del" onclick="deleteStudent('${escapeJs(s.nama)}')" title="Hapus">🗑️</button>
-      </div>
-    `;
-  }).join('');
+    if (unlocked) div.onclick = () => openBabSiswa(sem, i);
+    list.appendChild(div);
+  });
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-}
-function escapeJs(s) {
-  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-}
-
-function addStudent() {
-  const nama = document.getElementById('inputSiswaNama').value.trim();
-  const nisn = document.getElementById('inputSiswaNisn').value.trim();
-  const kelas = state.teacher.kelasAjar;
-
-  if (!nama) { alert('Nama siswa harus diisi!'); return; }
-  if (!nisn) { alert('NISN harus diisi!'); return; }
-  if (!/^[0-9]+$/.test(nisn)) { alert('NISN hanya boleh angka!'); return; }
-
-  const cd = getActiveClassData();
-  if (cd.students.some(s => s.nama.toLowerCase() === nama.toLowerCase())) {
-    alert('Siswa dengan nama "' + nama + '" sudah ada di kelas ' + kelas);
-    return;
-  }
-  if (cd.students.some(s => s.nisn === nisn)) {
-    alert('NISN "' + nisn + '" sudah digunakan di kelas ' + kelas + '!');
-    return;
-  }
-
-  cd.students.push({ nama, nisn });
-  saveState();
-  updateHeader();
-
-  document.getElementById('inputSiswaNama').value = '';
-  document.getElementById('inputSiswaNisn').value = '';
-  document.getElementById('inputSiswaNama').focus();
-
-  showToast('✅ Siswa "' + nama + '" ditambahkan ke ' + kelas + '!');
-  renderStudentList();
-}
-
-function deleteStudent(nama) {
-  if (!confirm('Hapus siswa "' + nama + '" dari kelas ' + state.teacher.kelasAjar + '?')) return;
-  const cd = getActiveClassData();
-  cd.students = cd.students.filter(s => s.nama !== nama);
-  saveState();
-  updateHeader();
-  renderStudentList();
-  showToast('🗑️ Siswa dihapus');
+function openBabSiswa(sem, index) {
+  openBab(sem, index);
 }
 
 /* =========================================================
-   SEMESTER & LEVEL
+   LEVEL & MATERI (shared)
    ========================================================= */
 function openSemester(sem) {
   state.currentSemester = sem;
@@ -1285,7 +1915,9 @@ function isBabUnlocked(sem, index) {
   return !!cd.readBabs[prevBab.id];
 }
 function renderLevels(sem) {
+  const isGuru = state.session && state.session.role === 'guru';
   document.getElementById('levelMapTitle').textContent = 'Semester ' + sem + ' • Peta Level';
+  document.getElementById('btnBackFromLevels').setAttribute('onclick', isGuru ? "goTo('screenSemester')" : "goTo('screenSemesterSiswa')");
   const list = document.getElementById('levelList');
   const cd = getActiveClassData();
   const babs = DATA[sem];
@@ -1320,39 +1952,15 @@ function renderLevels(sem) {
   });
 }
 
-/* =========================================================
-   MATERI
-   ========================================================= */
 function openBab(sem, index) {
   const bab = DATA[sem][index];
   state.currentBab = {sem, index};
   document.getElementById('materialTitle').textContent = bab.title;
 
   let fullContent = bab.content;
-  if (bab.contoh) {
-    fullContent += `
-      <div class="section-box box-contoh">
-        <div class="box-title">💡 Contoh Konkrit</div>
-        <div class="box-body">${bab.contoh}</div>
-      </div>
-    `;
-  }
-  if (bab.rangkuman) {
-    fullContent += `
-      <div class="section-box box-rangkuman">
-        <div class="box-title">📋 Rangkuman</div>
-        <div class="box-body">${bab.rangkuman}</div>
-      </div>
-    `;
-  }
-  if (bab.refleksi) {
-    fullContent += `
-      <div class="section-box box-refleksi">
-        <div class="box-title">🤔 Refleksi Diri</div>
-        <div class="box-body">${bab.refleksi}</div>
-      </div>
-    `;
-  }
+  if (bab.contoh) fullContent += `<div class="section-box box-contoh"><div class="box-title">💡 Contoh Konkrit</div><div class="box-body">${bab.contoh}</div></div>`;
+  if (bab.rangkuman) fullContent += `<div class="section-box box-rangkuman"><div class="box-title">📋 Rangkuman</div><div class="box-body">${bab.rangkuman}</div></div>`;
+  if (bab.refleksi) fullContent += `<div class="section-box box-refleksi"><div class="box-title">🤔 Refleksi Diri</div><div class="box-body">${bab.refleksi}</div></div>`;
   document.getElementById('materialContent').innerHTML = fullContent;
 
   const cd = getActiveClassData();
@@ -1360,6 +1968,15 @@ function openBab(sem, index) {
   const hasRead = !!cd.readBabs[bab.id];
   btnDone.textContent = hasRead ? '✅ Materi Sudah Dibaca' : '✅ Selesai Membaca';
   btnDone.disabled = hasRead;
+
+  const btnQuiz = document.getElementById('btnStartQuiz');
+  if (state.session && state.session.role === 'siswa') {
+    btnQuiz.textContent = '📝 Mulai Kuis Sekarang';
+    btnQuiz.setAttribute('onclick', 'startQuizSiswa()');
+  } else {
+    btnQuiz.textContent = '📝 Ikuti Kuis (Pilih Siswa)';
+    btnQuiz.setAttribute('onclick', 'promptStudentData()');
+  }
 
   goTo('screenMaterial');
 }
@@ -1377,97 +1994,154 @@ function markAsRead() {
   }
 
   const isLast = (index === DATA[sem].length - 1);
-  const msg = isLast
-    ? '🎉 Semua materi Semester ' + sem + ' telah selesai!'
-    : '✅ Bab selesai! Bab berikutnya terbuka.';
-  showToast(msg);
+  showToast(isLast ? '🎉 Semua materi Semester ' + sem + ' selesai!' : '✅ Bab selesai! Bab berikutnya terbuka.');
 
   setTimeout(() => {
-    renderLevels(sem);
-    goTo('screenLevels');
+    if (state.session && state.session.role === 'siswa') {
+      renderLevelsSiswa(sem);
+      goTo('screenLevels');
+    } else {
+      renderLevels(sem);
+      goTo('screenLevels');
+    }
   }, 900);
 }
 
 function showToast(msg) {
   const t = document.createElement('div');
   t.textContent = msg;
-  t.style.cssText = `
-    position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
-    background:rgba(0,230,118,0.95); color:#0a0a14; padding:14px 20px;
-    border-radius:12px; font-weight:700; font-size:13px; z-index:9999;
-    max-width:80%; text-align:center; box-shadow:0 0 30px rgba(0,230,118,0.6);
-    animation:popIn 0.3s ease;
-  `;
+  t.style.cssText = `position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,230,118,0.95);color:#0a0a14;padding:14px 20px;border-radius:12px;font-weight:700;font-size:13px;z-index:9999;max-width:80%;text-align:center;box-shadow:0 0 30px rgba(0,230,118,0.6);animation:popIn 0.3s ease;`;
   document.body.appendChild(t);
   setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.4s'; }, 1400);
   setTimeout(() => t.remove(), 1900);
 }
 
 /* =========================================================
-   FORM SISWA SEBELUM KUIS
+   KELOLA SISWA
    ========================================================= */
-function promptStudentData() {
-  const kelasGuru = state.teacher.kelasAjar;
+function renderManageStudents() {
+  const kelas = state.session ? state.session.kelas : '';
+  document.getElementById('manageStudentsClass').textContent = kelas || '-';
+  document.getElementById('inputSiswaKelas').value = kelas || '-';
+  document.getElementById('inputSiswaNama').value = '';
+  document.getElementById('inputSiswaNisn').value = '';
+  renderStudentList();
+}
+
+function renderStudentList() {
   const cd = getActiveClassData();
   const students = cd.students || [];
+  const container = document.getElementById('studentListContainer');
+  const countEl = document.getElementById('studentListCount');
+  countEl.textContent = students.length + ' Siswa';
 
   if (students.length === 0) {
-    if (confirm('Belum ada siswa terdaftar di kelas ' + kelasGuru + '.\n\nTambahkan siswa terlebih dahulu?')) {
+    container.innerHTML = `<div class="empty-list"><span class="emoji">👥</span><b>Belum ada siswa</b><br>Tambahkan siswa dengan nama dan NISN di atas.</div>`;
+    return;
+  }
+
+  const sorted = [...students].sort((a, b) => a.nama.localeCompare(b.nama));
+
+  container.innerHTML = sorted.map((s, i) => {
+    const sudahKerja = cd.quizHistory.some(h => h.studentName === s.nama && h.studentNisn === s.nisn);
+    const doneTag = sudahKerja ? '<span class="done-tag">✓ Sudah Kuis</span>' : '';
+    const studentAccount = state.students.find(sa => sa.nisn === s.nisn && sa.nama === s.nama);
+    const avatar = studentAccount && studentAccount.foto
+      ? `<img src="${studentAccount.foto}" alt="Siswa">`
+      : `<span>👨‍🎓</span>`;
+    return `
+      <div class="student-list-item">
+        <div class="student-avatar-sm">${avatar}</div>
+        <div class="info">
+          <div class="name">${escapeHtml(s.nama)}${doneTag}</div>
+          <div class="nisn">NISN: ${escapeHtml(s.nisn || '-')}</div>
+        </div>
+        <button class="btn-del" onclick="deleteStudent('${escapeJs(s.nama)}','${escapeJs(s.nisn)}')" title="Hapus">🗑️</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+function escapeJs(s) {
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+}
+
+function addStudent() {
+  const nama = document.getElementById('inputSiswaNama').value.trim();
+  const nisn = document.getElementById('inputSiswaNisn').value.trim();
+  const kelas = state.session.kelas;
+
+  if (!nama) { alert('Nama siswa harus diisi!'); return; }
+  if (!nisn) { alert('NISN harus diisi!'); return; }
+  if (!/^[0-9]+$/.test(nisn)) { alert('NISN hanya boleh angka!'); return; }
+
+  const cd = getActiveClassData();
+  if (cd.students.some(s => s.nama.toLowerCase() === nama.toLowerCase())) {
+    alert('Siswa dengan nama "' + nama + '" sudah ada!'); return;
+  }
+  if (cd.students.some(s => s.nisn === nisn)) {
+    alert('NISN "' + nisn + '" sudah digunakan!'); return;
+  }
+
+  cd.students.push({ nama, nisn });
+  saveState();
+  updateHeader();
+
+  document.getElementById('inputSiswaNama').value = '';
+  document.getElementById('inputSiswaNisn').value = '';
+  document.getElementById('inputSiswaNama').focus();
+
+  showToast('✅ Siswa "' + nama + '" ditambahkan!');
+  renderStudentList();
+}
+
+function deleteStudent(nama, nisn) {
+  if (!confirm('Hapus siswa "' + nama + '"?')) return;
+  const cd = getActiveClassData();
+  cd.students = cd.students.filter(s => !(s.nama === nama && s.nisn === nisn));
+  saveState();
+  updateHeader();
+  renderStudentList();
+  showToast('🗑️ Siswa dihapus');
+}
+
+/* =========================================================
+   KUIS
+   ========================================================= */
+function promptStudentData() {
+  const cd = getActiveClassData();
+  const students = cd.students || [];
+  if (students.length === 0) {
+    if (confirm('Belum ada siswa. Tambahkan siswa dulu?')) {
       renderManageStudents();
       goTo('screenManageStudents');
     }
     return;
   }
+  const nama = prompt('Masukkan nama siswa yang mengerjakan kuis:');
+  if (!nama) return;
+  const nisn = prompt('Masukkan NISN siswa:');
+  if (!nisn) return;
 
-  document.getElementById('formSiswaKelasDisplay').value = kelasGuru;
-  document.getElementById('formSiswaNisnDisplay').textContent = '-';
-
-  const select = document.getElementById('selectNamaSiswa');
-  select.innerHTML = '<option value="">-- Pilih Nama Siswa --</option>';
-
-  const sorted = [...students].sort((a, b) => a.nama.localeCompare(b.nama));
-
-  sorted.forEach(s => {
-    const opt = document.createElement('option');
-    opt.value = s.nama;
-    opt.textContent = s.nama + ' (' + s.nisn + ')';
-    const sudah = cd.quizHistory.some(h => h.studentName === s.nama);
-    if (sudah) opt.textContent += ' ✓';
-    select.appendChild(opt);
-  });
-
-  if (state.currentStudent.nama && state.currentStudent.kelas === kelasGuru) {
-    select.value = state.currentStudent.nama;
-    const student = students.find(s => s.nama === state.currentStudent.nama);
-    document.getElementById('formSiswaNisnDisplay').textContent = student ? student.nisn : '-';
-  }
-
-  select.onchange = () => {
-    const nama = select.value;
-    const student = students.find(s => s.nama === nama);
-    document.getElementById('formSiswaNisnDisplay').textContent = student ? student.nisn : '-';
-  };
-
-  goTo('screenFormSiswa');
+  const found = students.find(s => s.nama.toLowerCase() === nama.toLowerCase() && s.nisn === nisn);
+  if (!found) { alert('❌ Siswa tidak ditemukan!'); return; }
+  startQuizWithStudent(found.nama, found.nisn, state.session.kelas);
 }
 
-function handleStartQuiz() {
-  const nama = document.getElementById('selectNamaSiswa').value;
-  if (!nama) { alert('Silakan pilih nama siswa terlebih dahulu!'); return; }
+function startQuizSiswa() {
+  const student = getCurrentStudent();
+  if (!student) { alert('Session error!'); return; }
+  startQuizWithStudent(student.nama, student.nisn, student.kelas);
+}
 
-  const kelas = state.teacher.kelasAjar;
-  const cd = getActiveClassData();
-  const student = cd.students.find(s => s.nama === nama);
-
-  state.currentStudent.nama = nama;
-  state.currentStudent.kelas = kelas;
-  state.currentStudent.nisn = student ? student.nisn : '-';
-  saveState();
-
+function startQuizWithStudent(nama, nisn, kelas) {
+  state.currentStudent = { nama, nisn, kelas };
   document.getElementById('quizStudentName').textContent = nama;
   document.getElementById('quizStudentClass').textContent = kelas;
-  document.getElementById('quizStudentNisn').textContent = student ? student.nisn : '-';
-
+  document.getElementById('quizStudentNisn').textContent = nisn;
   startQuizDirect();
 }
 
@@ -1480,9 +2154,6 @@ function startQuizDirect() {
   goTo('screenQuiz');
 }
 
-/* =========================================================
-   KUIS
-   ========================================================= */
 function renderQuiz() {
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
@@ -1491,7 +2162,7 @@ function renderQuiz() {
 
   document.getElementById('quizStudentName').textContent = state.currentStudent.nama;
   document.getElementById('quizStudentClass').textContent = state.currentStudent.kelas;
-  document.getElementById('quizStudentNisn').textContent = state.currentStudent.nisn || '-';
+  document.getElementById('quizStudentNisn').textContent = state.currentStudent.nisn;
 
   document.getElementById('quizProgress').textContent = `Soal ${state.quizIndex+1}/${total}`;
   document.getElementById('quizBarFill').style.width = ((state.quizIndex)/total*100) + '%';
@@ -1526,10 +2197,7 @@ function answerQuestion(selected) {
 
   showFeedback(isCorrect, () => {
     if (!isCorrect) {
-      setTimeout(() => {
-        alert('❌ Jawaban salah! Kamu harus mengulang kuis dari awal.');
-        startQuizDirect();
-      }, 200);
+      setTimeout(() => { alert('❌ Jawaban salah! Kuis diulang dari awal.'); startQuizDirect(); }, 200);
     } else {
       state.quizIndex++;
       if (state.quizIndex >= bab.questions.length) finishQuiz();
@@ -1553,9 +2221,7 @@ function showFeedback(isCorrect, callback) {
   overlay.classList.add('active');
   textEl.textContent = isCorrect ? '✓ BENAR!' : '✗ SALAH!';
   textEl.className = 'feedback-text ' + (isCorrect ? 'correct' : 'wrong');
-  subEl.textContent = isCorrect
-    ? 'Pancasila & bendera berkibar!'
-    : 'Pancasila disilang, bendera tidak berkibar. Kamu harus mengulang!';
+  subEl.textContent = isCorrect ? 'Pancasila & bendera berkibar!' : 'Pancasila disilang. Kamu harus mengulang!';
 
   if (feedbackRenderer) { feedbackRenderer.dispose(); container.innerHTML = ''; }
   const width = container.clientWidth || window.innerWidth;
@@ -1678,7 +2344,7 @@ function showFeedback(isCorrect, callback) {
 }
 
 /* =========================================================
-   FINISH QUIZ & REWARD - DATA TERPISAH PER KELAS
+   FINISH QUIZ
    ========================================================= */
 function finishQuiz() {
   const {sem, index} = state.currentBab;
@@ -1692,17 +2358,16 @@ function finishQuiz() {
 
   cd.quizHistory.push({
     studentName: state.currentStudent.nama,
+    studentNisn: state.currentStudent.nisn,
     studentClass: state.currentStudent.kelas,
-    studentNisn: state.currentStudent.nisn || '-',
-    teacherName: state.teacher.nama,
-    teacherClass: state.teacher.kelasAjar,
     babId: bab.id,
-    babTitle: bab.title,
     babShort: bab.short,
+    babTitle: bab.title,
     semester: sem,
     score: correct,
     total: total,
-    date: new Date().toISOString()
+    date: new Date().toISOString(),
+    teacherId: state.session.role === 'guru' ? state.session.userId : state.session.teacherId
   });
 
   if (passed) {
@@ -1713,11 +2378,7 @@ function finishQuiz() {
       cd.pancasilaProgress = (cd.pancasilaProgress || 0) + 1;
       const badgeId = 'pancasila_' + cd.pancasilaProgress;
       if (!cd.badges.find(b => b.id === badgeId)) {
-        cd.badges.push({
-          id: badgeId,
-          name: 'Pancasila Lengkap #' + cd.pancasilaProgress,
-          date: new Date().toISOString()
-        });
+        cd.badges.push({ id: badgeId, name: 'Pancasila Lengkap #' + cd.pancasilaProgress, date: new Date().toISOString() });
       }
     }
     saveState();
@@ -1727,7 +2388,7 @@ function finishQuiz() {
     document.getElementById('resultTitle').textContent = 'Sempurna!';
     document.getElementById('resultScore').textContent = correct + '/' + total;
     document.getElementById('resultText').textContent = alreadyCompleted
-      ? 'Kuis sudah pernah diselesaikan sebelumnya. Tetap hebat!'
+      ? 'Kuis sudah pernah diselesaikan sebelumnya.'
       : 'Kamu mendapatkan ' + (total*10) + ' XP dan badge Pancasila!';
     document.getElementById('btnRetryQuiz').style.display = 'block';
     goTo('screenResult');
@@ -1739,10 +2400,13 @@ function finishQuiz() {
     document.getElementById('resultIcon').textContent = '😅';
     document.getElementById('resultTitle').textContent = 'Belum Sempurna';
     document.getElementById('resultScore').textContent = correct + '/' + total;
-    document.getElementById('resultText').textContent = 'Untuk dapat badge Pancasila, kamu harus menjawab semua soal dengan benar. Coba lagi ya!';
+    document.getElementById('resultText').textContent = 'Untuk dapat badge, kamu harus menjawab semua soal dengan benar.';
     document.getElementById('btnRetryQuiz').style.display = 'block';
     goTo('screenResult');
   }
+
+  const isSiswa = state.session && state.session.role === 'siswa';
+  document.getElementById('btnResultBack').setAttribute('onclick', isSiswa ? "renderLevelsSiswa(state.currentSemester);goTo('screenLevels')" : "backToLevels()");
 }
 
 /* =========================================================
@@ -1754,7 +2418,7 @@ function showRewardModal(count) {
   document.getElementById('rewardModal').classList.add('active');
   document.getElementById('rewardDesc').textContent = 'Kamu berhasil menggambar Pancasila secara utuh!';
   const cd = getActiveClassData();
-  document.getElementById('rewardDetail').textContent = 'Badge Pancasila #' + count + ' telah dikoleksi untuk kelas ' + state.teacher.kelasAjar + '. Total: ' + cd.badges.length + ' badge.';
+  document.getElementById('rewardDetail').textContent = 'Badge Pancasila #' + count + ' dikoleksi. Total: ' + cd.badges.length + ' badge.';
 
   const container = document.getElementById('badgeCanvasContainer');
   container.innerHTML = '';
@@ -1819,17 +2483,28 @@ function closeReward() {
     document.getElementById('badgeCanvasContainer').innerHTML = '';
   }
   renderBadges();
-  backToLevels();
+  if (state.session && state.session.role === 'siswa') {
+    renderLevelsSiswa(state.currentSemester);
+  } else {
+    backToLevels();
+  }
+  goTo('screenLevels');
 }
 
 /* =========================================================
-   BADGES SCREEN - PER KELAS
+   BADGES
    ========================================================= */
 function renderBadges() {
   const grid = document.getElementById('badgesGrid');
   grid.innerHTML = '';
   const cd = getActiveClassData();
   const totalBabs = DATA[1].length + DATA[2].length;
+  const btnBack = document.getElementById('btnBackFromBadges');
+  if (state.session && state.session.role === 'siswa') {
+    btnBack.setAttribute('onclick', "goTo('screenSemesterSiswa')");
+  } else {
+    btnBack.setAttribute('onclick', "goTo('screenSemester')");
+  }
   for (let i=1; i<=totalBabs; i++) {
     const badgeId = 'pancasila_' + i;
     const earned = cd.badges.find(b => b.id === badgeId);
@@ -1841,41 +2516,37 @@ function renderBadges() {
 }
 
 /* =========================================================
-   REKAP NILAI - PER KELAS
+   REKAP
    ========================================================= */
-let currentFilterKelas = 'all';
-
 function renderRekap() {
   const cd = getActiveClassData();
-  const kelasAktif = state.teacher.kelasAjar;
+  const kelasAktif = state.session ? state.session.kelas : '';
+  const teacher = getCurrentTeacher();
   const container = document.getElementById('rekapContent');
 
   const history = cd.quizHistory || [];
   const students = cd.students || [];
 
+  let exportBtnHtml = `<button class="btn-success" style="margin-bottom:14px;" onclick="exportToExcel()">📥 Export ke Excel (.xlsx)</button>`;
+
   if (history.length === 0) {
     container.innerHTML = `
       <div class="info-banner">
-        👨‍🏫 Guru: <b>${state.teacher.nama || '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b>
+        🏫 <b>${teacher ? teacher.sekolah.nama : '-'}</b><br>
+        👨‍🏫 Guru: <b>${teacher ? teacher.nama : '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b>
       </div>
-      <div class="rekap-empty">
-        🎯<br><br>
-        <b>Belum Ada Nilai di ${kelasAktif}</b><br>
-        Belum ada siswa dari kelas ini yang mengerjakan kuis.
-      </div>
+      ${exportBtnHtml}
+      <div class="rekap-empty">🎯<br><br><b>Belum Ada Nilai</b><br>Belum ada siswa yang mengerjakan kuis.</div>
     `;
     return;
   }
 
   const sortedHistory = [...history].sort((a,b) => new Date(b.date) - new Date(a.date));
 
-  // Nilai terbaik per siswa
   const studentBest = {};
   history.forEach(h => {
-    const key = h.studentName;
-    if (!studentBest[key] || h.score > studentBest[key].score) {
-      studentBest[key] = h;
-    }
+    const key = h.studentName + '|' + h.studentNisn;
+    if (!studentBest[key] || h.score > studentBest[key].score) studentBest[key] = h;
   });
   const uniqueStudents = Object.keys(studentBest).length;
   const totalStudents = students.length;
@@ -1884,99 +2555,304 @@ function renderRekap() {
 
   container.innerHTML = `
     <div class="info-banner">
-      👨‍🏫 Guru: <b>${state.teacher.nama || '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b><br>
+      🏫 <b>${teacher ? teacher.sekolah.nama : '-'}</b><br>
+      👨‍🏫 Guru: <b>${teacher ? teacher.nama : '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b><br>
       ${uniqueStudents} dari ${totalStudents} siswa sudah mengerjakan • ${history.length} total percobaan
     </div>
+    ${exportBtnHtml}
     <div class="rekap-summary">
-      <div class="rekap-stat">
-        <div class="val">${avgScore}</div>
-        <div class="lbl">Rata-rata</div>
-      </div>
-      <div class="rekap-stat">
-        <div class="val">${uniqueStudents}/${totalStudents}</div>
-        <div class="lbl">Siswa Ikut</div>
-      </div>
-      <div class="rekap-stat">
-        <div class="val">${lulusCount}</div>
-        <div class="lbl">Lulus Sempurna</div>
-      </div>
-      <div class="rekap-stat">
-        <div class="val">${history.length}</div>
-        <div class="lbl">Total Kuis</div>
-      </div>
+      <div class="rekap-stat"><div class="val">${avgScore}</div><div class="lbl">Rata-rata</div></div>
+      <div class="rekap-stat"><div class="val">${uniqueStudents}/${totalStudents}</div><div class="lbl">Siswa Ikut</div></div>
+      <div class="rekap-stat"><div class="val">${lulusCount}</div><div class="lbl">Lulus Sempurna</div></div>
+      <div class="rekap-stat"><div class="val">${history.length}</div><div class="lbl">Total Kuis</div></div>
     </div>
-
     <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">🏆 Nilai Terbaik Per Siswa</h3>
     <table class="rekap-table">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nama Siswa</th>
-          <th>NISN</th>
-          <th>Nilai</th>
-          <th>Status</th>
-        </tr>
-      </thead>
+      <thead><tr><th>No</th><th>Nama</th><th>NISN</th><th>Nilai</th><th>Status</th></tr></thead>
       <tbody>
-        ${Object.values(studentBest)
-          .sort((a,b) => b.score - a.score)
-          .map((h, i) => {
-            const pct = Math.round(h.score/h.total*100);
-            const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
-            const status = h.score === h.total
-              ? '<span class="rekap-badge-status badge-yes">✓ LULUS</span>'
-              : '<span class="rekap-badge-status badge-no">✗ ULANG</span>';
-            return `
-              <tr>
-                <td>${i+1}</td>
-                <td><b>${escapeHtml(h.studentName)}</b></td>
-                <td style="font-size:10px;color:#4fc3f7;">${escapeHtml(h.studentNisn || '-')}</td>
-                <td class="score-cell ${cls}">${h.score}/${h.total}</td>
-                <td>${status}</td>
-              </tr>
-            `;
-          }).join('')}
+        ${Object.values(studentBest).sort((a,b) => b.score - a.score).map((h, i) => {
+          const pct = Math.round(h.score/h.total*100);
+          const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
+          const status = h.score === h.total ? '<span class="rekap-badge-status badge-yes">✓ LULUS</span>' : '<span class="rekap-badge-status badge-no">✗ ULANG</span>';
+          return `<tr><td>${i+1}</td><td><b>${escapeHtml(h.studentName)}</b></td><td style="font-size:10px;color:#4fc3f7;">${escapeHtml(h.studentNisn||'-')}</td><td class="score-cell ${cls}">${h.score}/${h.total}</td><td>${status}</td></tr>`;
+        }).join('')}
       </tbody>
     </table>
-
     <h3 style="font-size:13px;color:#ffd700;margin:20px 0 8px;">🕒 Riwayat Semua Percobaan</h3>
     <table class="rekap-table">
-      <thead>
-        <tr>
-          <th>Siswa</th>
-          <th>Bab</th>
-          <th>Nilai</th>
-          <th>Waktu</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Siswa</th><th>Bab</th><th>Nilai</th><th>Waktu</th></tr></thead>
       <tbody>
         ${sortedHistory.slice(0, 30).map(h => {
           const d = new Date(h.date);
           const tgl = d.toLocaleDateString('id-ID', {day:'2-digit', month:'short'}) + ' ' + d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
           const pct = Math.round(h.score/h.total*100);
           const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
-          return `
-            <tr>
-              <td><b>${escapeHtml(h.studentName)}</b><br><span style="font-size:9px;color:#4fc3f7;">${escapeHtml(h.studentNisn || '-')}</span></td>
-              <td style="font-size:10px;">${h.babShort}</td>
-              <td class="score-cell ${cls}">${h.score}/${h.total}</td>
-              <td style="font-size:9px;color:#888;">${tgl}</td>
-            </tr>
-          `;
+          return `<tr><td><b>${escapeHtml(h.studentName)}</b></td><td style="font-size:10px;">${h.babShort}</td><td class="score-cell ${cls}">${h.score}/${h.total}</td><td style="font-size:9px;color:#888;">${tgl}</td></tr>`;
         }).join('')}
       </tbody>
     </table>
-    ${sortedHistory.length > 30 ? '<p style="font-size:10px;color:#666;text-align:center;margin-top:10px;">Menampilkan 30 percobaan terbaru</p>' : ''}
-    <button class="btn-secondary" style="margin-top:20px;" onclick="resetRekap()">🗑️ Hapus Semua Riwayat Nilai Kelas Ini</button>
   `;
 }
 
-function resetRekap() {
-  if (!confirm('Yakin ingin menghapus semua riwayat nilai kuis di kelas ' + state.teacher.kelasAjar + '?\n\n(Badge dan XP tidak akan hilang)')) return;
+/* =========================================================
+   EXPORT EXCEL
+   ========================================================= */
+function exportToExcel() {
+  if (typeof XLSX === 'undefined') { alert('Library Excel belum dimuat.'); return; }
   const cd = getActiveClassData();
-  cd.quizHistory = [];
+  const teacher = getCurrentTeacher();
+  const kelasAktif = state.session ? state.session.kelas : '';
+  const history = cd.quizHistory || [];
+  const students = cd.students || [];
+
+  if (history.length === 0 && students.length === 0) { alert('Belum ada data!'); return; }
+
+  const siswaRows = students.map((s, i) => {
+    const studentAccount = state.students.find(sa => sa.nisn === s.nisn && sa.nama === s.nama);
+    const nilaiTerbaik = history
+      .filter(h => h.studentName === s.nama && h.studentNisn === s.nisn)
+      .reduce((best, h) => (!best || h.score > best.score) ? h : best, null);
+    return {
+      'No': i+1, 'Nama Siswa': s.nama, 'NISN': s.nisn, 'Kelas': kelasAktif,
+      'Email': studentAccount ? (studentAccount.email || '-') : '-',
+      'Nilai Terbaik': nilaiTerbaik ? nilaiTerbaik.score + '/' + nilaiTerbaik.total : '-',
+      'Status': nilaiTerbaik ? (nilaiTerbaik.score === nilaiTerbaik.total ? 'LULUS' : 'BELUM LULUS') : 'Belum Kuis'
+    };
+  });
+
+  const riwayatRows = [...history].sort((a,b) => new Date(b.date) - new Date(a.date)).map((h, i) => {
+    const d = new Date(h.date);
+    return {
+      'No': i+1, 'Tanggal': d.toLocaleDateString('id-ID'), 'Waktu': d.toLocaleTimeString('id-ID'),
+      'Nama Siswa': h.studentName, 'NISN': h.studentNisn || '-', 'Kelas': h.studentClass,
+      'Bab': h.babShort || h.babTitle, 'Semester': h.semester,
+      'Skor': h.score, 'Total Soal': h.total, 'Nilai (%)': Math.round(h.score / h.total * 100),
+      'Status': h.score === h.total ? 'LULUS' : 'ULANG'
+    };
+  });
+
+  const studentBestMap = {};
+  history.forEach(h => {
+    const key = h.studentName + '|' + h.studentNisn;
+    if (!studentBestMap[key] || h.score > studentBestMap[key].score) studentBestMap[key] = h;
+  });
+  const bestRows = Object.values(studentBestMap).sort((a, b) => b.score - a.score).map((h, i) => {
+    const d = new Date(h.date);
+    return {
+      'Ranking': i+1, 'Nama Siswa': h.studentName, 'NISN': h.studentNisn || '-',
+      'Nilai Terbaik': h.score + '/' + h.total,
+      'Persentase': Math.round(h.score / h.total * 100) + '%',
+      'Tanggal': d.toLocaleDateString('id-ID'),
+      'Status': h.score === h.total ? 'LULUS' : 'BELUM LULUS'
+    };
+  });
+
+  const infoRows = [
+    { 'Keterangan': 'Nama Sekolah', 'Nilai': teacher ? teacher.sekolah.nama : '-' },
+    { 'Keterangan': 'Nama Guru', 'Nilai': teacher ? teacher.nama : '-' },
+    { 'Keterangan': 'Kelas', 'Nilai': kelasAktif },
+    { 'Keterangan': 'Total Siswa', 'Nilai': students.length },
+    { 'Keterangan': 'Total Percobaan Kuis', 'Nilai': history.length },
+    { 'Keterangan': 'Tanggal Export', 'Nilai': new Date().toLocaleString('id-ID') }
+  ];
+
+  const wb = XLSX.utils.book_new();
+  const ws1 = XLSX.utils.json_to_sheet(siswaRows.length > 0 ? siswaRows : [{ 'Info': 'Belum ada siswa' }]);
+  const ws2 = XLSX.utils.json_to_sheet(riwayatRows.length > 0 ? riwayatRows : [{ 'Info': 'Belum ada riwayat kuis' }]);
+  const ws3 = XLSX.utils.json_to_sheet(bestRows.length > 0 ? bestRows : [{ 'Info': 'Belum ada nilai' }]);
+  const ws4 = XLSX.utils.json_to_sheet(infoRows);
+
+  ws1['!cols'] = [{wch:5},{wch:25},{wch:15},{wch:12},{wch:25},{wch:15},{wch:15}];
+  ws2['!cols'] = [{wch:5},{wch:12},{wch:10},{wch:25},{wch:15},{wch:12},{wch:25},{wch:10},{wch:8},{wch:10},{wch:10},{wch:12}];
+  ws3['!cols'] = [{wch:10},{wch:25},{wch:15},{wch:15},{wch:12},{wch:12},{wch:15}];
+  ws4['!cols'] = [{wch:30},{wch:40}];
+
+  XLSX.utils.book_append_sheet(wb, ws4, 'Info');
+  XLSX.utils.book_append_sheet(wb, ws1, 'Daftar Siswa');
+  XLSX.utils.book_append_sheet(wb, ws2, 'Riwayat Kuis');
+  XLSX.utils.book_append_sheet(wb, ws3, 'Nilai Terbaik');
+
+  const tgl = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  const sekolahNama = teacher ? teacher.sekolah.nama.replace(/[^a-zA-Z0-9]/g,'_') : 'Sekolah';
+  const fileName = `Nilai_PKn_Kelas11_${sekolahNama}_${kelasAktif.replace(/\s/g,'_')}_${tgl}.xlsx`;
+
+  XLSX.writeFile(wb, fileName);
+  showToast('✅ File Excel berhasil didownload!');
+}
+
+/* =========================================================
+   PROFIL
+   ========================================================= */
+function renderProfile() {
+  if (!state.session) return;
+  const teacher = getCurrentTeacher();
+  const student = getCurrentStudent();
+
+  if (state.session.role === 'guru') {
+    document.getElementById('profileGuruForm').style.display = 'block';
+    document.getElementById('profileSiswaForm').style.display = 'none';
+    document.getElementById('profileInfoBanner').innerHTML = '💡 Ubah data profil guru & sekolah Anda.';
+    document.getElementById('profNamaSekolah').value = teacher.sekolah.nama || '';
+    document.getElementById('profNamaGuru').value = teacher.nama || '';
+    document.getElementById('profEmailGuru').value = teacher.email || '';
+    document.getElementById('profPasswordGuru').value = '';
+    document.getElementById('profilePhotoPlaceholder').textContent = '👨‍🏫';
+    updateUploadPreview('profileUploadPreview', 'profileUploadItem', teacher.foto, '👨‍🏫');
+  } else {
+    document.getElementById('profileGuruForm').style.display = 'none';
+    document.getElementById('profileSiswaForm').style.display = 'block';
+    document.getElementById('profileInfoBanner').innerHTML = '💡 Ubah data profil Anda. Foto profil akan muncul di beranda.';
+    document.getElementById('profNamaSiswa').value = student.nama || '';
+    document.getElementById('profNisnSiswa').value = student.nisn || '';
+    document.getElementById('profKelasSiswa').value = student.kelas || '';
+    document.getElementById('profEmailSiswa').value = student.email || '';
+    document.getElementById('profilePhotoPlaceholder').textContent = '👨‍🎓';
+    updateUploadPreview('profileUploadPreview', 'profileUploadItem', student.foto, '👨‍🎓');
+  }
+}
+
+function backFromProfile() {
+  if (state.session && state.session.role === 'siswa') goTo('screenSemesterSiswa');
+  else goTo('screenSemester');
+}
+
+function handleProfilePhotoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  processImage(file, 300, (dataUrl) => {
+    if (state.session.role === 'guru') {
+      getCurrentTeacher().foto = dataUrl;
+    } else {
+      getCurrentStudent().foto = dataUrl;
+    }
+    saveState();
+    updateUploadPreview('profileUploadPreview', 'profileUploadItem', dataUrl, state.session.role === 'guru' ? '👨‍🏫' : '👨‍🎓');
+    updateHeader();
+    showToast('📷 Foto profil diperbarui!');
+  });
+}
+
+function removeProfilePhoto() {
+  if (state.session.role === 'guru') {
+    getCurrentTeacher().foto = '';
+    updateUploadPreview('profileUploadPreview', 'profileUploadItem', '', '👨‍🏫');
+  } else {
+    getCurrentStudent().foto = '';
+    updateUploadPreview('profileUploadPreview', 'profileUploadItem', '', '👨‍🎓');
+  }
   saveState();
-  renderRekap();
+  updateHeader();
+  document.getElementById('profilePhotoFile').value = '';
+}
+
+function saveProfile() {
+  if (state.session.role === 'guru') {
+    const teacher = getCurrentTeacher();
+    const namaSekolah = document.getElementById('profNamaSekolah').value.trim();
+    const namaGuru = document.getElementById('profNamaGuru').value.trim();
+    const email = document.getElementById('profEmailGuru').value.trim();
+    const newPwd = document.getElementById('profPasswordGuru').value;
+
+    if (!namaSekolah) { alert('Nama sekolah tidak boleh kosong!'); return; }
+    if (!namaGuru) { alert('Nama guru tidak boleh kosong!'); return; }
+
+    const dup = state.teachers.find(t =>
+      t.id !== teacher.id &&
+      t.nama.toLowerCase() === namaGuru.toLowerCase() &&
+      t.sekolah.nama.toLowerCase() === namaSekolah.toLowerCase()
+    );
+    if (dup) { alert('Sudah ada guru dengan nama & sekolah yang sama!'); return; }
+
+    teacher.sekolah.nama = namaSekolah;
+    teacher.nama = namaGuru;
+    teacher.email = email;
+    if (newPwd) {
+      if (newPwd.length < 4) { alert('Password minimal 4 karakter!'); return; }
+      teacher.password = newPwd;
+    }
+    saveState();
+    updateHeader();
+    showToast('✅ Profil guru tersimpan!');
+    document.getElementById('profPasswordGuru').value = '';
+  } else {
+    const student = getCurrentStudent();
+    const nama = document.getElementById('profNamaSiswa').value.trim();
+    const nisn = document.getElementById('profNisnSiswa').value.trim();
+    const email = document.getElementById('profEmailSiswa').value.trim();
+
+    if (!nama) { alert('Nama tidak boleh kosong!'); return; }
+    if (!nisn) { alert('NISN tidak boleh kosong!'); return; }
+    if (!/^[0-9]+$/.test(nisn)) { alert('NISN hanya boleh angka!'); return; }
+
+    const cd = getActiveClassData();
+    const studentInClass = cd.students.find(s => s.nama === student.nama && s.nisn === student.nisn);
+    if (studentInClass) {
+      studentInClass.nama = nama;
+      studentInClass.nisn = nisn;
+    }
+
+    student.nama = nama;
+    student.nisn = nisn;
+    student.email = email;
+    saveState();
+    updateHeader();
+    showToast('✅ Profil siswa tersimpan!');
+  }
+}
+
+/* =========================================================
+   UTIL
+   ========================================================= */
+function processImage(file, maxSize, callback) {
+  if (!file.type.startsWith('image/')) { alert('File harus berupa gambar!'); return; }
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const img = new Image();
+    img.onload = function() {
+      let w = img.width, h = img.height;
+      if (w > h) {
+        if (w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
+      } else {
+        if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      callback(dataUrl);
+    };
+    img.onerror = function() { alert('Gagal memuat gambar'); };
+    img.src = ev.target.result;
+  };
+  reader.onerror = function() { alert('Gagal membaca file'); };
+  reader.readAsDataURL(file);
+}
+
+function updateUploadPreview(previewId, itemId, dataUrl, emoji) {
+  const preview = document.getElementById(previewId);
+  const item = document.getElementById(itemId);
+  if (!preview || !item) return;
+  if (dataUrl) {
+    preview.innerHTML = `<img src="${dataUrl}" alt="Preview">`;
+    item.classList.add('has-image');
+  } else {
+    preview.innerHTML = `<span class="placeholder">${emoji}</span>`;
+    item.classList.remove('has-image');
+  }
+}
+
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+}
+function backToLevels() {
+  if (state.session && state.session.role === 'siswa') {
+    renderLevelsSiswa(state.currentSemester);
+  } else {
+    renderLevels(state.currentSemester);
+  }
+  goTo('screenLevels');
 }
 
 /* =========================================================
@@ -1984,41 +2860,43 @@ function resetRekap() {
    ========================================================= */
 function init() {
   loadState();
-  updateHeader();
-  renderBadges();
 
-  // WAJIB LOGIN setiap kali buka web
-  if (state.teacher.nama && state.teacher.kelasAjar) {
-    // Jika sebelumnya sudah login, langsung ke semester
-    // (agar tidak kehilangan state; user bisa klik "Ganti Kelas" untuk logout)
-    goTo('screenSemester');
+  if (state.session) {
+    if (state.session.role === 'guru') {
+      const teacher = getCurrentTeacher();
+      if (teacher && state.session.kelas) {
+        updateHeader();
+        goTo('screenSemester');
+      } else if (teacher) {
+        updateHeader();
+        renderPilihKelas();
+        goTo('screenPilihKelas');
+      } else {
+        state.session = null;
+        saveState();
+        goTo('screenAuth');
+      }
+    } else if (state.session.role === 'siswa') {
+      const student = getCurrentStudent();
+      if (student) {
+        updateHeader();
+        renderSemesterSiswa();
+        goTo('screenSemesterSiswa');
+      } else {
+        state.session = null;
+        saveState();
+        goTo('screenAuth');
+      }
+    }
   } else {
-    goTo('screenLoginGuru');
+    goTo('screenAuth');
   }
 
+  updateHeader();
+
+  document.getElementById('logoutBtn').onclick = handleLogout;
   document.getElementById('badgeDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
   document.getElementById('xpDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
-  document.getElementById('rekapBtn').onclick = () => { renderRekap(); goTo('screenRekap'); };
-
-  document.getElementById('inputKelasAjar').addEventListener('change', (e) => {
-    const kelas = e.target.value;
-    const info = document.getElementById('studentCountInfo');
-    const num = document.getElementById('studentCountNum');
-    if (kelas) {
-      const count = (state.classData[kelas]?.students || []).length;
-      num.textContent = count + ' siswa';
-      info.style.display = 'flex';
-    } else {
-      info.style.display = 'none';
-    }
-  });
-
-  document.getElementById('inputNamaGuru').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') document.getElementById('inputKelasAjar').focus();
-  });
-  document.getElementById('inputKelasAjar').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleLoginGuru();
-  });
 
   document.getElementById('inputSiswaNama').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') document.getElementById('inputSiswaNisn').focus();
