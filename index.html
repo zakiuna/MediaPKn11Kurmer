@@ -21,7 +21,7 @@
     border-bottom:1px solid rgba(255,255,255,0.1); z-index:10;
   }
   .header h1 { font-size:13px; font-weight:600; color:#ffd700; letter-spacing:0.3px; }
-  .header .student-info { font-size:9px; color:#aaa; display:block; }
+  .header .teacher-info { font-size:9px; color:#aaa; display:block; margin-top:1px; }
   .stats { display:flex; gap:6px; font-size:10px; }
   .stat-badge {
     background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.4);
@@ -32,24 +32,25 @@
   .screen.active { display:block; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-  /* FORM SISWA */
+  /* FORM BOX (untuk login guru & siswa) */
   .form-box {
     background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,100,100,0.08));
     border:2px solid rgba(255,215,0,0.4); border-radius:16px;
-    padding:24px; margin-top:30px;
+    padding:24px; margin-top:20px;
   }
   .form-logo { font-size:60px; text-align:center; margin-bottom:16px; }
   .form-title { text-align:center; font-size:20px; font-weight:700; color:#ffd700; margin-bottom:6px; }
   .form-sub { text-align:center; font-size:11px; color:#aaa; margin-bottom:24px; }
   .form-group { margin-bottom:16px; }
   .form-label { font-size:12px; color:#ffd700; margin-bottom:6px; display:block; font-weight:600; }
-  .form-input {
+  .form-input, .form-select {
     width:100%; padding:12px 14px; background:rgba(255,255,255,0.08);
     border:1.5px solid rgba(255,255,255,0.2); border-radius:10px;
     color:#fff; font-size:14px; font-family:inherit; outline:none; transition:all 0.3s;
   }
-  .form-input:focus { border-color:#ffd700; background:rgba(255,215,0,0.08); }
+  .form-input:focus, .form-select:focus { border-color:#ffd700; background:rgba(255,215,0,0.08); }
   .form-input::placeholder { color:#666; }
+  .form-select option { background:#1a1a2e; color:#fff; }
 
   .title-main { text-align:center; margin:20px 0 20px; font-size:22px; font-weight:700; color:#fff; text-shadow:0 0 20px rgba(255,215,0,0.5); }
   .title-sub { text-align:center; font-size:12px; color:#aaa; margin-bottom:20px; }
@@ -251,6 +252,32 @@
   }
   .badge-yes { background:rgba(0,230,118,0.2); color:#00e676; }
   .badge-no { background:rgba(255,82,82,0.15); color:#ff5252; }
+
+  .filter-bar {
+    display:flex; gap:6px; overflow-x:auto; padding:4px 0 10px;
+    scrollbar-width:none;
+  }
+  .filter-bar::-webkit-scrollbar { display:none; }
+  .filter-chip {
+    padding:6px 12px; border-radius:20px; font-size:10px; font-weight:700;
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+    color:#aaa; cursor:pointer; white-space:nowrap; transition:all 0.3s;
+  }
+  .filter-chip.active {
+    background:rgba(255,215,0,0.2); border-color:#ffd700; color:#ffd700;
+  }
+
+  .student-info-box {
+    background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.3);
+    border-radius:10px; padding:10px 12px; margin-bottom:14px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:11px;
+  }
+  .student-info-box .name { color:#ffd700; font-weight:700; }
+  .student-info-box .change-btn {
+    font-size:10px; color:#4fc3f7; cursor:pointer; text-decoration:underline;
+    background:none; border:none;
+  }
 </style>
 </head>
 <body>
@@ -258,7 +285,7 @@
   <div class="header">
     <div>
       <h1>🎓 PKn Kelas 11</h1>
-      <span class="student-info" id="headerStudent">-</span>
+      <span class="teacher-info" id="headerTeacher">-</span>
     </div>
     <div class="stats">
       <div class="stat-badge" id="xpDisplay">⚡ 0</div>
@@ -267,21 +294,28 @@
     </div>
   </div>
 
-  <!-- ====== LOGIN SISWA ====== -->
-  <div class="screen active" id="screenLogin">
+  <!-- ====== LOGIN GURU ====== -->
+  <div class="screen active" id="screenLoginGuru">
     <div class="form-box">
-      <div class="form-logo">🎓</div>
-      <div class="form-title">PKn Kelas 11</div>
-      <div class="form-sub">Kurikulum Merdeka • Gamifikasi Pembelajaran</div>
+      <div class="form-logo">👨‍🏫</div>
+      <div class="form-title">Selamat Datang, Guru!</div>
+      <div class="form-sub">PKn Kelas 11 • Kurikulum Merdeka</div>
       <div class="form-group">
-        <label class="form-label">👤 Nama Siswa</label>
-        <input type="text" class="form-input" id="inputNama" placeholder="Masukkan nama lengkap" maxlength="40" autocomplete="off">
+        <label class="form-label">👤 Nama Guru</label>
+        <input type="text" class="form-input" id="inputNamaGuru" placeholder="Masukkan nama guru" maxlength="40" autocomplete="off">
       </div>
       <div class="form-group">
-        <label class="form-label">🏫 Kelas</label>
-        <input type="text" class="form-input" id="inputKelas" placeholder="Contoh: XI IPA 1" maxlength="20" autocomplete="off">
+        <label class="form-label">🏫 Kelas yang Diajar</label>
+        <select class="form-select" id="inputKelasAjar">
+          <option value="">-- Pilih Kelas --</option>
+          <option value="XI MIPA 1">XI MIPA 1</option>
+          <option value="XI MIPA 2">XI MIPA 2</option>
+          <option value="XI MIPA 3">XI MIPA 3</option>
+          <option value="XI MIPA 4">XI MIPA 4</option>
+          <option value="XI MIPA 5">XI MIPA 5</option>
+        </select>
       </div>
-      <button class="btn-primary" onclick="handleLogin()">🚀 Mulai Belajar</button>
+      <button class="btn-primary" onclick="handleLoginGuru()">🚀 Mulai Mengajar</button>
     </div>
   </div>
 
@@ -322,12 +356,45 @@
     <div class="material-content" id="materialContent"></div>
     <div class="btn-group">
       <button class="btn-primary" id="btnDoneReading" onclick="markAsRead()">✅ Selesai Membaca</button>
-      <button class="btn-secondary" id="btnStartQuiz" onclick="startQuiz()">📝 Ikuti Kuis (Opsional)</button>
+      <button class="btn-secondary" id="btnStartQuiz" onclick="promptStudentData()">📝 Ikuti Kuis (Opsional)</button>
+    </div>
+  </div>
+
+  <!-- ====== FORM SISWA (sebelum kuis) ====== -->
+  <div class="screen" id="screenFormSiswa">
+    <div class="material-header">
+      <button class="back-btn" onclick="goTo('screenMaterial')">←</button>
+      <div class="material-title">📝 Data Siswa</div>
+    </div>
+    <div class="form-box">
+      <div class="form-logo">👨‍🎓</div>
+      <div class="form-title">Isi Data Siswa</div>
+      <div class="form-sub">Data digunakan untuk rekap nilai kuis</div>
+      <div class="form-group">
+        <label class="form-label">👤 Nama Siswa</label>
+        <input type="text" class="form-input" id="inputNamaSiswa" placeholder="Masukkan nama lengkap" maxlength="40" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label class="form-label">🏫 Kelas</label>
+        <select class="form-select" id="inputKelasSiswa">
+          <option value="">-- Pilih Kelas --</option>
+          <option value="XI MIPA 1">XI MIPA 1</option>
+          <option value="XI MIPA 2">XI MIPA 2</option>
+          <option value="XI MIPA 3">XI MIPA 3</option>
+          <option value="XI MIPA 4">XI MIPA 4</option>
+          <option value="XI MIPA 5">XI MIPA 5</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="handleStartQuiz()">📝 Mulai Kuis Sekarang</button>
     </div>
   </div>
 
   <!-- ====== QUIZ ====== -->
   <div class="screen" id="screenQuiz">
+    <div class="student-info-box" id="quizStudentInfo">
+      <div>👤 <span class="name" id="quizStudentName">Siswa</span> • <span id="quizStudentClass">Kelas</span></div>
+      <button class="change-btn" onclick="promptStudentData()">Ubah</button>
+    </div>
     <div class="quiz-header">
       <div class="quiz-progress" id="quizProgress">Soal 1/10</div>
       <div class="quiz-bar"><div class="quiz-bar-fill" id="quizBarFill"></div></div>
@@ -344,7 +411,7 @@
       <div class="result-score" id="resultScore">0/10</div>
       <div class="result-text" id="resultText"></div>
       <button class="btn-primary" onclick="backToLevels()">Kembali ke Peta Level</button>
-      <button class="btn-secondary" id="btnRetryQuiz" onclick="startQuiz()">🔄 Coba Lagi</button>
+      <button class="btn-secondary" id="btnRetryQuiz" onclick="startQuizDirect()">🔄 Coba Lagi</button>
     </div>
   </div>
 
@@ -366,11 +433,11 @@
       <button class="back-btn" onclick="goTo('screenSemester')">←</button>
       <div class="material-title">📊 Rekap Daftar Nilai Kuis</div>
     </div>
+    <div class="filter-bar" id="filterKelas"></div>
     <div id="rekapContent"></div>
   </div>
 </div>
 
-<!-- Modal Reward -->
 <div class="modal-overlay" id="rewardModal">
   <div class="modal-content">
     <div class="modal-title">🏆 Badge Baru!</div>
@@ -381,7 +448,6 @@
   </div>
 </div>
 
-<!-- Feedback WebGL -->
 <div class="feedback-overlay" id="feedbackOverlay">
   <div class="feedback-canvas" id="feedbackCanvas"></div>
   <div class="feedback-text" id="feedbackText"></div>
@@ -390,8 +456,7 @@
 
 <script>
 /* =========================================================
-   DATA MATERI PKn KELAS 11 - LENGKAP DENGAN
-   CONTOH KONKRIT, RANGKUMAN, DAN REFLEKSI
+   DATA MATERI PKn KELAS 11
    ========================================================= */
 const DATA = {
   1: [
@@ -654,14 +719,15 @@ const DATA = {
 /* =========================================================
    STATE & STORAGE
    ========================================================= */
-const STORAGE_KEY = 'pkn11_gamifikasi_v3';
+const STORAGE_KEY = 'pkn11_gamifikasi_v4';
 let state = {
-  student: { nama:'', kelas:'' },
+  teacher: { nama:'', kelasAjar:'' },
+  currentStudent: { nama:'', kelas:'' },
   xp: 0,
   badges: [],
   readBabs: {},
   completed: {},
-  quizHistory: [], // [{babId, babTitle, score, total, date, semester}]
+  quizHistory: [], // [{studentName, studentClass, teacherName, teacherClass, babId, babTitle, babShort, score, total, semester, date}]
   currentSemester: 1,
   currentBab: null,
   quizIndex: 0,
@@ -682,33 +748,24 @@ function saveState() {
 function updateHeader() {
   document.getElementById('xpDisplay').textContent = '⚡ ' + state.xp;
   document.getElementById('badgeDisplay').textContent = '🏅 ' + state.badges.length;
-  if (state.student.nama) {
-    document.getElementById('headerStudent').textContent = state.student.nama + (state.student.kelas ? ' • ' + state.student.kelas : '');
+  if (state.teacher.nama) {
+    document.getElementById('headerTeacher').textContent = '👨‍🏫 ' + state.teacher.nama + (state.teacher.kelasAjar ? ' • ' + state.teacher.kelasAjar : '');
   }
 }
 
 /* =========================================================
-   LOGIN
+   LOGIN GURU
    ========================================================= */
-function handleLogin() {
-  const nama = document.getElementById('inputNama').value.trim();
-  const kelas = document.getElementById('inputKelas').value.trim();
-  if (!nama) { alert('Silakan isi nama Anda terlebih dahulu!'); return; }
-  if (!kelas) { alert('Silakan isi kelas Anda terlebih dahulu!'); return; }
-  state.student.nama = nama;
-  state.student.kelas = kelas;
+function handleLoginGuru() {
+  const nama = document.getElementById('inputNamaGuru').value.trim();
+  const kelas = document.getElementById('inputKelasAjar').value;
+  if (!nama) { alert('Silakan isi nama guru terlebih dahulu!'); return; }
+  if (!kelas) { alert('Silakan pilih kelas yang diajar!'); return; }
+  state.teacher.nama = nama;
+  state.teacher.kelasAjar = kelas;
   saveState();
   updateHeader();
   goTo('screenSemester');
-}
-
-function logout() {
-  if (!confirm('Keluar dari akun siswa ini?')) return;
-  state.student = {nama:'', kelas:''};
-  saveState();
-  document.getElementById('inputNama').value = '';
-  document.getElementById('inputKelas').value = '';
-  goTo('screenLogin');
 }
 
 /* =========================================================
@@ -780,9 +837,7 @@ function openBab(sem, index) {
   state.currentBab = {sem, index};
   document.getElementById('materialTitle').textContent = bab.title;
 
-  // Gabungkan materi + contoh konkrit + rangkuman + refleksi
   let fullContent = bab.content;
-
   if (bab.contoh) {
     fullContent += `
       <div class="section-box box-contoh">
@@ -856,21 +911,53 @@ function showToast(msg) {
 }
 
 /* =========================================================
-   KUIS
+   FORM SISWA SEBELUM KUIS
    ========================================================= */
-function startQuiz() {
-  if (!state.currentBab) return;
+function promptStudentData() {
+  // Isi otomatis dengan data siswa terakhir jika ada
+  document.getElementById('inputNamaSiswa').value = state.currentStudent.nama || '';
+  document.getElementById('inputKelasSiswa').value = state.currentStudent.kelas || state.teacher.kelasAjar || '';
+  goTo('screenFormSiswa');
+}
+
+function handleStartQuiz() {
+  const nama = document.getElementById('inputNamaSiswa').value.trim();
+  const kelas = document.getElementById('inputKelasSiswa').value;
+  if (!nama) { alert('Silakan isi nama siswa!'); return; }
+  if (!kelas) { alert('Silakan pilih kelas siswa!'); return; }
+
+  state.currentStudent.nama = nama;
+  state.currentStudent.kelas = kelas;
+  saveState();
+
+  // Update info di header kuis
+  document.getElementById('quizStudentName').textContent = nama;
+  document.getElementById('quizStudentClass').textContent = kelas;
+
+  startQuizDirect();
+}
+
+function startQuizDirect() {
+  if (!state.currentBab) { goTo('screenLevels'); return; }
   state.quizIndex = 0;
   state.quizCorrect = 0;
   state.quizAnswered = false;
   renderQuiz();
   goTo('screenQuiz');
 }
+
+/* =========================================================
+   KUIS
+   ========================================================= */
 function renderQuiz() {
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
   const q = bab.questions[state.quizIndex];
   const total = bab.questions.length;
+
+  // Pastikan info siswa tetap muncul
+  document.getElementById('quizStudentName').textContent = state.currentStudent.nama;
+  document.getElementById('quizStudentClass').textContent = state.currentStudent.kelas;
 
   document.getElementById('quizProgress').textContent = `Soal ${state.quizIndex+1}/${total}`;
   document.getElementById('quizBarFill').style.width = ((state.quizIndex)/total*100) + '%';
@@ -888,6 +975,7 @@ function renderQuiz() {
   });
   state.quizAnswered = false;
 }
+
 function answerQuestion(selected) {
   if (state.quizAnswered) return;
   state.quizAnswered = true;
@@ -906,7 +994,7 @@ function answerQuestion(selected) {
     if (!isCorrect) {
       setTimeout(() => {
         alert('❌ Jawaban salah! Kamu harus mengulang kuis dari awal.');
-        startQuiz();
+        startQuizDirect();
       }, 200);
     } else {
       state.quizIndex++;
@@ -955,7 +1043,6 @@ function showFeedback(isCorrect, callback) {
   dir.position.set(2,3,4);
   scene.add(dir);
 
-  // Bendera
   const flagGroup = new THREE.Group();
   const poleGeo = new THREE.CylinderGeometry(0.06,0.06,3,16);
   const poleMat = new THREE.MeshStandardMaterial({color:0xcccccc, metalness:0.7, roughness:0.3});
@@ -979,7 +1066,6 @@ function showFeedback(isCorrect, callback) {
   scene.add(flagGroup);
   flagGroup.position.set(-1.2, 0, 0);
 
-  // Pancasila
   const pancasilaGroup = new THREE.Group();
   const shape = new THREE.Shape();
   shape.moveTo(0, 1.4);
@@ -1069,8 +1155,12 @@ function finishQuiz() {
 
   if (!state.readBabs[bab.id]) state.readBabs[bab.id] = true;
 
-  // Simpan riwayat kuis
+  // Simpan riwayat kuis dengan data siswa & guru
   state.quizHistory.push({
+    studentName: state.currentStudent.nama,
+    studentClass: state.currentStudent.kelas,
+    teacherName: state.teacher.nama,
+    teacherClass: state.teacher.kelasAjar,
     babId: bab.id,
     babTitle: bab.title,
     babShort: bab.short,
@@ -1214,49 +1304,56 @@ function renderBadges() {
 }
 
 /* =========================================================
-   REKAP NILAI
+   REKAP NILAI (Filter per kelas)
    ========================================================= */
+let currentFilterKelas = 'all';
+
 function renderRekap() {
+  const filterBar = document.getElementById('filterKelas');
+  const classes = ['all', 'XI MIPA 1', 'XI MIPA 2', 'XI MIPA 3', 'XI MIPA 4', 'XI MIPA 5'];
+
+  filterBar.innerHTML = classes.map(c => {
+    const label = c === 'all' ? '📋 Semua' : c;
+    const active = currentFilterKelas === c ? ' active' : '';
+    return `<div class="filter-chip${active}" onclick="setFilterKelas('${c}')">${label}</div>`;
+  }).join('');
+
   const container = document.getElementById('rekapContent');
-  const history = state.quizHistory;
+  let history = state.quizHistory;
+
+  // Filter berdasarkan kelas siswa
+  if (currentFilterKelas !== 'all') {
+    history = history.filter(h => h.studentClass === currentFilterKelas);
+  }
 
   if (history.length === 0) {
     container.innerHTML = `
       <div class="info-banner">
-        📊 Belum ada riwayat kuis. Ikuti kuis untuk melihat nilai di sini!
+        👨‍🏫 Guru: <b>${state.teacher.nama || '-'}</b> • Kelas: <b>${state.teacher.kelasAjar || '-'}</b>
       </div>
       <div class="rekap-empty">
         🎯<br><br>
         <b>Belum Ada Nilai</b><br>
-        Selesaikan kuis untuk mengisi daftar nilai.
+        ${currentFilterKelas === 'all' ? 'Belum ada siswa yang mengerjakan kuis.' : 'Belum ada siswa dari kelas ' + currentFilterKelas + ' yang mengerjakan kuis.'}
       </div>
     `;
     return;
   }
 
-  // Urutkan dari yang terbaru
+  // Urutkan dari terbaru
   const sortedHistory = [...history].sort((a,b) => new Date(b.date) - new Date(a.date));
 
-  // Hitung statistik
+  // Statistik
   const totalKuis = history.length;
   const avgScore = Math.round(history.reduce((sum,h) => sum + (h.score/h.total*100), 0) / totalKuis);
   const bestScore = Math.max(...history.map(h => Math.round(h.score/h.total*100)));
   const lulusCount = history.filter(h => h.score === h.total).length;
-
-  // Ambil nilai terbaik per bab (untuk rekap unik)
-  const bestPerBab = {};
-  history.forEach(h => {
-    const key = h.babId;
-    if (!bestPerBab[key] || h.score > bestPerBab[key].score) {
-      bestPerBab[key] = h;
-    }
-  });
-  const uniqueBabs = Object.values(bestPerBab).sort((a,b) => new Date(b.date) - new Date(a.date));
+  const uniqueStudents = new Set(history.map(h => h.studentName + '|' + h.studentClass)).size;
 
   container.innerHTML = `
     <div class="info-banner">
-      👤 <b>${state.student.nama}</b> • ${state.student.kelas}<br>
-      Total ${totalKuis} percobaan kuis dari ${uniqueBabs.length} bab
+      👨‍🏫 Guru: <b>${state.teacher.nama || '-'}</b> • Kelas Diajar: <b>${state.teacher.kelasAjar || '-'}</b><br>
+      ${currentFilterKelas === 'all' ? 'Menampilkan semua kelas' : 'Filter: <b>' + currentFilterKelas + '</b>'} • ${totalKuis} percobaan kuis
     </div>
     <div class="rekap-summary">
       <div class="rekap-stat">
@@ -1268,71 +1365,55 @@ function renderRekap() {
         <div class="lbl">Nilai Tertinggi</div>
       </div>
       <div class="rekap-stat">
-        <div class="val">${lulusCount}</div>
-        <div class="lbl">Kuis Lulus Sempurna</div>
+        <div class="val">${uniqueStudents}</div>
+        <div class="lbl">Jumlah Siswa</div>
       </div>
       <div class="rekap-stat">
-        <div class="val">${state.badges.length}</div>
-        <div class="lbl">Badge Diperoleh</div>
+        <div class="val">${lulusCount}</div>
+        <div class="lbl">Kuis Lulus</div>
       </div>
     </div>
 
-    <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">📝 Nilai Terbaik Per Bab</h3>
+    <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">🕒 Riwayat Nilai Kuis</h3>
     <table class="rekap-table">
       <thead>
         <tr>
-          <th>Bab</th>
-          <th>Nilai</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${uniqueBabs.map(h => {
-          const pct = Math.round(h.score/h.total*100);
-          const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
-          const statusBadge = h.score === h.total
-            ? '<span class="rekap-badge-status badge-yes">✓ LULUS</span>'
-            : '<span class="rekap-badge-status badge-no">✗ ULANG</span>';
-          return `
-            <tr>
-              <td>${h.babShort}<br><span style="font-size:9px;color:#888;">Sem ${h.semester}</span></td>
-              <td class="score-cell ${cls}">${h.score}/${h.total}</td>
-              <td>${statusBadge}</td>
-            </tr>
-          `;
-        }).join('')}
-      </tbody>
-    </table>
-
-    <h3 style="font-size:13px;color:#ffd700;margin:20px 0 8px;">🕒 Riwayat Semua Percobaan</h3>
-    <table class="rekap-table">
-      <thead>
-        <tr>
-          <th>Tanggal</th>
+          <th>Siswa</th>
+          <th>Kelas</th>
           <th>Bab</th>
           <th>Nilai</th>
         </tr>
       </thead>
       <tbody>
-        ${sortedHistory.slice(0, 20).map(h => {
+        ${sortedHistory.slice(0, 50).map(h => {
           const d = new Date(h.date);
           const tgl = d.toLocaleDateString('id-ID', {day:'2-digit', month:'short'}) + ' ' + d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
           const pct = Math.round(h.score/h.total*100);
           const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
           return `
             <tr>
-              <td style="font-size:10px;color:#999;">${tgl}</td>
-              <td>${h.babShort}</td>
+              <td>
+                <b>${h.studentName}</b><br>
+                <span style="font-size:9px;color:#888;">${tgl}</span>
+              </td>
+              <td style="font-size:10px;">${h.studentClass}</td>
+              <td style="font-size:10px;">${h.babShort}<br><span style="font-size:9px;color:#888;">Sem ${h.semester}</span></td>
               <td class="score-cell ${cls}">${h.score}/${h.total}</td>
             </tr>
           `;
         }).join('')}
       </tbody>
     </table>
-    ${sortedHistory.length > 20 ? '<p style="font-size:10px;color:#666;text-align:center;margin-top:10px;">Menampilkan 20 percobaan terbaru</p>' : ''}
-    <button class="btn-secondary" style="margin-top:20px;" onclick="resetRekap()">🗑️ Hapus Riwayat Nilai</button>
+    ${sortedHistory.length > 50 ? '<p style="font-size:10px;color:#666;text-align:center;margin-top:10px;">Menampilkan 50 data terbaru</p>' : ''}
+    <button class="btn-secondary" style="margin-top:20px;" onclick="resetRekap()">🗑️ Hapus Semua Riwayat Nilai</button>
   `;
 }
+
+function setFilterKelas(kelas) {
+  currentFilterKelas = kelas;
+  renderRekap();
+}
+
 function resetRekap() {
   if (!confirm('Yakin ingin menghapus semua riwayat nilai kuis? (Badge dan XP tidak akan hilang)')) return;
   state.quizHistory = [];
@@ -1348,20 +1429,29 @@ function init() {
   updateHeader();
   renderBadges();
 
-  // Jika sudah login, langsung ke semester
-  if (state.student.nama && state.student.kelas) {
+  // Jika guru sudah login, langsung ke semester
+  if (state.teacher.nama && state.teacher.kelasAjar) {
     goTo('screenSemester');
   } else {
-    goTo('screenLogin');
+    goTo('screenLoginGuru');
   }
 
   document.getElementById('badgeDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
   document.getElementById('xpDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
   document.getElementById('rekapBtn').onclick = () => { renderRekap(); goTo('screenRekap'); };
 
-  // Enter untuk submit form login
-  document.getElementById('inputKelas').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleLogin();
+  // Enter untuk submit form guru
+  document.getElementById('inputNamaGuru').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('inputKelasAjar').focus();
+  });
+  document.getElementById('inputKelasAjar').addEventListener('change', () => {
+    if (state.teacher.nama === '') {
+      // Biarkan
+    }
+  });
+  // Enter untuk submit form siswa
+  document.getElementById('inputNamaSiswa').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('inputKelasSiswa').focus();
   });
 }
 init();
