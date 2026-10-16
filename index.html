@@ -8,35 +8,113 @@
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { height:100%; font-family:'Segoe UI', Tahoma, sans-serif; overflow:hidden; }
+
   body {
     background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
-    color:#fff; display:flex; justify-content:center; align-items:center;
-    max-width:480px; margin:0 auto; position:relative;
+    color:#fff;
+    display:flex; justify-content:center; align-items:stretch;
+    min-height:100vh;
   }
-  #app { width:100%; height:100vh; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+
+  #app {
+    width:100%; max-width:480px;
+    height:100vh; height:100dvh;
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+    background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+    box-shadow: 0 0 60px rgba(0,0,0,0.6);
+  }
+
+  @media (min-width: 768px) {
+    body { background: linear-gradient(135deg,#0a0a14 0%,#0f3460 100%); }
+    #app {
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        "header header"
+        "sidebar main";
+    }
+    .header { grid-area: header; }
+    .screen { grid-area: main; }
+    .desktop-sidebar {
+      grid-area: sidebar;
+      display:flex; flex-direction:column;
+      background:rgba(0,0,0,0.35);
+      border-right:1px solid rgba(255,255,255,0.08);
+      padding:20px 16px; overflow-y:auto;
+    }
+  }
+  @media (max-width: 767px) { .desktop-sidebar { display:none; } }
 
   .header {
-    padding:12px 16px; display:flex; justify-content:space-between; align-items:center;
+    padding:12px 16px;
+    display:flex; justify-content:space-between; align-items:center;
     background:rgba(0,0,0,0.3); backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(255,255,255,0.1); z-index:10;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    z-index:10; flex-shrink:0;
   }
   .header h1 { font-size:13px; font-weight:600; color:#ffd700; letter-spacing:0.3px; }
   .header .teacher-info { font-size:9px; color:#aaa; display:block; margin-top:1px; }
   .stats { display:flex; gap:6px; font-size:10px; }
   .stat-badge {
     background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.4);
-    padding:4px 8px; border-radius:12px; color:#ffd700; font-weight:600; cursor:pointer;
+    padding:4px 8px; border-radius:12px; color:#ffd700; font-weight:600;
+    cursor:pointer; transition:all 0.3s;
+  }
+  .stat-badge:hover { background:rgba(255,215,0,0.25); }
+  @media (max-width: 380px) {
+    .header h1 { font-size:11px; }
+    .stat-badge { padding:3px 6px; font-size:9px; }
   }
 
-  .screen { display:none; flex:1; overflow-y:auto; padding:16px; animation:fadeIn 0.4s ease; }
+  .desktop-sidebar-title {
+    font-size:12px; font-weight:700; color:#ffd700;
+    text-transform:uppercase; letter-spacing:1px;
+    margin-bottom:14px; padding-bottom:10px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-info {
+    background:rgba(255,215,0,0.08);
+    border:1px solid rgba(255,215,0,0.25);
+    border-radius:10px; padding:12px; margin-bottom:14px;
+    font-size:11px;
+  }
+  .sidebar-info .label { color:#aaa; font-size:9px; text-transform:uppercase; letter-spacing:0.5px; }
+  .sidebar-info .value { color:#ffd700; font-weight:700; font-size:13px; margin-top:2px; margin-bottom:8px; }
+  .sidebar-info .value:last-child { margin-bottom:0; }
+  .sidebar-info .kelas-badge {
+    display:inline-block; padding:2px 8px; border-radius:8px;
+    background:rgba(0,176,255,0.2); color:#4fc3f7;
+    font-size:11px; font-weight:700;
+  }
+  .sidebar-menu { display:flex; flex-direction:column; gap:8px; }
+  .sidebar-menu-item {
+    padding:12px 14px; background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1); border-radius:10px;
+    font-size:12px; font-weight:600; color:#ddd; cursor:pointer;
+    transition:all 0.3s; display:flex; align-items:center; gap:10px;
+  }
+  .sidebar-menu-item:hover { background:rgba(255,215,0,0.1); border-color:#ffd700; color:#ffd700; }
+  .sidebar-menu-item .icon { font-size:16px; }
+
+  .screen {
+    display:none; flex:1; overflow-y:auto;
+    padding:16px; animation:fadeIn 0.4s ease;
+    -webkit-overflow-scrolling:touch;
+  }
   .screen.active { display:block; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  @media (min-width: 768px) { .screen { padding:24px 28px; } }
 
-  /* FORM BOX (untuk login guru & siswa) */
   .form-box {
     background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,100,100,0.08));
     border:2px solid rgba(255,215,0,0.4); border-radius:16px;
     padding:24px; margin-top:20px;
+  }
+  @media (min-width: 768px) {
+    .form-box { max-width:560px; margin:30px auto 20px; padding:28px; }
   }
   .form-logo { font-size:60px; text-align:center; margin-bottom:16px; }
   .form-title { text-align:center; font-size:20px; font-weight:700; color:#ffd700; margin-bottom:6px; }
@@ -51,14 +129,53 @@
   .form-input:focus, .form-select:focus { border-color:#ffd700; background:rgba(255,215,0,0.08); }
   .form-input::placeholder { color:#666; }
   .form-select option { background:#1a1a2e; color:#fff; }
+  .form-input:disabled, .form-select:disabled {
+    background:rgba(255,215,0,0.1); color:#ffd700; cursor:not-allowed;
+    border-color:rgba(255,215,0,0.3); font-weight:600;
+  }
 
-  .title-main { text-align:center; margin:20px 0 20px; font-size:22px; font-weight:700; color:#fff; text-shadow:0 0 20px rgba(255,215,0,0.5); }
+  .student-count-info {
+    font-size:11px; color:#4fc3f7; margin-top:6px;
+    display:flex; align-items:center; gap:5px; flex-wrap:wrap;
+  }
+  .student-count-info .num {
+    background:rgba(0,176,255,0.2); color:#4fc3f7;
+    padding:1px 8px; border-radius:8px; font-weight:700;
+  }
+
+  .title-main {
+    text-align:center; margin:20px 0;
+    font-size:22px; font-weight:700; color:#fff;
+    text-shadow:0 0 20px rgba(255,215,0,0.5);
+  }
   .title-sub { text-align:center; font-size:12px; color:#aaa; margin-bottom:20px; }
+
+  /* Info kelas yang aktif */
+  .active-class-banner {
+    background:linear-gradient(135deg,rgba(0,176,255,0.15),rgba(255,215,0,0.1));
+    border:1.5px solid rgba(0,176,255,0.5);
+    border-radius:12px; padding:12px 14px; margin-bottom:16px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:8px;
+  }
+  .active-class-banner .label {
+    font-size:10px; color:#4fc3f7; text-transform:uppercase;
+    letter-spacing:0.5px; font-weight:700;
+  }
+  .active-class-banner .class-name {
+    font-size:16px; color:#fff; font-weight:800;
+    text-shadow:0 0 12px rgba(0,176,255,0.6);
+  }
+  .active-class-banner .meta { font-size:10px; color:#aaa; }
+
+  .semester-grid { display:grid; grid-template-columns:1fr; gap:14px; }
+  @media (min-width: 500px) { .semester-grid { grid-template-columns:1fr 1fr; } }
   .semester-card {
     background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,100,100,0.1));
     border:2px solid rgba(255,215,0,0.4); border-radius:16px;
-    padding:20px; margin-bottom:14px; cursor:pointer; transition:all 0.3s; text-align:center;
+    padding:20px; cursor:pointer; transition:all 0.3s; text-align:center;
   }
+  .semester-card:hover { transform:translateY(-2px); border-color:#ffd700; }
   .semester-card:active { transform:scale(0.97); }
   .semester-card h2 { font-size:18px; margin-bottom:8px; color:#ffd700; }
   .semester-card p { font-size:12px; color:#bbb; }
@@ -74,6 +191,7 @@
   .level-item.locked { opacity:0.5; cursor:not-allowed; }
   .level-item.read { border-color:#00b0ff; background:rgba(0,176,255,0.08); }
   .level-item.completed { border-color:#00e676; background:rgba(0,230,118,0.1); }
+  .level-item:not(.locked):hover { transform:translateX(3px); border-color:#ffd700; }
   .level-item:not(.locked):active { transform:scale(0.98); }
   .level-circle {
     width:44px; height:44px; border-radius:50%;
@@ -105,13 +223,21 @@
     background:rgba(255,255,255,0.1); border:none; color:#fff;
     width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer;
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    transition:all 0.3s;
   }
+  .back-btn:hover { background:rgba(255,215,0,0.2); color:#ffd700; }
   .material-title { font-size:13px; font-weight:600; color:#ffd700; line-height:1.3; }
   .material-content { font-size:13px; line-height:1.7; color:#ddd; }
   .material-content h3 { font-size:14px; color:#ffd700; margin:16px 0 8px; padding-left:8px; border-left:3px solid #ffd700; }
   .material-content p { margin-bottom:10px; text-align:justify; }
   .material-content ul { margin-left:18px; margin-bottom:10px; }
   .material-content li { margin-bottom:6px; }
+
+  @media (min-width: 768px) {
+    .material-content { max-width:800px; }
+    .btn-group { max-width:800px; }
+    .info-banner { max-width:800px; }
+  }
 
   .section-box {
     border-radius:12px; padding:14px; margin:16px 0;
@@ -138,14 +264,22 @@
     border:none; border-radius:12px; color:#1a1a2e; font-weight:700;
     font-size:14px; cursor:pointer; margin-top:20px; transition:all 0.3s;
   }
+  .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,215,0,0.4); }
   .btn-primary:active { transform:scale(0.97); }
   .btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
   .btn-secondary {
     width:100%; padding:12px; background:rgba(255,255,255,0.1);
     border:1px solid rgba(255,255,255,0.2); border-radius:12px; color:#fff;
-    font-weight:600; font-size:13px; cursor:pointer; margin-top:10px;
+    font-weight:600; font-size:13px; cursor:pointer; margin-top:10px; transition:all 0.3s;
   }
+  .btn-secondary:hover { background:rgba(255,255,255,0.15); }
   .btn-secondary:active { transform:scale(0.97); }
+  .btn-danger {
+    width:100%; padding:10px; background:rgba(255,82,82,0.15);
+    border:1px solid rgba(255,82,82,0.4); border-radius:10px; color:#ff5252;
+    font-weight:600; font-size:12px; cursor:pointer; transition:all 0.3s;
+  }
+  .btn-danger:hover { background:rgba(255,82,82,0.25); }
 
   .btn-group { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
   .btn-group .btn-primary, .btn-group .btn-secondary { margin-top:0; }
@@ -155,11 +289,18 @@
   .quiz-question { font-size:14px; line-height:1.6; margin-bottom:18px; font-weight:500; }
   .quiz-bar { height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-bottom:16px; }
   .quiz-bar-fill { height:100%; background:linear-gradient(90deg,#ffd700,#ff8c00); width:0%; transition:width 0.4s; }
+
+  @media (min-width: 768px) {
+    .quiz-question { max-width:800px; margin:0 auto 18px; }
+    #quizOptions { max-width:800px; margin:0 auto; }
+  }
+
   .option {
     background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.15);
     border-radius:10px; padding:14px; margin-bottom:10px; cursor:pointer;
     font-size:13px; transition:all 0.3s; display:flex; gap:10px; align-items:center;
   }
+  .option:hover { background:rgba(255,215,0,0.08); border-color:rgba(255,215,0,0.4); }
   .option:active { transform:scale(0.98); }
   .option.correct { background:rgba(0,230,118,0.2); border-color:#00e676; }
   .option.wrong { background:rgba(255,82,82,0.2); border-color:#ff5252; }
@@ -173,6 +314,7 @@
   .result-title { font-size:20px; font-weight:700; margin-bottom:8px; }
   .result-text { font-size:13px; color:#bbb; margin-bottom:20px; }
   .result-score { font-size:36px; font-weight:800; color:#ffd700; margin:16px 0; }
+  @media (min-width: 768px) { .result-box { max-width:500px; margin:40px auto; } }
 
   .modal-overlay {
     position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:100;
@@ -206,6 +348,7 @@
   .feedback-sub { font-size:12px; color:#aaa; margin-top:8px; text-align:center; padding:0 20px; }
 
   .badges-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+  @media (min-width: 768px) { .badges-grid { grid-template-columns:repeat(5,1fr); max-width:800px; } }
   .badge-item {
     background:rgba(255,255,255,0.05); border:1px solid rgba(255,215,0,0.2);
     border-radius:12px; padding:12px 8px; text-align:center; font-size:10px; color:#ccc;
@@ -213,17 +356,14 @@
   .badge-item.earned { border-color:#ffd700; background:rgba(255,215,0,0.1); color:#ffd700; }
   .badge-item .bi { font-size:24px; margin-bottom:6px; display:block; }
 
-  .screen::-webkit-scrollbar { width:4px; }
-  .screen::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.3); border-radius:2px; }
-
   .info-banner {
     background:rgba(0,176,255,0.12); border:1px solid rgba(0,176,255,0.35);
     border-radius:10px; padding:10px 12px; font-size:11px; color:#4fc3f7;
     margin-bottom:14px; line-height:1.5;
   }
   .info-banner b { color:#fff; }
+  .info-banner.warning { background:rgba(255,215,0,0.12); border-color:rgba(255,215,0,0.4); color:#ffd700; }
 
-  /* REKAP NILAI */
   .rekap-table {
     width:100%; border-collapse:collapse; font-size:11px; margin-top:10px;
     background:rgba(255,255,255,0.03); border-radius:10px; overflow:hidden;
@@ -238,9 +378,15 @@
   .rekap-table .score-good { color:#00e676; }
   .rekap-table .score-mid { color:#ffd700; }
   .rekap-table .score-low { color:#ff5252; }
-  .rekap-summary {
-    display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0;
+
+  @media (min-width: 768px) {
+    .rekap-table { max-width:900px; }
+    #rekapContent { max-width:900px; }
+    .rekap-summary { max-width:900px; }
   }
+
+  .rekap-summary { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0; }
+  @media (min-width: 500px) { .rekap-summary { grid-template-columns:repeat(4,1fr); } }
   .rekap-stat {
     background:rgba(255,255,255,0.05); border-radius:10px; padding:12px; text-align:center;
   }
@@ -253,20 +399,6 @@
   .badge-yes { background:rgba(0,230,118,0.2); color:#00e676; }
   .badge-no { background:rgba(255,82,82,0.15); color:#ff5252; }
 
-  .filter-bar {
-    display:flex; gap:6px; overflow-x:auto; padding:4px 0 10px;
-    scrollbar-width:none;
-  }
-  .filter-bar::-webkit-scrollbar { display:none; }
-  .filter-chip {
-    padding:6px 12px; border-radius:20px; font-size:10px; font-weight:700;
-    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
-    color:#aaa; cursor:pointer; white-space:nowrap; transition:all 0.3s;
-  }
-  .filter-chip.active {
-    background:rgba(255,215,0,0.2); border-color:#ffd700; color:#ffd700;
-  }
-
   .student-info-box {
     background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.3);
     border-radius:10px; padding:10px 12px; margin-bottom:14px;
@@ -278,14 +410,106 @@
     font-size:10px; color:#4fc3f7; cursor:pointer; text-decoration:underline;
     background:none; border:none;
   }
+
+  .student-list-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:12px; gap:8px; flex-wrap:wrap;
+  }
+  .student-list-header .count-badge {
+    background:rgba(0,176,255,0.2); color:#4fc3f7;
+    padding:4px 10px; border-radius:12px; font-size:10px; font-weight:700;
+  }
+  .student-form-inline {
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,215,0,0.25);
+    border-radius:12px; padding:14px; margin-bottom:14px;
+  }
+  .student-form-inline .row {
+    display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:10px;
+  }
+  @media (min-width: 500px) {
+    .student-form-inline .row { grid-template-columns:2fr 1.2fr; }
+  }
+  .student-form-inline .label-sm {
+    font-size:10px; color:#ffd700; margin-bottom:4px;
+    display:block; font-weight:600; text-transform:uppercase;
+    letter-spacing:0.3px;
+  }
+  .student-form-inline .input-sm {
+    width:100%; padding:10px 12px; background:rgba(255,255,255,0.08);
+    border:1.5px solid rgba(255,255,255,0.2); border-radius:8px;
+    color:#fff; font-size:12px; font-family:inherit; outline:none;
+  }
+  .student-form-inline .input-sm:focus { border-color:#ffd700; }
+  .student-form-inline .input-sm::placeholder { color:#666; }
+  .student-form-inline .input-sm:disabled {
+    background:rgba(255,215,0,0.1); color:#ffd700; cursor:not-allowed;
+    border-color:rgba(255,215,0,0.3); font-weight:600;
+  }
+  .student-form-inline .btn-add {
+    width:100%; padding:10px; background:linear-gradient(135deg,#00e676,#00b0ff);
+    border:none; border-radius:8px; color:#0a0a14; font-weight:700;
+    font-size:12px; cursor:pointer; transition:all 0.3s;
+  }
+  .student-form-inline .btn-add:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,230,118,0.4); }
+
+  .student-list { display:flex; flex-direction:column; gap:8px; }
+  .student-list-item {
+    display:flex; align-items:center; gap:10px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px; padding:10px 12px;
+    transition:all 0.3s;
+  }
+  .student-list-item:hover { border-color:rgba(255,215,0,0.3); }
+  .student-list-item .num-badge {
+    width:28px; height:28px; border-radius:50%;
+    background:rgba(255,215,0,0.15); color:#ffd700;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:11px; flex-shrink:0;
+  }
+  .student-list-item .info { flex:1; min-width:0; }
+  .student-list-item .name { font-size:13px; font-weight:600; color:#fff; }
+  .student-list-item .nisn { font-size:10px; color:#4fc3f7; margin-top:2px; }
+  .student-list-item .done-tag {
+    font-size:8px; padding:2px 6px; border-radius:6px;
+    background:rgba(0,230,118,0.2); color:#00e676; font-weight:700;
+    margin-left:4px;
+  }
+  .student-list-item .btn-del {
+    background:rgba(255,82,82,0.15); border:1px solid rgba(255,82,82,0.3);
+    color:#ff5252; width:30px; height:30px; border-radius:8px;
+    cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:all 0.3s;
+  }
+  .student-list-item .btn-del:hover { background:rgba(255,82,82,0.3); }
+
+  .empty-list {
+    text-align:center; padding:30px 20px; color:#666; font-size:12px;
+  }
+  .empty-list .emoji { font-size:40px; margin-bottom:10px; display:block; opacity:0.5; }
+
+  .screen::-webkit-scrollbar { width:4px; }
+  .screen::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.3); border-radius:2px; }
+  .desktop-sidebar::-webkit-scrollbar { width:4px; }
+  .desktop-sidebar::-webkit-scrollbar-thumb { background:rgba(255,215,0,0.3); border-radius:2px; }
+
+  /* Badge kelas di header */
+  .class-active-badge {
+    display:inline-block;
+    background:linear-gradient(135deg,#00b0ff,#00e676);
+    color:#0a0a14; font-weight:800; font-size:9px;
+    padding:2px 8px; border-radius:8px; margin-left:4px;
+    letter-spacing:0.3px;
+  }
 </style>
 </head>
 <body>
 <div id="app">
   <div class="header">
     <div>
-      <h1>🎓 PKn Kelas 11</h1>
-      <span class="teacher-info" id="headerTeacher">-</span>
+      <h1>🎓 PKn Kelas 11 <span class="class-active-badge" id="headerClassBadge">-</span></h1>
+      <span class="teacher-info" id="headerTeacher">Belum login</span>
     </div>
     <div class="stats">
       <div class="stat-badge" id="xpDisplay">⚡ 0</div>
@@ -294,12 +518,44 @@
     </div>
   </div>
 
-  <!-- ====== LOGIN GURU ====== -->
+  <aside class="desktop-sidebar" id="desktopSidebar">
+    <div class="desktop-sidebar-title">📋 Panel Guru</div>
+    <div class="sidebar-info">
+      <div class="label">Nama Guru</div>
+      <div class="value" id="sidebarTeacherName">-</div>
+      <div class="label">Kelas Aktif</div>
+      <div class="value"><span class="kelas-badge" id="sidebarTeacherClass">-</span></div>
+      <div class="label">Jumlah Siswa</div>
+      <div class="value" id="sidebarStudentCount">0</div>
+    </div>
+    <div class="sidebar-menu">
+      <div class="sidebar-menu-item" onclick="goTo('screenSemester')">
+        <span class="icon">🏠</span><span>Beranda</span>
+      </div>
+      <div class="sidebar-menu-item" onclick="renderManageStudents();goTo('screenManageStudents')">
+        <span class="icon">👥</span><span>Tambah / Kelola Siswa</span>
+      </div>
+      <div class="sidebar-menu-item" onclick="renderRekap();goTo('screenRekap')">
+        <span class="icon">📊</span><span>Rekap Nilai</span>
+      </div>
+      <div class="sidebar-menu-item" onclick="renderBadges();goTo('screenBadges')">
+        <span class="icon">🏅</span><span>Koleksi Badge</span>
+      </div>
+      <div class="sidebar-menu-item" onclick="handleLogout()">
+        <span class="icon">🚪</span><span>Ganti Kelas / Keluar</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== LOGIN GURU (WAJIB SETIAP MASUK) ====== -->
   <div class="screen active" id="screenLoginGuru">
     <div class="form-box">
       <div class="form-logo">👨‍🏫</div>
       <div class="form-title">Selamat Datang, Guru!</div>
       <div class="form-sub">PKn Kelas 11 • Kurikulum Merdeka</div>
+      <div class="info-banner warning" style="text-align:left;">
+        ⚠️ <b>Wajib diisi setiap login.</b> Setiap kelas memiliki data siswa, nilai, dan badge yang terpisah.
+      </div>
       <div class="form-group">
         <label class="form-label">👤 Nama Guru</label>
         <input type="text" class="form-input" id="inputNamaGuru" placeholder="Masukkan nama guru" maxlength="40" autocomplete="off">
@@ -314,25 +570,83 @@
           <option value="XI MIPA 4">XI MIPA 4</option>
           <option value="XI MIPA 5">XI MIPA 5</option>
         </select>
+        <div class="student-count-info" id="studentCountInfo" style="display:none;">
+          <span>👥 Siswa terdaftar di kelas ini:</span> <span class="num" id="studentCountNum">0</span>
+        </div>
       </div>
-      <button class="btn-primary" onclick="handleLoginGuru()">🚀 Mulai Mengajar</button>
+      <button class="btn-primary" onclick="handleLoginGuru()">🚀 Masuk Kelas</button>
     </div>
   </div>
 
   <!-- ====== SEMESTER ====== -->
   <div class="screen" id="screenSemester">
+    <div class="active-class-banner">
+      <div>
+        <div class="label">🏫 Kelas Aktif</div>
+        <div class="class-name" id="activeClassName">-</div>
+        <div class="meta" id="activeClassMeta">-</div>
+      </div>
+      <button class="btn-secondary" style="width:auto;margin:0;padding:8px 12px;font-size:11px;" onclick="handleLogout()">🔄 Ganti Kelas</button>
+    </div>
+
     <div class="title-main">Pilih Semester</div>
     <div class="title-sub">Kurikulum Merdeka - Kelas 11</div>
-    <div class="semester-card" onclick="openSemester(1)">
-      <div class="semester-icon">📚</div>
-      <h2>Semester 1</h2>
-      <p>4 Bab • 4 Level</p>
+    <div class="semester-grid">
+      <div class="semester-card" onclick="openSemester(1)">
+        <div class="semester-icon">📚</div>
+        <h2>Semester 1</h2>
+        <p>4 Bab • 4 Level</p>
+      </div>
+      <div class="semester-card" onclick="openSemester(2)">
+        <div class="semester-icon">📖</div>
+        <h2>Semester 2</h2>
+        <p>3 Bab • 3 Level</p>
+      </div>
     </div>
-    <div class="semester-card" onclick="openSemester(2)">
-      <div class="semester-icon">📖</div>
-      <h2>Semester 2</h2>
-      <p>3 Bab • 3 Level</p>
+
+    <div style="margin-top:24px; display:flex; flex-direction:column; gap:10px;">
+      <button class="btn-secondary" onclick="renderManageStudents();goTo('screenManageStudents')">👥 Tambah / Kelola Siswa</button>
+      <button class="btn-secondary" onclick="renderRekap();goTo('screenRekap')">📊 Rekap Nilai</button>
     </div>
+  </div>
+
+  <!-- ====== MANAGE STUDENTS ====== -->
+  <div class="screen" id="screenManageStudents">
+    <div class="material-header">
+      <button class="back-btn" onclick="goTo('screenSemester')">←</button>
+      <div class="material-title">👥 Tambah / Kelola Siswa</div>
+    </div>
+
+    <div class="info-banner">
+      📚 Kelas Aktif: <b id="manageStudentsClass">-</b> • Tambahkan siswa dengan <b>Nama</b> dan <b>NISN</b>. Data ini terpisah untuk setiap kelas.
+    </div>
+
+    <div class="student-form-inline">
+      <div class="row">
+        <div>
+          <label class="label-sm">Nama Siswa</label>
+          <input type="text" class="input-sm" id="inputSiswaNama" placeholder="Contoh: Ahmad Fauzi" maxlength="40" autocomplete="off">
+        </div>
+        <div>
+          <label class="label-sm">NISN</label>
+          <input type="text" class="input-sm" id="inputSiswaNisn" placeholder="Contoh: 0012345678" maxlength="15" autocomplete="off" inputmode="numeric">
+        </div>
+      </div>
+      <div class="row" style="grid-template-columns:1fr;">
+        <div>
+          <label class="label-sm">Kelas (Otomatis dari login guru)</label>
+          <input type="text" class="input-sm" id="inputSiswaKelas" disabled>
+        </div>
+      </div>
+      <button class="btn-add" onclick="addStudent()">➕ Tambah Siswa</button>
+    </div>
+
+    <div class="student-list-header">
+      <div style="font-size:12px;color:#ffd700;font-weight:700;">📋 Daftar Siswa</div>
+      <div class="count-badge" id="studentListCount">0 Siswa</div>
+    </div>
+
+    <div class="student-list" id="studentListContainer"></div>
   </div>
 
   <!-- ====== LEVELS ====== -->
@@ -360,39 +674,41 @@
     </div>
   </div>
 
-  <!-- ====== FORM SISWA (sebelum kuis) ====== -->
+  <!-- ====== FORM SISWA SEBELUM KUIS ====== -->
   <div class="screen" id="screenFormSiswa">
     <div class="material-header">
       <button class="back-btn" onclick="goTo('screenMaterial')">←</button>
-      <div class="material-title">📝 Data Siswa</div>
+      <div class="material-title">📝 Pilih Data Siswa</div>
     </div>
-    <div class="form-box">
+    <div class="form-box" style="margin-top:0;">
       <div class="form-logo">👨‍🎓</div>
-      <div class="form-title">Isi Data Siswa</div>
-      <div class="form-sub">Data digunakan untuk rekap nilai kuis</div>
-      <div class="form-group">
-        <label class="form-label">👤 Nama Siswa</label>
-        <input type="text" class="form-input" id="inputNamaSiswa" placeholder="Masukkan nama lengkap" maxlength="40" autocomplete="off">
-      </div>
+      <div class="form-title">Pilih Siswa yang Mengerjakan</div>
+      <div class="form-sub">Data sesuai dengan kelas yang Anda ajar</div>
       <div class="form-group">
         <label class="form-label">🏫 Kelas</label>
-        <select class="form-select" id="inputKelasSiswa">
-          <option value="">-- Pilih Kelas --</option>
-          <option value="XI MIPA 1">XI MIPA 1</option>
-          <option value="XI MIPA 2">XI MIPA 2</option>
-          <option value="XI MIPA 3">XI MIPA 3</option>
-          <option value="XI MIPA 4">XI MIPA 4</option>
-          <option value="XI MIPA 5">XI MIPA 5</option>
+        <input type="text" class="form-input" id="formSiswaKelasDisplay" disabled>
+      </div>
+      <div class="form-group">
+        <label class="form-label">👤 Nama Siswa</label>
+        <select class="form-select" id="selectNamaSiswa">
+          <option value="">-- Pilih Nama Siswa --</option>
         </select>
+        <div class="student-count-info">
+          <span>NISN:</span> <span class="num" id="formSiswaNisnDisplay">-</span>
+        </div>
       </div>
       <button class="btn-primary" onclick="handleStartQuiz()">📝 Mulai Kuis Sekarang</button>
+      <button class="btn-secondary" onclick="renderManageStudents();goTo('screenManageStudents')">👥 Kelola Daftar Siswa</button>
     </div>
   </div>
 
   <!-- ====== QUIZ ====== -->
   <div class="screen" id="screenQuiz">
     <div class="student-info-box" id="quizStudentInfo">
-      <div>👤 <span class="name" id="quizStudentName">Siswa</span> • <span id="quizStudentClass">Kelas</span></div>
+      <div>
+        👤 <span class="name" id="quizStudentName">Siswa</span> • <span id="quizStudentClass">Kelas</span>
+        <div style="font-size:9px;color:#888;margin-top:2px;">NISN: <span id="quizStudentNisn">-</span></div>
+      </div>
       <button class="change-btn" onclick="promptStudentData()">Ubah</button>
     </div>
     <div class="quiz-header">
@@ -427,13 +743,12 @@
     <div class="badges-grid" id="badgesGrid"></div>
   </div>
 
-  <!-- ====== REKAP NILAI ====== -->
+  <!-- ====== REKAP ====== -->
   <div class="screen" id="screenRekap">
     <div class="material-header">
       <button class="back-btn" onclick="goTo('screenSemester')">←</button>
       <div class="material-title">📊 Rekap Daftar Nilai Kuis</div>
     </div>
-    <div class="filter-bar" id="filterKelas"></div>
     <div id="rekapContent"></div>
   </div>
 </div>
@@ -717,55 +1032,131 @@ const DATA = {
 };
 
 /* =========================================================
-   STATE & STORAGE
+   STATE & STORAGE - DATA TERPISAH PER KELAS
    ========================================================= */
-const STORAGE_KEY = 'pkn11_gamifikasi_v4';
+const STORAGE_KEY = 'pkn11_gamifikasi_v7';
+const ALL_CLASSES = ['XI MIPA 1','XI MIPA 2','XI MIPA 3','XI MIPA 4','XI MIPA 5'];
+
+// Struktur data: setiap kelas punya data sendiri
+function createEmptyClassData() {
+  return {
+    xp: 0,
+    badges: [],
+    readBabs: {},
+    completed: {},
+    quizHistory: [],
+    students: [], // [{nama, nisn}]
+    pancasilaProgress: 0
+  };
+}
+
 let state = {
   teacher: { nama:'', kelasAjar:'' },
-  currentStudent: { nama:'', kelas:'' },
-  xp: 0,
-  badges: [],
-  readBabs: {},
-  completed: {},
-  quizHistory: [], // [{studentName, studentClass, teacherName, teacherClass, babId, babTitle, babShort, score, total, semester, date}]
+  currentStudent: { nama:'', kelas:'', nisn:'' },
   currentSemester: 1,
   currentBab: null,
   quizIndex: 0,
   quizCorrect: 0,
   quizAnswered: false,
-  pancasilaProgress: 0
+  // Data terpisah per kelas
+  classData: {
+    'XI MIPA 1': createEmptyClassData(),
+    'XI MIPA 2': createEmptyClassData(),
+    'XI MIPA 3': createEmptyClassData(),
+    'XI MIPA 4': createEmptyClassData(),
+    'XI MIPA 5': createEmptyClassData()
+  }
 };
 
 function loadState() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) state = {...state, ...JSON.parse(saved)};
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state = {...state, ...parsed};
+      // Pastikan semua kelas ada
+      ALL_CLASSES.forEach(k => {
+        if (!state.classData[k]) state.classData[k] = createEmptyClassData();
+        // Pastikan field lengkap
+        const def = createEmptyClassData();
+        Object.keys(def).forEach(f => {
+          if (state.classData[k][f] === undefined) state.classData[k][f] = def[f];
+        });
+      });
+    }
   } catch(e) { console.warn(e); }
 }
 function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) { console.warn(e); }
 }
+
+// Ambil data kelas aktif
+function getActiveClassData() {
+  const kelas = state.teacher.kelasAjar;
+  if (!kelas) return createEmptyClassData();
+  if (!state.classData[kelas]) state.classData[kelas] = createEmptyClassData();
+  return state.classData[kelas];
+}
+
 function updateHeader() {
-  document.getElementById('xpDisplay').textContent = '⚡ ' + state.xp;
-  document.getElementById('badgeDisplay').textContent = '🏅 ' + state.badges.length;
-  if (state.teacher.nama) {
-    document.getElementById('headerTeacher').textContent = '👨‍🏫 ' + state.teacher.nama + (state.teacher.kelasAjar ? ' • ' + state.teacher.kelasAjar : '');
+  const cd = getActiveClassData();
+  document.getElementById('xpDisplay').textContent = '⚡ ' + (cd.xp || 0);
+  document.getElementById('badgeDisplay').textContent = '🏅 ' + (cd.badges.length || 0);
+
+  if (state.teacher.nama && state.teacher.kelasAjar) {
+    document.getElementById('headerTeacher').textContent = '👨‍🏫 ' + state.teacher.nama;
+    document.getElementById('headerClassBadge').textContent = state.teacher.kelasAjar;
+
+    const sName = document.getElementById('sidebarTeacherName');
+    const sClass = document.getElementById('sidebarTeacherClass');
+    const sCount = document.getElementById('sidebarStudentCount');
+    if (sName) sName.textContent = state.teacher.nama;
+    if (sClass) sClass.textContent = state.teacher.kelasAjar;
+    if (sCount) sCount.textContent = (cd.students || []).length + ' siswa';
+
+    // Update active class banner
+    const an = document.getElementById('activeClassName');
+    const am = document.getElementById('activeClassMeta');
+    if (an) an.textContent = state.teacher.kelasAjar;
+    if (am) am.textContent = (cd.students || []).length + ' siswa • ' + (cd.quizHistory || []).length + ' percobaan kuis';
+  } else {
+    document.getElementById('headerTeacher').textContent = 'Belum login';
+    document.getElementById('headerClassBadge').textContent = '-';
   }
 }
 
 /* =========================================================
-   LOGIN GURU
+   LOGIN GURU (WAJIB SETIAP MASUK)
    ========================================================= */
 function handleLoginGuru() {
   const nama = document.getElementById('inputNamaGuru').value.trim();
   const kelas = document.getElementById('inputKelasAjar').value;
   if (!nama) { alert('Silakan isi nama guru terlebih dahulu!'); return; }
   if (!kelas) { alert('Silakan pilih kelas yang diajar!'); return; }
+
   state.teacher.nama = nama;
   state.teacher.kelasAjar = kelas;
   saveState();
   updateHeader();
+
+  // Reset filter kelas saat login
+  currentFilterKelas = 'all';
+
   goTo('screenSemester');
+}
+
+function handleLogout() {
+  if (!confirm('Keluar dari kelas ini?\n\nData siswa dan nilai di kelas ' + state.teacher.kelasAjar + ' tetap tersimpan.')) return;
+  state.teacher = {nama:'', kelasAjar:''};
+  state.currentStudent = {nama:'', kelas:'', nisn:''};
+  saveState();
+
+  document.getElementById('inputNamaGuru').value = '';
+  document.getElementById('inputKelasAjar').value = '';
+  document.getElementById('studentCountInfo').style.display = 'none';
+
+  updateHeader();
+  goTo('screenLoginGuru');
 }
 
 /* =========================================================
@@ -781,6 +1172,104 @@ function backToLevels() {
 }
 
 /* =========================================================
+   KELOLA SISWA
+   ========================================================= */
+function renderManageStudents() {
+  const kelas = state.teacher.kelasAjar;
+  document.getElementById('manageStudentsClass').textContent = kelas || '-';
+  document.getElementById('inputSiswaKelas').value = kelas || '-';
+  document.getElementById('inputSiswaNama').value = '';
+  document.getElementById('inputSiswaNisn').value = '';
+  renderStudentList();
+}
+
+function renderStudentList() {
+  const cd = getActiveClassData();
+  const kelas = state.teacher.kelasAjar;
+  const students = cd.students || [];
+  const container = document.getElementById('studentListContainer');
+  const countEl = document.getElementById('studentListCount');
+
+  countEl.textContent = students.length + ' Siswa';
+
+  if (students.length === 0) {
+    container.innerHTML = `
+      <div class="empty-list">
+        <span class="emoji">👥</span>
+        <b>Belum ada siswa di ${kelas}</b><br>
+        Tambahkan siswa dengan nama dan NISN di atas.
+      </div>
+    `;
+    return;
+  }
+
+  const sorted = [...students].sort((a, b) => a.nama.localeCompare(b.nama));
+
+  container.innerHTML = sorted.map((s, i) => {
+    const sudahKerja = cd.quizHistory.some(h => h.studentName === s.nama);
+    const doneTag = sudahKerja ? '<span class="done-tag">✓ Sudah Kuis</span>' : '';
+    return `
+      <div class="student-list-item">
+        <div class="num-badge">${i+1}</div>
+        <div class="info">
+          <div class="name">${escapeHtml(s.nama)}${doneTag}</div>
+          <div class="nisn">NISN: ${escapeHtml(s.nisn || '-')}</div>
+        </div>
+        <button class="btn-del" onclick="deleteStudent('${escapeJs(s.nama)}')" title="Hapus">🗑️</button>
+      </div>
+    `;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+function escapeJs(s) {
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+}
+
+function addStudent() {
+  const nama = document.getElementById('inputSiswaNama').value.trim();
+  const nisn = document.getElementById('inputSiswaNisn').value.trim();
+  const kelas = state.teacher.kelasAjar;
+
+  if (!nama) { alert('Nama siswa harus diisi!'); return; }
+  if (!nisn) { alert('NISN harus diisi!'); return; }
+  if (!/^[0-9]+$/.test(nisn)) { alert('NISN hanya boleh angka!'); return; }
+
+  const cd = getActiveClassData();
+  if (cd.students.some(s => s.nama.toLowerCase() === nama.toLowerCase())) {
+    alert('Siswa dengan nama "' + nama + '" sudah ada di kelas ' + kelas);
+    return;
+  }
+  if (cd.students.some(s => s.nisn === nisn)) {
+    alert('NISN "' + nisn + '" sudah digunakan di kelas ' + kelas + '!');
+    return;
+  }
+
+  cd.students.push({ nama, nisn });
+  saveState();
+  updateHeader();
+
+  document.getElementById('inputSiswaNama').value = '';
+  document.getElementById('inputSiswaNisn').value = '';
+  document.getElementById('inputSiswaNama').focus();
+
+  showToast('✅ Siswa "' + nama + '" ditambahkan ke ' + kelas + '!');
+  renderStudentList();
+}
+
+function deleteStudent(nama) {
+  if (!confirm('Hapus siswa "' + nama + '" dari kelas ' + state.teacher.kelasAjar + '?')) return;
+  const cd = getActiveClassData();
+  cd.students = cd.students.filter(s => s.nama !== nama);
+  saveState();
+  updateHeader();
+  renderStudentList();
+  showToast('🗑️ Siswa dihapus');
+}
+
+/* =========================================================
    SEMESTER & LEVEL
    ========================================================= */
 function openSemester(sem) {
@@ -791,18 +1280,20 @@ function openSemester(sem) {
 }
 function isBabUnlocked(sem, index) {
   if (index === 0) return true;
+  const cd = getActiveClassData();
   const prevBab = DATA[sem][index-1];
-  return !!state.readBabs[prevBab.id];
+  return !!cd.readBabs[prevBab.id];
 }
 function renderLevels(sem) {
   document.getElementById('levelMapTitle').textContent = 'Semester ' + sem + ' • Peta Level';
   const list = document.getElementById('levelList');
+  const cd = getActiveClassData();
   const babs = DATA[sem];
   list.innerHTML = '';
   babs.forEach((bab, i) => {
     const unlocked = isBabUnlocked(sem, i);
-    const hasRead = !!state.readBabs[bab.id];
-    const completed = !!state.completed[bab.id];
+    const hasRead = !!cd.readBabs[bab.id];
+    const completed = !!cd.completed[bab.id];
     const div = document.createElement('div');
     let cls = 'level-item';
     if (!unlocked) cls += ' locked';
@@ -864,8 +1355,9 @@ function openBab(sem, index) {
   }
   document.getElementById('materialContent').innerHTML = fullContent;
 
+  const cd = getActiveClassData();
   const btnDone = document.getElementById('btnDoneReading');
-  const hasRead = !!state.readBabs[bab.id];
+  const hasRead = !!cd.readBabs[bab.id];
   btnDone.textContent = hasRead ? '✅ Materi Sudah Dibaca' : '✅ Selesai Membaca';
   btnDone.disabled = hasRead;
 
@@ -875,10 +1367,11 @@ function openBab(sem, index) {
 function markAsRead() {
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
+  const cd = getActiveClassData();
 
-  if (!state.readBabs[bab.id]) {
-    state.readBabs[bab.id] = true;
-    state.xp += 5;
+  if (!cd.readBabs[bab.id]) {
+    cd.readBabs[bab.id] = true;
+    cd.xp += 5;
     saveState();
     updateHeader();
   }
@@ -901,7 +1394,7 @@ function showToast(msg) {
   t.style.cssText = `
     position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
     background:rgba(0,230,118,0.95); color:#0a0a14; padding:14px 20px;
-    border-radius:12px; font-weight:700; font-size:13px; z-index:999;
+    border-radius:12px; font-weight:700; font-size:13px; z-index:9999;
     max-width:80%; text-align:center; box-shadow:0 0 30px rgba(0,230,118,0.6);
     animation:popIn 0.3s ease;
   `;
@@ -914,25 +1407,66 @@ function showToast(msg) {
    FORM SISWA SEBELUM KUIS
    ========================================================= */
 function promptStudentData() {
-  // Isi otomatis dengan data siswa terakhir jika ada
-  document.getElementById('inputNamaSiswa').value = state.currentStudent.nama || '';
-  document.getElementById('inputKelasSiswa').value = state.currentStudent.kelas || state.teacher.kelasAjar || '';
+  const kelasGuru = state.teacher.kelasAjar;
+  const cd = getActiveClassData();
+  const students = cd.students || [];
+
+  if (students.length === 0) {
+    if (confirm('Belum ada siswa terdaftar di kelas ' + kelasGuru + '.\n\nTambahkan siswa terlebih dahulu?')) {
+      renderManageStudents();
+      goTo('screenManageStudents');
+    }
+    return;
+  }
+
+  document.getElementById('formSiswaKelasDisplay').value = kelasGuru;
+  document.getElementById('formSiswaNisnDisplay').textContent = '-';
+
+  const select = document.getElementById('selectNamaSiswa');
+  select.innerHTML = '<option value="">-- Pilih Nama Siswa --</option>';
+
+  const sorted = [...students].sort((a, b) => a.nama.localeCompare(b.nama));
+
+  sorted.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.nama;
+    opt.textContent = s.nama + ' (' + s.nisn + ')';
+    const sudah = cd.quizHistory.some(h => h.studentName === s.nama);
+    if (sudah) opt.textContent += ' ✓';
+    select.appendChild(opt);
+  });
+
+  if (state.currentStudent.nama && state.currentStudent.kelas === kelasGuru) {
+    select.value = state.currentStudent.nama;
+    const student = students.find(s => s.nama === state.currentStudent.nama);
+    document.getElementById('formSiswaNisnDisplay').textContent = student ? student.nisn : '-';
+  }
+
+  select.onchange = () => {
+    const nama = select.value;
+    const student = students.find(s => s.nama === nama);
+    document.getElementById('formSiswaNisnDisplay').textContent = student ? student.nisn : '-';
+  };
+
   goTo('screenFormSiswa');
 }
 
 function handleStartQuiz() {
-  const nama = document.getElementById('inputNamaSiswa').value.trim();
-  const kelas = document.getElementById('inputKelasSiswa').value;
-  if (!nama) { alert('Silakan isi nama siswa!'); return; }
-  if (!kelas) { alert('Silakan pilih kelas siswa!'); return; }
+  const nama = document.getElementById('selectNamaSiswa').value;
+  if (!nama) { alert('Silakan pilih nama siswa terlebih dahulu!'); return; }
+
+  const kelas = state.teacher.kelasAjar;
+  const cd = getActiveClassData();
+  const student = cd.students.find(s => s.nama === nama);
 
   state.currentStudent.nama = nama;
   state.currentStudent.kelas = kelas;
+  state.currentStudent.nisn = student ? student.nisn : '-';
   saveState();
 
-  // Update info di header kuis
   document.getElementById('quizStudentName').textContent = nama;
   document.getElementById('quizStudentClass').textContent = kelas;
+  document.getElementById('quizStudentNisn').textContent = student ? student.nisn : '-';
 
   startQuizDirect();
 }
@@ -955,9 +1489,9 @@ function renderQuiz() {
   const q = bab.questions[state.quizIndex];
   const total = bab.questions.length;
 
-  // Pastikan info siswa tetap muncul
   document.getElementById('quizStudentName').textContent = state.currentStudent.nama;
   document.getElementById('quizStudentClass').textContent = state.currentStudent.kelas;
+  document.getElementById('quizStudentNisn').textContent = state.currentStudent.nisn || '-';
 
   document.getElementById('quizProgress').textContent = `Soal ${state.quizIndex+1}/${total}`;
   document.getElementById('quizBarFill').style.width = ((state.quizIndex)/total*100) + '%';
@@ -1144,7 +1678,7 @@ function showFeedback(isCorrect, callback) {
 }
 
 /* =========================================================
-   FINISH QUIZ & REWARD
+   FINISH QUIZ & REWARD - DATA TERPISAH PER KELAS
    ========================================================= */
 function finishQuiz() {
   const {sem, index} = state.currentBab;
@@ -1152,13 +1686,14 @@ function finishQuiz() {
   const total = bab.questions.length;
   const correct = state.quizCorrect;
   const passed = correct === total;
+  const cd = getActiveClassData();
 
-  if (!state.readBabs[bab.id]) state.readBabs[bab.id] = true;
+  if (!cd.readBabs[bab.id]) cd.readBabs[bab.id] = true;
 
-  // Simpan riwayat kuis dengan data siswa & guru
-  state.quizHistory.push({
+  cd.quizHistory.push({
     studentName: state.currentStudent.nama,
     studentClass: state.currentStudent.kelas,
+    studentNisn: state.currentStudent.nisn || '-',
     teacherName: state.teacher.nama,
     teacherClass: state.teacher.kelasAjar,
     babId: bab.id,
@@ -1171,16 +1706,16 @@ function finishQuiz() {
   });
 
   if (passed) {
-    const alreadyCompleted = !!state.completed[bab.id];
-    state.completed[bab.id] = true;
+    const alreadyCompleted = !!cd.completed[bab.id];
+    cd.completed[bab.id] = true;
     if (!alreadyCompleted) {
-      state.xp += total * 10;
-      state.pancasilaProgress = (state.pancasilaProgress || 0) + 1;
-      const badgeId = 'pancasila_' + state.pancasilaProgress;
-      if (!state.badges.find(b => b.id === badgeId)) {
-        state.badges.push({
+      cd.xp += total * 10;
+      cd.pancasilaProgress = (cd.pancasilaProgress || 0) + 1;
+      const badgeId = 'pancasila_' + cd.pancasilaProgress;
+      if (!cd.badges.find(b => b.id === badgeId)) {
+        cd.badges.push({
           id: badgeId,
-          name: 'Pancasila Lengkap #' + state.pancasilaProgress,
+          name: 'Pancasila Lengkap #' + cd.pancasilaProgress,
           date: new Date().toISOString()
         });
       }
@@ -1197,7 +1732,7 @@ function finishQuiz() {
     document.getElementById('btnRetryQuiz').style.display = 'block';
     goTo('screenResult');
 
-    if (!alreadyCompleted) setTimeout(() => showRewardModal(state.pancasilaProgress), 500);
+    if (!alreadyCompleted) setTimeout(() => showRewardModal(cd.pancasilaProgress), 500);
   } else {
     saveState();
     updateHeader();
@@ -1218,7 +1753,8 @@ let rewardAnimId = null;
 function showRewardModal(count) {
   document.getElementById('rewardModal').classList.add('active');
   document.getElementById('rewardDesc').textContent = 'Kamu berhasil menggambar Pancasila secara utuh!';
-  document.getElementById('rewardDetail').textContent = 'Badge Pancasila #' + count + ' telah dikoleksi. Total: ' + state.badges.length + ' badge.';
+  const cd = getActiveClassData();
+  document.getElementById('rewardDetail').textContent = 'Badge Pancasila #' + count + ' telah dikoleksi untuk kelas ' + state.teacher.kelasAjar + '. Total: ' + cd.badges.length + ' badge.';
 
   const container = document.getElementById('badgeCanvasContainer');
   container.innerHTML = '';
@@ -1287,15 +1823,16 @@ function closeReward() {
 }
 
 /* =========================================================
-   BADGES SCREEN
+   BADGES SCREEN - PER KELAS
    ========================================================= */
 function renderBadges() {
   const grid = document.getElementById('badgesGrid');
   grid.innerHTML = '';
+  const cd = getActiveClassData();
   const totalBabs = DATA[1].length + DATA[2].length;
   for (let i=1; i<=totalBabs; i++) {
     const badgeId = 'pancasila_' + i;
-    const earned = state.badges.find(b => b.id === badgeId);
+    const earned = cd.badges.find(b => b.id === badgeId);
     const div = document.createElement('div');
     div.className = 'badge-item' + (earned ? ' earned' : '');
     div.innerHTML = `<span class="bi">${earned ? '🏅' : '🔒'}</span>Pancasila #${i}`;
@@ -1304,119 +1841,140 @@ function renderBadges() {
 }
 
 /* =========================================================
-   REKAP NILAI (Filter per kelas)
+   REKAP NILAI - PER KELAS
    ========================================================= */
 let currentFilterKelas = 'all';
 
 function renderRekap() {
-  const filterBar = document.getElementById('filterKelas');
-  const classes = ['all', 'XI MIPA 1', 'XI MIPA 2', 'XI MIPA 3', 'XI MIPA 4', 'XI MIPA 5'];
-
-  filterBar.innerHTML = classes.map(c => {
-    const label = c === 'all' ? '📋 Semua' : c;
-    const active = currentFilterKelas === c ? ' active' : '';
-    return `<div class="filter-chip${active}" onclick="setFilterKelas('${c}')">${label}</div>`;
-  }).join('');
-
+  const cd = getActiveClassData();
+  const kelasAktif = state.teacher.kelasAjar;
   const container = document.getElementById('rekapContent');
-  let history = state.quizHistory;
 
-  // Filter berdasarkan kelas siswa
-  if (currentFilterKelas !== 'all') {
-    history = history.filter(h => h.studentClass === currentFilterKelas);
-  }
+  const history = cd.quizHistory || [];
+  const students = cd.students || [];
 
   if (history.length === 0) {
     container.innerHTML = `
       <div class="info-banner">
-        👨‍🏫 Guru: <b>${state.teacher.nama || '-'}</b> • Kelas: <b>${state.teacher.kelasAjar || '-'}</b>
+        👨‍🏫 Guru: <b>${state.teacher.nama || '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b>
       </div>
       <div class="rekap-empty">
         🎯<br><br>
-        <b>Belum Ada Nilai</b><br>
-        ${currentFilterKelas === 'all' ? 'Belum ada siswa yang mengerjakan kuis.' : 'Belum ada siswa dari kelas ' + currentFilterKelas + ' yang mengerjakan kuis.'}
+        <b>Belum Ada Nilai di ${kelasAktif}</b><br>
+        Belum ada siswa dari kelas ini yang mengerjakan kuis.
       </div>
     `;
     return;
   }
 
-  // Urutkan dari terbaru
   const sortedHistory = [...history].sort((a,b) => new Date(b.date) - new Date(a.date));
 
-  // Statistik
-  const totalKuis = history.length;
-  const avgScore = Math.round(history.reduce((sum,h) => sum + (h.score/h.total*100), 0) / totalKuis);
-  const bestScore = Math.max(...history.map(h => Math.round(h.score/h.total*100)));
-  const lulusCount = history.filter(h => h.score === h.total).length;
-  const uniqueStudents = new Set(history.map(h => h.studentName + '|' + h.studentClass)).size;
+  // Nilai terbaik per siswa
+  const studentBest = {};
+  history.forEach(h => {
+    const key = h.studentName;
+    if (!studentBest[key] || h.score > studentBest[key].score) {
+      studentBest[key] = h;
+    }
+  });
+  const uniqueStudents = Object.keys(studentBest).length;
+  const totalStudents = students.length;
+  const avgScore = Math.round(history.reduce((sum,h) => sum + (h.score/h.total*100), 0) / history.length);
+  const lulusCount = Object.values(studentBest).filter(h => h.score === h.total).length;
 
   container.innerHTML = `
     <div class="info-banner">
-      👨‍🏫 Guru: <b>${state.teacher.nama || '-'}</b> • Kelas Diajar: <b>${state.teacher.kelasAjar || '-'}</b><br>
-      ${currentFilterKelas === 'all' ? 'Menampilkan semua kelas' : 'Filter: <b>' + currentFilterKelas + '</b>'} • ${totalKuis} percobaan kuis
+      👨‍🏫 Guru: <b>${state.teacher.nama || '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b><br>
+      ${uniqueStudents} dari ${totalStudents} siswa sudah mengerjakan • ${history.length} total percobaan
     </div>
     <div class="rekap-summary">
       <div class="rekap-stat">
         <div class="val">${avgScore}</div>
-        <div class="lbl">Rata-rata Nilai</div>
+        <div class="lbl">Rata-rata</div>
       </div>
       <div class="rekap-stat">
-        <div class="val">${bestScore}</div>
-        <div class="lbl">Nilai Tertinggi</div>
-      </div>
-      <div class="rekap-stat">
-        <div class="val">${uniqueStudents}</div>
-        <div class="lbl">Jumlah Siswa</div>
+        <div class="val">${uniqueStudents}/${totalStudents}</div>
+        <div class="lbl">Siswa Ikut</div>
       </div>
       <div class="rekap-stat">
         <div class="val">${lulusCount}</div>
-        <div class="lbl">Kuis Lulus</div>
+        <div class="lbl">Lulus Sempurna</div>
+      </div>
+      <div class="rekap-stat">
+        <div class="val">${history.length}</div>
+        <div class="lbl">Total Kuis</div>
       </div>
     </div>
 
-    <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">🕒 Riwayat Nilai Kuis</h3>
+    <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">🏆 Nilai Terbaik Per Siswa</h3>
+    <table class="rekap-table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nama Siswa</th>
+          <th>NISN</th>
+          <th>Nilai</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${Object.values(studentBest)
+          .sort((a,b) => b.score - a.score)
+          .map((h, i) => {
+            const pct = Math.round(h.score/h.total*100);
+            const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
+            const status = h.score === h.total
+              ? '<span class="rekap-badge-status badge-yes">✓ LULUS</span>'
+              : '<span class="rekap-badge-status badge-no">✗ ULANG</span>';
+            return `
+              <tr>
+                <td>${i+1}</td>
+                <td><b>${escapeHtml(h.studentName)}</b></td>
+                <td style="font-size:10px;color:#4fc3f7;">${escapeHtml(h.studentNisn || '-')}</td>
+                <td class="score-cell ${cls}">${h.score}/${h.total}</td>
+                <td>${status}</td>
+              </tr>
+            `;
+          }).join('')}
+      </tbody>
+    </table>
+
+    <h3 style="font-size:13px;color:#ffd700;margin:20px 0 8px;">🕒 Riwayat Semua Percobaan</h3>
     <table class="rekap-table">
       <thead>
         <tr>
           <th>Siswa</th>
-          <th>Kelas</th>
           <th>Bab</th>
           <th>Nilai</th>
+          <th>Waktu</th>
         </tr>
       </thead>
       <tbody>
-        ${sortedHistory.slice(0, 50).map(h => {
+        ${sortedHistory.slice(0, 30).map(h => {
           const d = new Date(h.date);
           const tgl = d.toLocaleDateString('id-ID', {day:'2-digit', month:'short'}) + ' ' + d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
           const pct = Math.round(h.score/h.total*100);
           const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
           return `
             <tr>
-              <td>
-                <b>${h.studentName}</b><br>
-                <span style="font-size:9px;color:#888;">${tgl}</span>
-              </td>
-              <td style="font-size:10px;">${h.studentClass}</td>
-              <td style="font-size:10px;">${h.babShort}<br><span style="font-size:9px;color:#888;">Sem ${h.semester}</span></td>
+              <td><b>${escapeHtml(h.studentName)}</b><br><span style="font-size:9px;color:#4fc3f7;">${escapeHtml(h.studentNisn || '-')}</span></td>
+              <td style="font-size:10px;">${h.babShort}</td>
               <td class="score-cell ${cls}">${h.score}/${h.total}</td>
+              <td style="font-size:9px;color:#888;">${tgl}</td>
             </tr>
           `;
         }).join('')}
       </tbody>
     </table>
-    ${sortedHistory.length > 50 ? '<p style="font-size:10px;color:#666;text-align:center;margin-top:10px;">Menampilkan 50 data terbaru</p>' : ''}
-    <button class="btn-secondary" style="margin-top:20px;" onclick="resetRekap()">🗑️ Hapus Semua Riwayat Nilai</button>
+    ${sortedHistory.length > 30 ? '<p style="font-size:10px;color:#666;text-align:center;margin-top:10px;">Menampilkan 30 percobaan terbaru</p>' : ''}
+    <button class="btn-secondary" style="margin-top:20px;" onclick="resetRekap()">🗑️ Hapus Semua Riwayat Nilai Kelas Ini</button>
   `;
 }
 
-function setFilterKelas(kelas) {
-  currentFilterKelas = kelas;
-  renderRekap();
-}
-
 function resetRekap() {
-  if (!confirm('Yakin ingin menghapus semua riwayat nilai kuis? (Badge dan XP tidak akan hilang)')) return;
-  state.quizHistory = [];
+  if (!confirm('Yakin ingin menghapus semua riwayat nilai kuis di kelas ' + state.teacher.kelasAjar + '?\n\n(Badge dan XP tidak akan hilang)')) return;
+  const cd = getActiveClassData();
+  cd.quizHistory = [];
   saveState();
   renderRekap();
 }
@@ -1429,8 +1987,10 @@ function init() {
   updateHeader();
   renderBadges();
 
-  // Jika guru sudah login, langsung ke semester
+  // WAJIB LOGIN setiap kali buka web
   if (state.teacher.nama && state.teacher.kelasAjar) {
+    // Jika sebelumnya sudah login, langsung ke semester
+    // (agar tidak kehilangan state; user bisa klik "Ganti Kelas" untuk logout)
     goTo('screenSemester');
   } else {
     goTo('screenLoginGuru');
@@ -1440,18 +2000,31 @@ function init() {
   document.getElementById('xpDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
   document.getElementById('rekapBtn').onclick = () => { renderRekap(); goTo('screenRekap'); };
 
-  // Enter untuk submit form guru
+  document.getElementById('inputKelasAjar').addEventListener('change', (e) => {
+    const kelas = e.target.value;
+    const info = document.getElementById('studentCountInfo');
+    const num = document.getElementById('studentCountNum');
+    if (kelas) {
+      const count = (state.classData[kelas]?.students || []).length;
+      num.textContent = count + ' siswa';
+      info.style.display = 'flex';
+    } else {
+      info.style.display = 'none';
+    }
+  });
+
   document.getElementById('inputNamaGuru').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') document.getElementById('inputKelasAjar').focus();
   });
-  document.getElementById('inputKelasAjar').addEventListener('change', () => {
-    if (state.teacher.nama === '') {
-      // Biarkan
-    }
+  document.getElementById('inputKelasAjar').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleLoginGuru();
   });
-  // Enter untuk submit form siswa
-  document.getElementById('inputNamaSiswa').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') document.getElementById('inputKelasSiswa').focus();
+
+  document.getElementById('inputSiswaNama').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('inputSiswaNisn').focus();
+  });
+  document.getElementById('inputSiswaNisn').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') addStudent();
   });
 }
 init();
