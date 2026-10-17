@@ -48,17 +48,14 @@
   @media (max-width: 767px) { .desktop-sidebar { display:none; } }
 
   .header {
-    padding:10px 16px;
+    padding:10px 12px;
     display:flex; justify-content:space-between; align-items:center;
     background:rgba(0,0,0,0.3); backdrop-filter:blur(10px);
     border-bottom:1px solid rgba(255,255,255,0.1);
     z-index:10; flex-shrink:0;
-    gap:8px;
+    gap:6px;
   }
-  .header-left {
-    display:flex; align-items:center; gap:8px;
-    flex:1; min-width:0;
-  }
+  .header-left { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
   .header-logo {
     width:36px; height:36px; border-radius:8px;
     background:rgba(255,255,255,0.1);
@@ -70,7 +67,7 @@
   .header-logo .placeholder { font-size:18px; color:#ffd700; }
   .header-title-block { min-width:0; flex:1; }
   .header h1 {
-    font-size:13px; font-weight:600; color:#ffd700;
+    font-size:12px; font-weight:600; color:#ffd700;
     letter-spacing:0.3px; white-space:nowrap;
     overflow:hidden; text-overflow:ellipsis;
   }
@@ -90,12 +87,14 @@
     overflow:hidden; flex-shrink:0;
     display:flex; align-items:center; justify-content:center;
     font-size:14px;
+    cursor:pointer; transition:all 0.3s;
   }
+  .header-teacher-photo:hover { transform:scale(1.08); border-color:#ffd700; }
   .header-teacher-photo img { width:100%; height:100%; object-fit:cover; }
-  .stats { display:flex; gap:5px; font-size:10px; flex-shrink:0; align-items:center; }
+  .stats { display:flex; gap:4px; font-size:10px; flex-shrink:0; align-items:center; }
   .stat-badge {
     background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.4);
-    padding:3px 7px; border-radius:12px; color:#ffd700; font-weight:600;
+    padding:3px 6px; border-radius:12px; color:#ffd700; font-weight:600;
     cursor:pointer; transition:all 0.3s; font-size:10px;
   }
   .stat-badge:hover { background:rgba(255,215,0,0.25); }
@@ -167,6 +166,8 @@
     transition:all 0.3s; display:flex; align-items:center; gap:10px;
   }
   .sidebar-menu-item:hover { background:rgba(255,215,0,0.1); border-color:#ffd700; color:#ffd700; }
+  .sidebar-menu-item.logout { background:rgba(255,82,82,0.1); border-color:rgba(255,82,82,0.3); color:#ff5252; }
+  .sidebar-menu-item.logout:hover { background:rgba(255,82,82,0.2); border-color:#ff5252; }
   .sidebar-menu-item .icon { font-size:16px; }
 
   .screen {
@@ -199,6 +200,10 @@
   .form-input:focus, .form-select:focus { border-color:#ffd700; background:rgba(255,215,0,0.08); }
   .form-input::placeholder { color:#666; }
   .form-select option { background:#1a1a2e; color:#fff; }
+  .form-input:disabled, .form-select:disabled {
+    background:rgba(255,215,0,0.1); color:#ffd700; cursor:not-allowed;
+    border-color:rgba(255,215,0,0.3); font-weight:600;
+  }
 
   .auth-tabs {
     display:flex; gap:6px; margin-bottom:18px;
@@ -207,8 +212,7 @@
   .auth-tab {
     flex:1; padding:10px; text-align:center;
     border-radius:8px; font-size:12px; font-weight:700;
-    cursor:pointer; transition:all 0.3s;
-    color:#aaa;
+    cursor:pointer; transition:all 0.3s; color:#aaa;
   }
   .auth-tab.active {
     background:linear-gradient(135deg,#ffd700,#ff8c00);
@@ -259,10 +263,7 @@
   .upload-preview .placeholder { font-size:24px; color:#ffd700; opacity:0.6; }
   .upload-label { font-size:10px; color:#ffd700; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; }
   .upload-hint { font-size:9px; color:#888; margin-top:2px; }
-  .upload-item.has-image {
-    border-style:solid; border-color:#00e676;
-    background:rgba(0,230,118,0.06);
-  }
+  .upload-item.has-image { border-style:solid; border-color:#00e676; background:rgba(0,230,118,0.06); }
   .upload-item.has-image .upload-label { color:#00e676; }
   .remove-img-btn {
     position:absolute; top:6px; right:6px;
@@ -330,14 +331,14 @@
     display:flex; align-items:center; gap:6px;
   }
   .welcome-teacher-photo {
-    width:22px; height:22px; border-radius:50%;
+    width:26px; height:26px; border-radius:50%;
     background:rgba(255,215,0,0.15);
     border:1.5px solid rgba(255,215,0,0.5);
     display:flex; align-items:center; justify-content:center;
     overflow:hidden; flex-shrink:0;
   }
   .welcome-teacher-photo img { width:100%; height:100%; object-fit:cover; }
-  .welcome-teacher-photo .placeholder { font-size:11px; }
+  .welcome-teacher-photo .placeholder { font-size:12px; }
 
   .student-count-info {
     font-size:11px; color:#4fc3f7; margin-top:6px;
@@ -422,7 +423,9 @@
   .material-header {
     display:flex; align-items:center; gap:10px; margin-bottom:16px;
     padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1);
+    flex-wrap:wrap;
   }
+  .material-title { font-size:13px; font-weight:600; color:#ffd700; line-height:1.3; flex:1; min-width:0; }
   .back-btn {
     background:rgba(255,255,255,0.1); border:none; color:#fff;
     width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer;
@@ -430,7 +433,7 @@
     transition:all 0.3s;
   }
   .back-btn:hover { background:rgba(255,215,0,0.2); color:#ffd700; }
-  .material-title { font-size:13px; font-weight:600; color:#ffd700; line-height:1.3; }
+
   .material-content { font-size:13px; line-height:1.7; color:#ddd; }
   .material-content h3 { font-size:14px; color:#ffd700; margin:16px 0 8px; padding-left:8px; border-left:3px solid #ffd700; }
   .material-content p { margin-bottom:10px; text-align:justify; }
@@ -443,10 +446,7 @@
     .info-banner { max-width:800px; }
   }
 
-  .section-box {
-    border-radius:12px; padding:14px; margin:16px 0;
-    border-left:4px solid;
-  }
+  .section-box { border-radius:12px; padding:14px; margin:16px 0; border-left:4px solid; }
   .box-contoh { background:rgba(0,176,255,0.08); border-color:#00b0ff; }
   .box-contoh .box-title { color:#4fc3f7; }
   .box-rangkuman { background:rgba(0,230,118,0.08); border-color:#00e676; }
@@ -485,20 +485,91 @@
   }
   .btn-success:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,230,118,0.4); }
   .btn-danger {
-    width:100%; padding:10px; background:rgba(255,82,82,0.15);
-    border:1px solid rgba(255,82,82,0.4); border-radius:10px; color:#ff5252;
-    font-weight:600; font-size:12px; cursor:pointer; transition:all 0.3s;
+    width:100%; padding:12px; background:rgba(255,82,82,0.15);
+    border:1px solid rgba(255,82,82,0.4); border-radius:12px; color:#ff5252;
+    font-weight:700; font-size:13px; cursor:pointer; transition:all 0.3s;
+    margin-top:10px;
   }
-  .btn-danger:hover { background:rgba(255,82,82,0.25); }
+  .btn-danger:hover { background:rgba(255,82,82,0.3); }
 
   .btn-group { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
   .btn-group .btn-primary, .btn-group .btn-secondary { margin-top:0; }
 
+  /* ============ LEVEL SELECTOR DI MATERI ============ */
+  .quiz-level-section {
+    background:linear-gradient(135deg,rgba(0,176,255,0.1),rgba(255,215,0,0.08));
+    border:1.5px solid rgba(0,176,255,0.4);
+    border-radius:14px; padding:16px; margin-top:20px;
+  }
+  .quiz-level-section .qls-title {
+    font-size:12px; font-weight:700; color:#ffd700;
+    text-transform:uppercase; letter-spacing:0.8px;
+    margin-bottom:12px; display:flex; align-items:center; gap:6px;
+  }
+  .quiz-level-grid {
+    display:grid; grid-template-columns:1fr; gap:10px;
+  }
+  @media (min-width: 500px) { .quiz-level-grid { grid-template-columns:1fr 1fr; } }
+  .quiz-level-card {
+    padding:14px; background:rgba(255,255,255,0.05);
+    border:1.5px solid rgba(255,255,255,0.15);
+    border-radius:10px; cursor:pointer; transition:all 0.3s;
+    position:relative; overflow:hidden;
+  }
+  .quiz-level-card:hover { transform:translateY(-2px); }
+  .quiz-level-card.lv1 { border-left:4px solid #00e676; }
+  .quiz-level-card.lv2 { border-left:4px solid #ffd700; }
+  .quiz-level-card.lv3 { border-left:4px solid #ff8c00; }
+  .quiz-level-card.lv4 { border-left:4px solid #ff5252; }
+  .quiz-level-card .qlc-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:6px;
+  }
+  .quiz-level-card .qlc-level {
+    font-size:10px; padding:2px 8px; border-radius:8px;
+    font-weight:700; letter-spacing:0.3px;
+  }
+  .quiz-level-card.lv1 .qlc-level { background:rgba(0,230,118,0.2); color:#00e676; }
+  .quiz-level-card.lv2 .qlc-level { background:rgba(255,215,0,0.2); color:#ffd700; }
+  .quiz-level-card.lv3 .qlc-level { background:rgba(255,140,0,0.2); color:#ff8c00; }
+  .quiz-level-card.lv4 .qlc-level { background:rgba(255,82,82,0.2); color:#ff5252; }
+  .quiz-level-card .qlc-diff {
+    font-size:9px; color:#aaa; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.5px;
+  }
+  .quiz-level-card .qlc-title {
+    font-size:13px; font-weight:700; color:#fff; margin-bottom:4px;
+  }
+  .quiz-level-card .qlc-desc {
+    font-size:10px; color:#999; margin-bottom:8px; line-height:1.4;
+  }
+  .quiz-level-card .qlc-stats {
+    display:flex; gap:10px; font-size:9px;
+    padding-top:8px; border-top:1px solid rgba(255,255,255,0.08);
+  }
+  .quiz-level-card .qlc-stat {
+    display:flex; align-items:center; gap:3px; color:#aaa;
+  }
+  .quiz-level-card .qlc-stat b { color:#4fc3f7; }
+  .quiz-level-card .qlc-stat.attempts b { color:#ffd700; }
+  .quiz-level-card .qlc-stat.pass b { color:#00e676; }
+
+  /* ============ QUIZ ============ */
   .quiz-header { text-align:center; margin-bottom:16px; }
   .quiz-progress { font-size:11px; color:#aaa; margin-bottom:6px; }
   .quiz-question { font-size:14px; line-height:1.6; margin-bottom:18px; font-weight:500; }
   .quiz-bar { height:4px; background:rgba(255,255,255,0.1); border-radius:2px; margin-bottom:16px; }
   .quiz-bar-fill { height:100%; background:linear-gradient(90deg,#ffd700,#ff8c00); width:0%; transition:width 0.4s; }
+
+  .quiz-level-badge {
+    display:inline-block; padding:4px 12px; border-radius:12px;
+    font-size:10px; font-weight:700; margin-bottom:12px;
+    letter-spacing:0.5px; text-transform:uppercase;
+  }
+  .quiz-level-badge.lv1 { background:rgba(0,230,118,0.2); color:#00e676; border:1px solid #00e676; }
+  .quiz-level-badge.lv2 { background:rgba(255,215,0,0.2); color:#ffd700; border:1px solid #ffd700; }
+  .quiz-level-badge.lv3 { background:rgba(255,140,0,0.2); color:#ff8c00; border:1px solid #ff8c00; }
+  .quiz-level-badge.lv4 { background:rgba(255,82,82,0.2); color:#ff5252; border:1px solid #ff5252; }
 
   @media (min-width: 768px) {
     .quiz-question { max-width:800px; margin:0 auto 18px; }
@@ -590,24 +661,29 @@
   .rekap-table .score-good { color:#00e676; }
   .rekap-table .score-mid { color:#ffd700; }
   .rekap-table .score-low { color:#ff5252; }
+  .rekap-table .level-cell { font-size:9px; color:#aaa; }
+  .rekap-table .level-badge-mini {
+    display:inline-block; padding:1px 6px; border-radius:6px;
+    font-size:8px; font-weight:700; letter-spacing:0.3px;
+  }
+  .level-badge-mini.lv1 { background:rgba(0,230,118,0.2); color:#00e676; }
+  .level-badge-mini.lv2 { background:rgba(255,215,0,0.2); color:#ffd700; }
+  .level-badge-mini.lv3 { background:rgba(255,140,0,0.2); color:#ff8c00; }
+  .level-badge-mini.lv4 { background:rgba(255,82,82,0.2); color:#ff5252; }
 
   @media (min-width: 768px) {
-    .rekap-table { max-width:900px; }
-    #rekapContent { max-width:900px; }
-    .rekap-summary { max-width:900px; }
+    .rekap-table { max-width:1000px; }
+    #rekapContent { max-width:1000px; }
+    .rekap-summary { max-width:1000px; }
   }
 
   .rekap-summary { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0; }
   @media (min-width: 500px) { .rekap-summary { grid-template-columns:repeat(4,1fr); } }
-  .rekap-stat {
-    background:rgba(255,255,255,0.05); border-radius:10px; padding:12px; text-align:center;
-  }
+  .rekap-stat { background:rgba(255,255,255,0.05); border-radius:10px; padding:12px; text-align:center; }
   .rekap-stat .val { font-size:22px; font-weight:800; color:#ffd700; }
   .rekap-stat .lbl { font-size:10px; color:#aaa; margin-top:2px; }
   .rekap-empty { text-align:center; padding:40px 20px; color:#666; font-size:12px; }
-  .rekap-badge-status {
-    display:inline-block; padding:2px 8px; border-radius:8px; font-size:9px; font-weight:700;
-  }
+  .rekap-badge-status { display:inline-block; padding:2px 8px; border-radius:8px; font-size:9px; font-weight:700; }
   .badge-yes { background:rgba(0,230,118,0.2); color:#00e676; }
   .badge-no { background:rgba(255,82,82,0.15); color:#ff5252; }
 
@@ -618,10 +694,6 @@
     font-size:11px;
   }
   .student-info-box .name { color:#ffd700; font-weight:700; }
-  .student-info-box .change-btn {
-    font-size:10px; color:#4fc3f7; cursor:pointer; text-decoration:underline;
-    background:none; border:none;
-  }
 
   .student-list-header {
     display:flex; justify-content:space-between; align-items:center;
@@ -715,6 +787,24 @@
     padding:2px 8px; border-radius:8px; margin-left:4px;
     letter-spacing:0.3px;
   }
+
+  /* Tab switch di rekap */
+  .rekap-tabs {
+    display:flex; gap:6px; margin-bottom:14px;
+    background:rgba(0,0,0,0.25); padding:5px; border-radius:12px;
+    overflow-x:auto; scrollbar-width:none;
+  }
+  .rekap-tabs::-webkit-scrollbar { display:none; }
+  .rekap-tab {
+    padding:8px 14px; text-align:center;
+    border-radius:8px; font-size:11px; font-weight:700;
+    cursor:pointer; transition:all 0.3s; color:#aaa;
+    white-space:nowrap;
+  }
+  .rekap-tab.active {
+    background:linear-gradient(135deg,#ffd700,#ff8c00);
+    color:#1a1a2e;
+  }
 </style>
 </head>
 <body>
@@ -731,12 +821,12 @@
       </div>
     </div>
     <div class="stats">
-      <div class="header-teacher-photo" id="headerTeacherPhoto">
+      <div class="header-teacher-photo" id="headerTeacherPhoto" onclick="openProfileFromHeader()" title="Klik untuk buka profil">
         <span class="placeholder">👤</span>
       </div>
       <div class="stat-badge" id="xpDisplay">⚡ 0</div>
       <div class="stat-badge" id="badgeDisplay">🏅 0</div>
-      <div class="stat-badge" id="logoutBtn">🚪</div>
+      <div class="stat-badge" id="logoutBtn" title="Keluar">🚪</div>
     </div>
   </div>
 
@@ -882,12 +972,17 @@
 
   <!-- PILIH KELAS -->
   <div class="screen" id="screenPilihKelas">
-    <div class="form-box">
+    <div class="material-header">
+      <button class="back-btn" onclick="handleLogout()" title="Logout">🚪</button>
+      <div class="material-title">Pilih Kelas</div>
+    </div>
+    <div class="form-box" style="margin-top:0;">
       <div class="form-logo">🏫</div>
       <div class="form-title">Pilih Kelas yang Diajar</div>
       <div class="form-sub" id="pilihKelasSub">Pilih kelas untuk memulai pembelajaran</div>
       <div class="class-selector" id="classSelector"></div>
       <button class="btn-primary" onclick="confirmPilihKelas()">✅ Masuk ke Kelas</button>
+      <button class="btn-danger" onclick="handleLogout()">🚪 Logout</button>
     </div>
   </div>
 
@@ -919,18 +1014,20 @@
       <div class="semester-card" onclick="openSemester(1)">
         <div class="semester-icon">📚</div>
         <h2>Semester 1</h2>
-        <p>4 Bab • 4 Level</p>
+        <p>4 Bab • 4 Level Kuis per Bab</p>
       </div>
       <div class="semester-card" onclick="openSemester(2)">
         <div class="semester-icon">📖</div>
         <h2>Semester 2</h2>
-        <p>3 Bab • 3 Level</p>
+        <p>3 Bab • 4 Level Kuis per Bab</p>
       </div>
     </div>
 
     <div style="margin-top:24px; display:flex; flex-direction:column; gap:10px;">
       <button class="btn-secondary" onclick="renderManageStudents();goTo('screenManageStudents')">👥 Tambah / Kelola Siswa</button>
       <button class="btn-secondary" onclick="renderRekap();goTo('screenRekap')">📊 Rekap Nilai</button>
+      <button class="btn-secondary" onclick="renderProfile();goTo('screenProfile')">👤 Profil Guru</button>
+      <button class="btn-danger" onclick="handleLogout()">🚪 Logout</button>
     </div>
   </div>
 
@@ -961,13 +1058,18 @@
       <div class="semester-card" onclick="openSemesterSiswa(1)">
         <div class="semester-icon">📚</div>
         <h2>Semester 1</h2>
-        <p>4 Bab • 4 Level</p>
+        <p>4 Bab • 4 Level Kuis per Bab</p>
       </div>
       <div class="semester-card" onclick="openSemesterSiswa(2)">
         <div class="semester-icon">📖</div>
         <h2>Semester 2</h2>
-        <p>3 Bab • 3 Level</p>
+        <p>3 Bab • 4 Level Kuis per Bab</p>
       </div>
+    </div>
+
+    <div style="margin-top:24px; display:flex; flex-direction:column; gap:10px;">
+      <button class="btn-secondary" onclick="renderProfile();goTo('screenProfile')">👤 Profil Saya</button>
+      <button class="btn-danger" onclick="handleLogout()">🚪 Logout</button>
     </div>
   </div>
 
@@ -976,6 +1078,7 @@
     <div class="material-header">
       <button class="back-btn" onclick="goTo('screenSemester')">←</button>
       <div class="material-title">👥 Tambah / Kelola Siswa</div>
+      <button class="back-btn" onclick="handleLogout()" style="background:rgba(255,82,82,0.2);color:#ff5252;" title="Logout">🚪</button>
     </div>
     <div class="info-banner">
       📚 Kelas Aktif: <b id="manageStudentsClass">-</b> • Tambahkan siswa dengan <b>Nama</b> dan <b>NISN</b>.
@@ -1011,9 +1114,10 @@
     <div class="material-header">
       <button class="back-btn" id="btnBackFromLevels" onclick="goTo('screenSemester')">←</button>
       <div class="material-title" id="levelMapTitle">Peta Level</div>
+      <button class="back-btn" onclick="handleLogout()" style="background:rgba(255,82,82,0.2);color:#ff5252;" title="Logout">🚪</button>
     </div>
     <div class="info-banner">
-      💡 <b>Cukup baca materi</b> untuk membuka bab berikutnya. Kuis opsional — selesaikan sempurna untuk dapat XP & 🏅 Badge Pancasila!
+      💡 <b>Baca materi</b> untuk membuka bab berikutnya. Kuis terdiri dari <b>4 level</b> dengan tingkat kesulitan berbeda.
     </div>
     <div class="level-map" id="levelList"></div>
   </div>
@@ -1023,16 +1127,29 @@
     <div class="material-header">
       <button class="back-btn" onclick="backToLevels()">←</button>
       <div class="material-title" id="materialTitle">Materi</div>
+      <button class="back-btn" onclick="handleLogout()" style="background:rgba(255,82,82,0.2);color:#ff5252;" title="Logout">🚪</button>
     </div>
     <div class="material-content" id="materialContent"></div>
     <div class="btn-group">
       <button class="btn-primary" id="btnDoneReading" onclick="markAsRead()">✅ Selesai Membaca</button>
-      <button class="btn-secondary" id="btnStartQuiz" onclick="promptStudentData()">📝 Ikuti Kuis</button>
+    </div>
+    <!-- Level Kuis Picker -->
+    <div class="quiz-level-section">
+      <div class="qls-title">📝 Pilih Level Kuis</div>
+      <div class="quiz-level-grid" id="quizLevelGrid"></div>
     </div>
   </div>
 
   <!-- QUIZ -->
   <div class="screen" id="screenQuiz">
+    <div class="material-header">
+      <button class="back-btn" onclick="confirmExitQuiz()">←</button>
+      <div class="material-title" id="quizTitleBar">📝 Kuis</div>
+      <button class="back-btn" onclick="handleLogout()" style="background:rgba(255,82,82,0.2);color:#ff5252;" title="Logout">🚪</button>
+    </div>
+    <div style="text-align:center;">
+      <div class="quiz-level-badge" id="quizLevelBadge">Level 1 • MUDAH</div>
+    </div>
     <div class="student-info-box" id="quizStudentInfo">
       <div>
         👤 <span class="name" id="quizStudentName">Siswa</span> • <span id="quizStudentClass">Kelas</span>
@@ -1049,6 +1166,11 @@
 
   <!-- RESULT -->
   <div class="screen" id="screenResult">
+    <div class="material-header">
+      <button class="back-btn" id="btnResultBack2" onclick="backToLevels()">←</button>
+      <div class="material-title">Hasil Kuis</div>
+      <button class="back-btn" onclick="handleLogout()" style="background:rgba(255,82,82,0.2);color:#ff5252;" title="Logout">🚪</button>
+    </div>
     <div class="result-box">
       <div class="result-icon" id="resultIcon">🎉</div>
       <div class="result-title" id="resultTitle">Selamat!</div>
@@ -1056,6 +1178,7 @@
       <div class="result-text" id="resultText"></div>
       <button class="btn-primary" id="btnResultBack" onclick="backToLevels()">Kembali ke Peta Level</button>
       <button class="btn-secondary" id="btnRetryQuiz" onclick="startQuizDirect()">🔄 Coba Lagi</button>
+      <button class="btn-danger" onclick="handleLogout()">🚪 Logout</button>
     </div>
   </div>
 
@@ -1064,9 +1187,10 @@
     <div class="material-header">
       <button class="back-btn" id="btnBackFromBadges" onclick="goTo('screenSemester')">←</button>
       <div class="material-title">🏅 Koleksi Badge Pancasila</div>
+      <button class="back-btn" onclick="handleLogout()" style="background:rgba(255,82,82,0.2);color:#ff5252;" title="Logout">🚪</button>
     </div>
     <div class="info-banner">
-      Selesaikan kuis dengan <b>nilai sempurna (10/10)</b> untuk menggambar Pancasila secara utuh dan mendapatkan badge!
+      Selesaikan kuis level mana pun dengan <b>nilai sempurna (10/10)</b> untuk menggambar Pancasila secara utuh dan mendapatkan badge!
     </div>
     <div class="badges-grid" id="badgesGrid"></div>
   </div>
@@ -1076,6 +1200,12 @@
     <div class="material-header">
       <button class="back-btn" onclick="goTo('screenSemester')">←</button>
       <div class="material-title">📊 Rekap Daftar Nilai Kuis</div>
+      <button class="back-btn" onclick="handleLogout()" style="background:rgba(255,82,82,0.2);color:#ff5252;" title="Logout">🚪</button>
+    </div>
+    <div class="rekap-tabs" id="rekapTabs">
+      <div class="rekap-tab active" onclick="switchRekapTab('nilai')">📊 Nilai</div>
+      <div class="rekap-tab" onclick="switchRekapTab('progress')">📈 Progress Per Level</div>
+      <div class="rekap-tab" onclick="switchRekapTab('riwayat')">🕒 Riwayat</div>
     </div>
     <div id="rekapContent"></div>
   </div>
@@ -1084,7 +1214,8 @@
   <div class="screen" id="screenProfile">
     <div class="material-header">
       <button class="back-btn" onclick="backFromProfile()">←</button>
-      <div class="material-title">⚙️ Pengaturan Profil</div>
+      <div class="material-title" id="profileTitle">⚙️ Pengaturan Profil</div>
+      <button class="back-btn" onclick="handleLogout()" style="background:rgba(255,82,82,0.2);color:#ff5252;" title="Logout">🚪</button>
     </div>
 
     <div class="info-banner" id="profileInfoBanner">
@@ -1106,6 +1237,17 @@
 
       <div id="profileGuruForm">
         <div class="form-divider">🏫 Data Sekolah</div>
+        <div class="upload-section" style="grid-template-columns:1fr;">
+          <div class="upload-item" id="profileLogoItem" onclick="document.getElementById('profileLogoFile').click()">
+            <button class="remove-img-btn" onclick="event.stopPropagation();removeProfileLogo()" title="Hapus">×</button>
+            <div class="upload-preview school" id="profileLogoPreview">
+              <span class="placeholder">🏫</span>
+            </div>
+            <div class="upload-label">Logo Sekolah</div>
+            <div class="upload-hint">Klik untuk ganti</div>
+            <input type="file" id="profileLogoFile" accept="image/*" onchange="handleProfileLogoUpload(event)">
+          </div>
+        </div>
         <div class="form-group">
           <label class="form-label">🏫 Nama Sekolah</label>
           <input type="text" class="form-input" id="profNamaSekolah" maxlength="60" autocomplete="off">
@@ -1146,6 +1288,7 @@
       </div>
 
       <button class="btn-primary" onclick="saveProfile()">💾 Simpan Perubahan</button>
+      <button class="btn-danger" onclick="handleLogout()">🚪 Logout</button>
     </div>
   </div>
 </div>
@@ -1168,270 +1311,430 @@
 
 <script>
 /* =========================================================
-   DATA MATERI PKn KELAS 11 KURIKULUM MERDEKA
+   LEVEL KUIS (4 LEVEL)
+   ========================================================= */
+const QUIZ_LEVELS = [
+  { id:1, name:'Level 1', diff:'MUDAH', desc:'Soal dasar pemahaman konsep', color:'#00e676', cls:'lv1' },
+  { id:2, name:'Level 2', diff:'SEDANG', desc:'Soal penerapan & contoh', color:'#ffd700', cls:'lv2' },
+  { id:3, name:'Level 3', diff:'SULIT', desc:'Soal analisis & studi kasus', color:'#ff8c00', cls:'lv3' },
+  { id:4, name:'Level 4', diff:'TANTANGAN', desc:'Soal HOTS & evaluasi kritis', color:'#ff5252', cls:'lv4' }
+];
+
+/* =========================================================
+   DATA MATERI PKn KELAS 11
+   Setiap BAB punya 4 level × 10 soal = 40 soal
    ========================================================= */
 const DATA = {
   1: [
     {
       id:'bab1', title:'Bab 1: Pancasila sebagai Ideologi Terbuka', short:'Pancasila & Ideologi Terbuka',
-      content:`
-        <h3>A. Pengertian Ideologi</h3>
-        <p>Ideologi berasal dari kata <em>idea</em> (gagasan) dan <em>logos</em> (ilmu). Ideologi adalah kumpulan gagasan, ide, keyakinan yang menyeluruh dan sistematis, yang menyangkut berbagai bidang kehidupan manusia.</p>
-        <h3>B. Pancasila sebagai Ideologi Terbuka</h3>
-        <p>Pancasila sebagai ideologi terbuka artinya Pancasila dapat menerima perubahan dan perkembangan zaman tanpa mengubah nilai-nilai dasarnya. Ciri-ciri ideologi terbuka:</p>
-        <ul>
-          <li>Nilai-nilainya bersifat universal dan objektif</li>
-          <li>Merupakan kekayaan rohani, moral, dan budaya masyarakat</li>
-          <li>Isinya tidak langsung operasional</li>
-          <li>Dapat dikembangkan sesuai zaman</li>
-        </ul>
-        <h3>C. Kedudukan Pancasila</h3>
-        <ul>
-          <li>Dasar Negara Republik Indonesia</li>
-          <li>Pandangan hidup bangsa</li>
-          <li>Ideologi negara</li>
-          <li>Sumber dari segala sumber hukum</li>
-        </ul>
-        <h3>D. Nilai-Nilai Pancasila</h3>
-        <p>Pancasila memiliki tiga dimensi: dimensi idealis (nilai dasar), dimensi normatif (nilai instrumental), dan dimensi realitas (nilai praksis).</p>
-      `,
+      content:`<h3>A. Pengertian Ideologi</h3><p>Ideologi berasal dari kata <em>idea</em> (gagasan) dan <em>logos</em> (ilmu). Ideologi adalah kumpulan gagasan, ide, keyakinan yang menyeluruh dan sistematis, yang menyangkut berbagai bidang kehidupan manusia.</p><h3>B. Pancasila sebagai Ideologi Terbuka</h3><p>Pancasila sebagai ideologi terbuka artinya Pancasila dapat menerima perubahan dan perkembangan zaman tanpa mengubah nilai-nilai dasarnya. Ciri-ciri ideologi terbuka:</p><ul><li>Nilai-nilainya bersifat universal dan objektif</li><li>Merupakan kekayaan rohani, moral, dan budaya masyarakat</li><li>Isinya tidak langsung operasional</li><li>Dapat dikembangkan sesuai zaman</li></ul><h3>C. Kedudukan Pancasila</h3><ul><li>Dasar Negara Republik Indonesia</li><li>Pandangan hidup bangsa</li><li>Ideologi negara</li><li>Sumber dari segala sumber hukum</li></ul><h3>D. Nilai-Nilai Pancasila</h3><p>Pancasila memiliki tiga dimensi: dimensi idealis (nilai dasar), dimensi normatif (nilai instrumental), dan dimensi realitas (nilai praksis).</p>`,
       contoh:`Contoh konkrit: Ketika teknologi digital berkembang pesat, Indonesia tetap berpegang pada Pancasila sambil mengadopsi e-government dan e-learning. Nilai gotong royong (sila ke-3) tetap dipertahankan melalui aplikasi gotong royong digital seperti penggalangan dana bencana online, yang tidak mengubah nilai dasar Pancasila namun menyesuaikan dengan zaman.`,
       rangkuman:`• Pancasila adalah ideologi terbuka yang dapat menerima perubahan zaman tanpa mengubah nilai dasarnya.<br>• Kedudukan Pancasila: dasar negara, pandangan hidup, ideologi negara, dan sumber segala sumber hukum.<br>• Pancasila memiliki tiga dimensi: idealis, normatif, dan realitas.<br>• Nilai-nilai Pancasila bersifat universal dan dapat dikembangkan sesuai konteks zaman.`,
-      refleksi:`Setelah mempelajari materi ini, renungkanlah: bagaimana saya menerapkan nilai-nilai Pancasila dalam kehidupan sehari-hari di era digital ini? Apakah sikap saya sudah mencerminkan Pancasila sebagai ideologi terbuka yang menghargai kemajuan tanpa melupakan nilai dasar bangsa?`,
-      questions:[
-        {q:'Ideologi berasal dari kata idea dan logos. Logos berarti...',o:['Gagasan','Ilmu','Keyakinan','Perbuatan'],a:1},
-        {q:'Berikut yang BUKAN ciri ideologi terbuka adalah...',o:['Bersifat universal','Isinya tidak langsung operasional','Bersifat kaku dan tertutup','Dapat dikembangkan sesuai zaman'],a:2},
-        {q:'Pancasila sebagai ideologi terbuka artinya...',o:['Tidak dapat diubah','Dapat menerima perubahan tanpa mengubah nilai dasar','Bebas diubah kapan saja','Hanya berlaku pada zaman tertentu'],a:1},
-        {q:'Kedudukan Pancasila sebagai sumber dari segala sumber hukum berarti...',o:['Hukum tertinggi di Indonesia','Semua peraturan harus bersumber pada Pancasila','Pancasila adalah UUD','Pancasila menggantikan hukum'],a:1},
-        {q:'Dimensi Pancasila yang berisi nilai-nilai dasar disebut dimensi...',o:['Normatif','Realitas','Idealis','Praksis'],a:2},
-        {q:'Nilai instrumental Pancasila terdapat dalam...',o:['Pembukaan UUD 1945','UUD 1945 dan peraturan perundangan','Pidato presiden','Adat istiadat'],a:1},
-        {q:'Pancasila sebagai pandangan hidup bangsa berarti...',o:['Dasar negara','Pedoman dalam kehidupan bermasyarakat','Sumber hukum','Lambang negara'],a:1},
-        {q:'Sifat ideologi tertutup adalah...',o:['Terbuka terhadap perubahan','Bersifat totaliter dan otoriter','Bersifat universal','Menghargai perbedaan'],a:1},
-        {q:'Jumlah sila dalam Pancasila adalah...',o:['3','4','5','6'],a:2},
-        {q:'Manfaat Pancasila sebagai ideologi terbuka adalah...',o:['Membuat Indonesia tertutup','Mampu menghadapi perkembangan zaman','Membatasi kebebasan','Menolak globalisasi'],a:1}
-      ]
+      refleksi:`Setelah mempelajari materi ini, renungkanlah: bagaimana saya menerapkan nilai-nilai Pancasila dalam kehidupan sehari-hari di era digital ini?`,
+      levels: {
+        1: [ // MUDAH
+          {q:'Ideologi berasal dari kata idea dan logos. Logos berarti...',o:['Gagasan','Ilmu','Keyakinan','Perbuatan'],a:1},
+          {q:'Jumlah sila dalam Pancasila adalah...',o:['3','4','5','6'],a:2},
+          {q:'Pancasila sebagai dasar negara tercantum dalam...',o:['Pembukaan UUD 1945','Pasal 1 UUD 1945','Tap MPR','Pidato presiden'],a:0},
+          {q:'Semboyan bangsa Indonesia adalah...',o:['Bhinneka Tunggal Ika','Tut Wuri Handayani','Rawe-rawe rantas','Ing Ngarso Sung Tulodo'],a:0},
+          {q:'Pancasila disahkan sebagai dasar negara pada tanggal...',o:['18 Agustus 1945','17 Agustus 1945','1 Juni 1945','28 Oktober 1928'],a:0},
+          {q:'Sila pertama Pancasila berbunyi...',o:['Ketuhanan Yang Maha Esa','Persatuan Indonesia','Kemanusiaan yang Adil dan Beradab','Keadilan Sosial'],a:0},
+          {q:'Lambang sila kedua Pancasila adalah...',o:['Bintang','Rantai','Pohon Beringin','Padi dan Kapas'],a:1},
+          {q:'Pancasila sebagai pandangan hidup bangsa berarti...',o:['Dasar negara','Pedoman dalam kehidupan bermasyarakat','Sumber hukum','Lambang negara'],a:1},
+          {q:'Penggagas utama rumusan Pancasila adalah...',o:['Soekarno','Hatta','Soepomo','Yamin'],a:0},
+          {q:'Istilah Pancasila pertama kali muncul dalam kitab...',o:['Negarakertagama','Sutasoma','Ramayana','Mahabharata'],a:1}
+        ],
+        2: [ // SEDANG
+          {q:'Berikut yang BUKAN ciri ideologi terbuka adalah...',o:['Bersifat universal','Isinya tidak langsung operasional','Bersifat kaku dan tertutup','Dapat dikembangkan sesuai zaman'],a:2},
+          {q:'Pancasila sebagai ideologi terbuka artinya...',o:['Tidak dapat diubah','Dapat menerima perubahan tanpa mengubah nilai dasar','Bebas diubah kapan saja','Hanya berlaku pada zaman tertentu'],a:1},
+          {q:'Kedudukan Pancasila sebagai sumber dari segala sumber hukum berarti...',o:['Hukum tertinggi di Indonesia','Semua peraturan harus bersumber pada Pancasila','Pancasila adalah UUD','Pancasila menggantikan hukum'],a:1},
+          {q:'Dimensi Pancasila yang berisi nilai-nilai dasar disebut dimensi...',o:['Normatif','Realitas','Idealis','Praksis'],a:2},
+          {q:'Nilai instrumental Pancasila terdapat dalam...',o:['Pembukaan UUD 1945','UUD 1945 dan peraturan perundangan','Pidato presiden','Adat istiadat'],a:1},
+          {q:'Sifat ideologi tertutup adalah...',o:['Terbuka terhadap perubahan','Bersifat totaliter dan otoriter','Bersifat universal','Menghargai perbedaan'],a:1},
+          {q:'Manfaat Pancasila sebagai ideologi terbuka adalah...',o:['Membuat Indonesia tertutup','Mampu menghadapi perkembangan zaman','Membatasi kebebasan','Menolak globalisasi'],a:1},
+          {q:'Pancasila berfungsi sebagai pemersatu bangsa karena...',o:['Bersifat memaksa','Mengakomodasi keberagaman','Hanya untuk satu suku','Berasal dari luar negeri'],a:1},
+          {q:'Dimensi realitas Pancasila tercermin dalam...',o:['Teks Pancasila','Penerapan sehari-hari','Lambang negara','Pidato'],a:1},
+          {q:'Contoh penerapan sila ke-3 Pancasila adalah...',o:['Beribadah','Gotong royong','Musyawarah','Membayar pajak'],a:1}
+        ],
+        3: [ // SULIT
+          {q:'Mengapa Pancasila disebut sebagai ideologi terbuka? Karena...',o:['Bisa diubah total kapan saja','Menerima perubahan dengan tetap berpegang nilai dasar','Tidak memiliki nilai tetap','Mengikuti ideologi asing'],a:1},
+          {q:'Pancasila sebagai ideologi terbuka memiliki ciri nilai-nilainya bersifat universal, artinya...',o:['Berlaku di seluruh dunia','Berlaku untuk semua warga tanpa diskriminasi','Hanya untuk orang kaya','Hanya untuk pejabat'],a:1},
+          {q:'Perbedaan ideologi terbuka dan tertutup terletak pada...',o:['Jumlah sila','Kekakuan terhadap perubahan','Warna lambang','Bahasa'],a:1},
+          {q:'Hubungan Pancasila dengan UUD 1945 adalah...',o:['Bertentangan','Pancasila menjadi sumber UUD 1945','UUD menggantikan Pancasila','Tidak berhubungan'],a:1},
+          {q:'Kasus yang mencerminkan Pancasila sebagai ideologi terbuka adalah...',o:['Menolak semua budaya asing','Mengadopsi teknologi digital dengan tetap menjunjung nilai Pancasila','Mengikuti budaya asing sepenuhnya','Menutup diri dari dunia luar'],a:1},
+          {q:'Pancasila sebagai ideologi negara berfungsi untuk...',o:['Membatasi hak warga','Memberi arah tujuan negara','Menguntungkan penguasa','Menghambat pembangunan'],a:1},
+          {q:'Mengapa sila-sila Pancasila bersifat hierarkis-piramidal? Karena...',o:['Sila 1 paling penting, sila 5 tidak','Sila 1 menjiwai sila 2-5, sila 2 menjiwai 3-5, dst','Semua sila setara tanpa urutan','Sila 5 paling utama'],a:1},
+          {q:'Tantangan Pancasila sebagai ideologi terbuka di era globalisasi adalah...',o:['Terlalu banyak perubahan','Masuknya ideologi asing yang bertentangan dengan Pancasila','Kurangnya pemahaman masyarakat','A dan B benar'],a:3},
+          {q:'Nilai praksis Pancasila adalah...',o:['Nilai dasar','Nilai instrumental','Nilai dalam penerapan nyata','Nilai simbolik'],a:2},
+          {q:'Sikap yang tepat menghadapi globalisasi sesuai Pancasila adalah...',o:['Menolak semua','Menerima semua','Selektif dan berpegang pada nilai Pancasila','Acuh tak acuh'],a:2}
+        ],
+        4: [ // TANTANGAN (HOTS)
+          {q:'Analisis kasus: Sebuah perusahaan multinasional ingin menanamkan modal di Indonesia, tetapi mereka menuntut agar Indonesia mengubah sistem hukum yang bertentangan dengan Pancasila. Sikap yang tepat adalah...',o:['Menerima karena ekonomi','Menolak karena nilai Pancasila tidak bisa ditawar','Menerima dengan syarat','Menunda keputusan'],a:1},
+          {q:'Mengapa Pancasila tidak bisa diganti meskipun Indonesia mengalami perubahan zaman? Karena...',o:['Ada UU yang melarang','Pancasila merupakan konsensus nasional dan sumber hukum tertinggi','Tidak ada ideologi lain','PBB melarang'],a:1},
+          {q:'Kasus: Seorang siswa mengikuti tren budaya asing yang bertentangan dengan Pancasila. Solusi terbaik adalah...',o:['Melarang semua budaya asing','Memberi pemahaman nilai Pancasila sambil tetap terbuka pada perbedaan','Mengucilkan siswa','Membiarkan saja'],a:1},
+          {q:'Relevansi Pancasila sebagai ideologi terbuka di era Revolusi Industri 4.0 adalah...',o:['Tidak relevan lagi','Tetap relevan sebagai pedoman mengadopsi teknologi secara bijak','Perlu diganti','Hanya simbol'],a:1},
+          {q:'Evaluasi: Apakah perubahan sila dalam Pancasila diperbolehkan?',o:['Ya, kapan saja','Ya, jika presiden setuju','Tidak, Pancasila bersifat final','Tidak, kecuali MPR setuju'],a:2},
+          {q:'Kritik terhadap ideologi tertutup adalah...',o:['Terlalu bebas','Tidak menghargai HAM dan kebebasan berpendapat','Terlalu modern','Tidak punya tujuan'],a:1},
+          {q:'Sintesis yang tepat antara Pancasila dan globalisasi adalah...',o:['Menolak globalisasi','Mengikuti globalisasi sepenuhnya','Mengadopsi globalisasi yang sesuai Pancasila','Netral'],a:2},
+          {q:'Peran generasi muda dalam menjaga Pancasila sebagai ideologi terbuka adalah...',o:['Meninggalkan Pancasila','Mengamalkan nilai Pancasila di era digital dengan bijak','Menolak teknologi','Mengikuti tren global tanpa filter'],a:1},
+          {q:'Kasus: Hoaks SARA tersebar di media sosial. Tindakan yang sesuai Pancasila adalah...',o:['Ikut menyebarkan','Memverifikasi dan melaporkan','Membiarkan','Menambah hoaks baru'],a:1},
+          {q:'Kesimpulan tentang Pancasila sebagai ideologi terbuka adalah...',o:['Bersifat statis','Bersifat dinamis namun tetap berpegang nilai dasar','Bersifat bebas tanpa aturan','Bersifat kaku'],a:1}
+        ]
+      }
     },
     {
       id:'bab2', title:'Bab 2: Sistem Pemerintahan Indonesia', short:'Sistem Pemerintahan',
-      content:`
-        <h3>A. Pengertian Sistem Pemerintahan</h3>
-        <p>Sistem pemerintahan adalah cara kerja lembaga-lembaga negara dalam menjalankan kekuasaan untuk mencapai tujuan negara.</p>
-        <h3>B. Sistem Pemerintahan Presidensial</h3>
-        <ul>
-          <li>Presiden sebagai kepala negara dan kepala pemerintahan</li>
-          <li>Presiden tidak bertanggung jawab kepada parlemen</li>
-          <li>Menteri diangkat dan bertanggung jawab kepada presiden</li>
-          <li>Presiden dan parlemen dipilih langsung oleh rakyat</li>
-        </ul>
-        <h3>C. Lembaga Negara Menurut UUD 1945</h3>
-        <ul>
-          <li>MPR (Majelis Permusyawaratan Rakyat)</li>
-          <li>DPR (Dewan Perwakilan Rakyat)</li>
-          <li>DPD (Dewan Perwakilan Daerah)</li>
-          <li>Presiden dan Wakil Presiden</li>
-          <li>MA, MK, dan KY (Kekuasaan Kehakiman)</li>
-          <li>BPK (Badan Pemeriksa Keuangan)</li>
-        </ul>
-        <h3>D. Trias Politika</h3>
-        <p>Kekuasaan negara dibagi menjadi tiga: eksekutif, legislatif, dan yudikatif, agar tidak terjadi pemusatan kekuasaan.</p>
-      `,
-      contoh:`Contoh konkrit: Ketika Presiden Joko Widodo mengeluarkan Peraturan Pemerintah Pengganti Undang-Undang (Perppu), DPR dapat menolak atau menyetujuinya. Ini menunjukkan sistem presidensial dengan checks and balances. Contoh lain: ketika MK membatalkan pasal UU Cipta Kerja, itu menunjukkan fungsi yudikatif mengontrol legislatif.`,
+      content:`<h3>A. Pengertian Sistem Pemerintahan</h3><p>Sistem pemerintahan adalah cara kerja lembaga-lembaga negara dalam menjalankan kekuasaan untuk mencapai tujuan negara.</p><h3>B. Sistem Pemerintahan Presidensial</h3><ul><li>Presiden sebagai kepala negara dan kepala pemerintahan</li><li>Presiden tidak bertanggung jawab kepada parlemen</li><li>Menteri diangkat dan bertanggung jawab kepada presiden</li><li>Presiden dan parlemen dipilih langsung oleh rakyat</li></ul><h3>C. Lembaga Negara Menurut UUD 1945</h3><ul><li>MPR (Majelis Permusyawaratan Rakyat)</li><li>DPR (Dewan Perwakilan Rakyat)</li><li>DPD (Dewan Perwakilan Daerah)</li><li>Presiden dan Wakil Presiden</li><li>MA, MK, dan KY (Kekuasaan Kehakiman)</li><li>BPK (Badan Pemeriksa Keuangan)</li></ul><h3>D. Trias Politika</h3><p>Kekuasaan negara dibagi menjadi tiga: eksekutif, legislatif, dan yudikatif, agar tidak terjadi pemusatan kekuasaan.</p>`,
+      contoh:`Contoh konkrit: Ketika Presiden mengeluarkan Perppu, DPR dapat menolak atau menyetujuinya. Ini menunjukkan checks and balances. Contoh lain: ketika MK membatalkan pasal UU Cipta Kerja, itu menunjukkan fungsi yudikatif mengontrol legislatif.`,
       rangkuman:`• Indonesia menganut sistem pemerintahan presidensial.<br>• Presiden adalah kepala negara sekaligus kepala pemerintahan.<br>• Lembaga negara: MPR, DPR, DPD, Presiden, MA, MK, KY, dan BPK.<br>• Trias politika membagi kekuasaan menjadi eksekutif, legislatif, dan yudikatif.`,
-      refleksi:`Sebagai warga negara, apakah saya sudah memahami peran lembaga negara? Bagaimana saya bisa berpartisipasi aktif dalam sistem pemerintahan Indonesia, misalnya dengan menggunakan hak pilih atau mengawasi kinerja wakil rakyat?`,
-      questions:[
-        {q:'Indonesia menganut sistem pemerintahan...',o:['Parlementer','Presidensial','Liberal','Komunis'],a:1},
-        {q:'Presiden sebagai kepala negara dan kepala pemerintahan merupakan ciri sistem...',o:['Parlementer','Presidensial','Campuran','Federal'],a:1},
-        {q:'Lembaga yang berwenang mengubah UUD adalah...',o:['DPR','MPR','DPD','Presiden'],a:1},
-        {q:'Anggota DPD mewakili...',o:['Partai politik','Daerah provinsi','Kabupaten','Organisasi massa'],a:1},
-        {q:'Lembaga yang menguji undang-undang terhadap UUD adalah...',o:['MA','MK','KY','BPK'],a:1},
-        {q:'Trias politika membagi kekuasaan menjadi...',o:['2','3','4','5'],a:1},
-        {q:'Lembaga yang bertugas memeriksa keuangan negara adalah...',o:['BPK','KY','MA','MPR'],a:0},
-        {q:'Kekuasaan eksekutif dijalankan oleh...',o:['DPR','Presiden','MA','BPK'],a:1},
-        {q:'Menteri diangkat dan bertanggung jawab kepada...',o:['DPR','Presiden','MPR','Rakyat'],a:1},
-        {q:'Sistem pemerintahan parlementer memiliki ciri...',o:['Presiden sebagai kepala pemerintahan','Perdana menteri sebagai kepala pemerintahan','Tidak ada parlemen','Kekuasaan tunggal'],a:1}
-      ]
+      refleksi:`Sebagai warga negara, apakah saya sudah memahami peran lembaga negara? Bagaimana saya bisa berpartisipasi aktif dalam sistem pemerintahan Indonesia?`,
+      levels: {
+        1: [
+          {q:'Indonesia menganut sistem pemerintahan...',o:['Parlementer','Presidensial','Liberal','Komunis'],a:1},
+          {q:'Presiden Indonesia dipilih melalui...',o:['DPR','Pemilu langsung','MPR','Partai'],a:1},
+          {q:'Lembaga yang berwenang mengubah UUD adalah...',o:['DPR','MPR','DPD','Presiden'],a:1},
+          {q:'Trias politika membagi kekuasaan menjadi...',o:['2','3','4','5'],a:1},
+          {q:'Anggota DPD mewakili...',o:['Partai politik','Daerah provinsi','Kabupaten','Organisasi massa'],a:1},
+          {q:'Kekuasaan eksekutif dijalankan oleh...',o:['DPR','Presiden','MA','BPK'],a:1},
+          {q:'Lembaga yang bertugas memeriksa keuangan negara adalah...',o:['BPK','KY','MA','MPR'],a:0},
+          {q:'Masa jabatan presiden Indonesia adalah...',o:['4 tahun','5 tahun','6 tahun','7 tahun'],a:1},
+          {q:'Lembaga yang menguji undang-undang terhadap UUD adalah...',o:['MA','MK','KY','BPK'],a:1},
+          {q:'Menteri diangkat dan bertanggung jawab kepada...',o:['DPR','Presiden','MPR','Rakyat'],a:1}
+        ],
+        2: [
+          {q:'Presiden sebagai kepala negara dan kepala pemerintahan merupakan ciri sistem...',o:['Parlementer','Presidensial','Campuran','Federal'],a:1},
+          {q:'Sistem pemerintahan parlementer memiliki ciri...',o:['Presiden sebagai kepala pemerintahan','Perdana menteri sebagai kepala pemerintahan','Tidak ada parlemen','Kekuasaan tunggal'],a:1},
+          {q:'Anggota MPR terdiri dari...',o:['DPR saja','DPR dan DPD','Presiden dan DPR','DPD saja'],a:1},
+          {q:'Fungsi legislasi dijalankan oleh...',o:['Presiden','DPR','MA','BPK'],a:1},
+          {q:'Lembaga yang berwenang mengadili sengketa hasil pemilu adalah...',o:['MA','MK','KY','DPR'],a:1},
+          {q:'Sistem checks and balances bertujuan untuk...',o:['Memusatkan kekuasaan','Mencegah penyalahgunaan kekuasaan','Mempercepat keputusan','Mengurangi jumlah lembaga'],a:1},
+          {q:'Presiden dapat diberhentikan oleh MPR jika...',o:['Tidak populer','Terbukti melanggar hukum','Berbeda partai','Tidak hadir rapat'],a:1},
+          {q:'Lembaga negara yang bebas dari pengaruh kekuasaan lain adalah...',o:['DPR','Kekuasaan kehakiman','MPR','Presiden'],a:1},
+          {q:'Hak DPR untuk mengajukan RUU disebut hak...',o:['Angket','Interpelasi','Inisiatif','Menyatakan pendapat'],a:2},
+          {q:'Pemilu di Indonesia dilaksanakan oleh...',o:['KPUD','KPU','Bawaslu','DKPP'],a:1}
+        ],
+        3: [
+          {q:'Perbedaan utama sistem presidensial dan parlementer adalah...',o:['Jumlah lembaga negara','Pertanggungjawaban eksekutif','Sistem pemilu','Bahasa hukum'],a:1},
+          {q:'Mengapa Indonesia memilih sistem presidensial? Karena...',o:['Warisan Belanda','Ingin stabilitas pemerintahan dan kepala negara yang kuat','Ikut Amerika','Tidak ada pilihan lain'],a:1},
+          {q:'Kasus: Presiden mengeluarkan Perppu, tetapi DPR menolaknya. Ini mencerminkan...',o:['Konflik','Checks and balances','Kekuasaan presiden absolut','Kelemahan DPR'],a:1},
+          {q:'Fungsi MK dalam sistem pemerintahan Indonesia adalah...',o:['Membuat UU','Menguji UU terhadap UUD','Memeriksa keuangan','Mengadili menteri'],a:1},
+          {q:'Posisi MPR setelah amandemen UUD 1945 adalah...',o:['Lembaga tertinggi','Lembaga tinggi setara lembaga lain','Bagian dari DPR','Tidak ada'],a:1},
+          {q:'Hak angket DPR adalah hak untuk...',o:['Mengajukan RUU','Menyelidiki kebijakan pemerintah','Meminta keterangan presiden','Menyatakan pendapat'],a:1},
+          {q:'Mengapa menteri tidak bertanggung jawab kepada DPR dalam sistem presidensial? Karena...',o:['DPR tidak punya wewenang','Menteri adalah pembantu presiden','DPR tidak tahu','UUD melarang'],a:1},
+          {q:'Contoh penerapan checks and balances adalah...',o:['Presiden membubarkan DPR','DPR mengawasi presiden dan MK menguji UU','MA membuat UU','MPR memilih presiden langsung'],a:1},
+          {q:'Sistem multipartai di Indonesia berpengaruh terhadap...',o:['Stabilitas pemerintahan','Sistem presidensial','Hubungan presiden-DPR','Semua benar'],a:3},
+          {q:'Kewenangan KY adalah...',o:['Mengadili perkara','Mengawasi hakim','Menguji UU','Memeriksa keuangan'],a:1},
+          {q:'Pasal UUD 1945 yang mengatur kedaulatan rakyat adalah...',o:['Pasal 1 Ayat (2)','Pasal 1 Ayat (3)','Pasal 2','Pasal 3'],a:0}
+        ],
+        4: [
+          {q:'Analisis: Jika presiden dan DPR berasal dari partai berbeda, potensi konflik yang muncul adalah...',o:['Tidak ada konflik','Kebuntuan kebijakan (gridlock)','Pemerintahan otomatis runtuh','Presiden mundur'],a:1},
+          {q:'Evaluasi: Kelebihan sistem presidensial dibanding parlementer adalah...',o:['Lebih cepat jatuh','Stabilitas eksekutif lebih terjamin','Kepala negara mudah diganti','Tidak ada oposisi'],a:1},
+          {q:'Kasus: MK membatalkan pasal UU yang dinilai merugikan rakyat. Ini menunjukkan...',o:['MK melampaui wewenang','Fungsi kontrol yudikatif berjalan','DPR lemah','Presiden kalah'],a:1},
+          {q:'Kritik terhadap sistem presidensial di Indonesia adalah...',o:['Terlalu cepat','Rentan dinasti politik dan koalisi gemuk','Tidak demokratis','Tidak ada presiden'],a:1},
+          {q:'Sintesis terbaik antara sistem presidensial dan kebutuhan demokrasi Indonesia adalah...',o:['Menghapus DPR','Memperkuat checks and balances dan transparansi','Mengganti presiden dengan perdana menteri','Menambah lembaga'],a:1},
+          {q:'Jika terjadi impeachment presiden, yang berwenang memutus adalah...',o:['DPR','MK','MPR','MA'],a:2},
+          {q:'Peran DPD dalam sistem ketatanegaraan Indonesia adalah...',o:['Membuat UU','Mewakili daerah dan mengajukan RUU terkait daerah','Mengawasi presiden','Mengadili sengketa'],a:1},
+          {q:'Dampak koalisi gemuk terhadap sistem presidensial adalah...',o:['Oposisi kuat','Kontrol terhadap presiden melemah','Pemerintahan tidak stabil','Pemilu dibatalkan'],a:1},
+          {q:'Rekomendasi untuk memperkuat sistem presidensial Indonesia adalah...',o:['Menghapus pemilu','Memperjelas batas kekuasaan dan memperkuat parlemen','Menggabung semua partai','Membatasi kebebasan pers'],a:1},
+          {q:'Kesimpulan tentang sistem pemerintahan Indonesia adalah...',o:['Sempurna tanpa cela','Menganut presidensial dengan checks and balances','Sama dengan parlementer','Tidak jelas'],a:1}
+        ]
+      }
     },
     {
       id:'bab3', title:'Bab 3: Harmoni dalam Keberagaman', short:'Harmoni Keberagaman',
-      content:`
-        <h3>A. Keberagaman Indonesia</h3>
-        <p>Indonesia adalah negara majemuk dengan keberagaman suku, agama, ras, bahasa, dan budaya. Semboyan <em>Bhinneka Tunggal Ika</em> menjadi perekat persatuan.</p>
-        <h3>B. Faktor Pendorong Harmoni</h3>
-        <ul>
-          <li>Toleransi antarumat beragama</li>
-          <li>Sikap saling menghargai perbedaan</li>
-          <li>Gotong royong dan solidaritas</li>
-          <li>Kesadaran akan persatuan dan kesatuan</li>
-        </ul>
-        <h3>C. Ancaman terhadap Harmoni</h3>
-        <ul>
-          <li>Radikalisme dan ekstremisme</li>
-          <li>SARA (Suku, Agama, Ras, Antargolongan)</li>
-          <li>Primordialisme berlebihan</li>
-          <li>Hoaks dan ujaran kebencian</li>
-        </ul>
-        <h3>D. Upaya Menjaga Harmoni</h3>
-        <p>Dialog antaragama, pendidikan multikultural, penegakan hukum, dan penguatan nilai-nilai Pancasila.</p>
-      `,
-      contoh:`Contoh konkrit: Di Bali, umat Hindu dan Muslim saling membantu saat Nyepi dan Idul Fitri. Di Ambon, setelah konflik 1999, masyarakat membangun kembali kerukunan melalui "Baileo" (rumah adat) sebagai simbol dialog. Di sekolah, siswa dari berbagai suku bergotong royong dalam kegiatan class meeting.`,
+      content:`<h3>A. Keberagaman Indonesia</h3><p>Indonesia adalah negara majemuk dengan keberagaman suku, agama, ras, bahasa, dan budaya. Semboyan <em>Bhinneka Tunggal Ika</em> menjadi perekat persatuan.</p><h3>B. Faktor Pendorong Harmoni</h3><ul><li>Toleransi antarumat beragama</li><li>Sikap saling menghargai perbedaan</li><li>Gotong royong dan solidaritas</li><li>Kesadaran akan persatuan dan kesatuan</li></ul><h3>C. Ancaman terhadap Harmoni</h3><ul><li>Radikalisme dan ekstremisme</li><li>SARA (Suku, Agama, Ras, Antargolongan)</li><li>Primordialisme berlebihan</li><li>Hoaks dan ujaran kebencian</li></ul><h3>D. Upaya Menjaga Harmoni</h3><p>Dialog antaragama, pendidikan multikultural, penegakan hukum, dan penguatan nilai-nilai Pancasila.</p>`,
+      contoh:`Contoh konkrit: Di Bali, umat Hindu dan Muslim saling membantu saat Nyepi dan Idul Fitri. Di Ambon, setelah konflik 1999, masyarakat membangun kembali kerukunan melalui "Baileo" sebagai simbol dialog.`,
       rangkuman:`• Indonesia adalah negara majemuk dengan keberagaman suku, agama, ras, dan budaya.<br>• Bhinneka Tunggal Ika menjadi perekat persatuan.<br>• Faktor pendorong harmoni: toleransi, gotong royong, dan saling menghargai.<br>• Ancaman harmoni: radikalisme, SARA, primordialisme, dan hoaks.<br>• Upaya: dialog, pendidikan multikultural, dan penegakan hukum.`,
-      refleksi:`Apakah saya sudah menjadi bagian dari solusi harmoni di lingkungan saya? Bagaimana saya bersikap ketika bertemu dengan orang yang berbeda keyakinan atau suku? Sudahkah saya menghargai perbedaan sebagai kekayaan, bukan ancaman?`,
-      questions:[
-        {q:'Semboyan yang mempersatukan keberagaman Indonesia adalah...',o:['Bhinneka Tunggal Ika','Tut Wuri Handayani','Rawe-rawe rantas','Ing Ngarso Sung Tulodo'],a:0},
-        {q:'Faktor pendorong harmoni dalam keberagaman adalah...',o:['Primordialisme','Toleransi','Radikalisme','Diskriminasi'],a:1},
-        {q:'SARA merupakan ancaman karena...',o:['Mempererat persatuan','Memicu konflik antarkelompok','Meningkatkan toleransi','Menguatkan persaudaraan'],a:1},
-        {q:'Pendidikan multikultural bertujuan untuk...',o:['Menyeragamkan budaya','Menumbuhkan sikap menghargai perbedaan','Menghapus budaya lokal','Memisahkan suku'],a:1},
-        {q:'Sikap primordialisme yang berlebihan dapat menyebabkan...',o:['Persatuan','Etnosentrisme','Toleransi','Kerukunan'],a:1},
-        {q:'Gotong royong merupakan wujud nilai Pancasila sila ke...',o:['1','2','3','4'],a:2},
-        {q:'Upaya menjaga harmoni antaragama dapat dilakukan dengan...',o:['Dialog antaragama','Menjauhi pemeluk agama lain','Memaksakan keyakinan','Mengucilkan minoritas'],a:0},
-        {q:'Ujaran kebencian di media sosial dapat memicu...',o:['Persatuan','Konflik sosial','Kemajuan','Kerukunan'],a:1},
-        {q:'Keberagaman Indonesia merupakan...',o:['Ancaman','Kekayaan bangsa','Kelemahan','Beban'],a:1},
-        {q:'Sikap yang harus dihindari dalam keberagaman adalah...',o:['Toleransi','Diskriminasi','Menghargai','Menghormati'],a:1}
-      ]
+      refleksi:`Apakah saya sudah menjadi bagian dari solusi harmoni di lingkungan saya? Bagaimana saya bersikap ketika bertemu dengan orang yang berbeda keyakinan atau suku?`,
+      levels: {
+        1: [
+          {q:'Semboyan yang mempersatukan keberagaman Indonesia adalah...',o:['Bhinneka Tunggal Ika','Tut Wuri Handayani','Rawe-rawe rantas','Ing Ngarso Sung Tulodo'],a:0},
+          {q:'Jumlah suku bangsa di Indonesia lebih dari...',o:['100','300','1.300','3.000'],a:2},
+          {q:'Kitab yang memuat semboyan Bhinneka Tunggal Ika adalah...',o:['Negarakertagama','Sutasoma','Ramayana','Mahabharata'],a:1},
+          {q:'Sikap menghargai perbedaan disebut...',o:['Egoisme','Toleransi','Primordialisme','Diskriminasi'],a:1},
+          {q:'Gotong royong merupakan wujud nilai Pancasila sila ke...',o:['1','2','3','4'],a:2},
+          {q:'Agama yang diakui resmi di Indonesia berjumlah...',o:['4','5','6','7'],a:2},
+          {q:'Lagu daerah merupakan contoh keberagaman di bidang...',o:['Politik','Budaya','Ekonomi','Hukum'],a:1},
+          {q:'Bahasa Indonesia berfungsi sebagai bahasa...',o:['Asing','Persatuan','Daerah','Resmi daerah'],a:1},
+          {q:'Sikap yang harus dihindari dalam keberagaman adalah...',o:['Toleransi','Diskriminasi','Menghargai','Menghormati'],a:1},
+          {q:'Keberagaman Indonesia merupakan...',o:['Ancaman','Kekayaan bangsa','Kelemahan','Beban'],a:1}
+        ],
+        2: [
+          {q:'Faktor pendorong harmoni dalam keberagaman adalah...',o:['Primordialisme','Toleransi','Radikalisme','Diskriminasi'],a:1},
+          {q:'SARA merupakan ancaman karena...',o:['Mempererat persatuan','Memicu konflik antarkelompok','Meningkatkan toleransi','Menguatkan persaudaraan'],a:1},
+          {q:'Pendidikan multikultural bertujuan untuk...',o:['Menyeragamkan budaya','Menumbuhkan sikap menghargai perbedaan','Menghapus budaya lokal','Memisahkan suku'],a:1},
+          {q:'Sikap primordialisme yang berlebihan dapat menyebabkan...',o:['Persatuan','Etnosentrisme','Toleransi','Kerukunan'],a:1},
+          {q:'Upaya menjaga harmoni antaragama dapat dilakukan dengan...',o:['Dialog antaragama','Menjauhi pemeluk agama lain','Memaksakan keyakinan','Mengucilkan minoritas'],a:0},
+          {q:'Ujaran kebencian di media sosial dapat memicu...',o:['Persatuan','Konflik sosial','Kemajuan','Kerukunan'],a:1},
+          {q:'Rasa senasib sepenanggungan menjadi perekat karena...',o:['Memisahkan suku','Mempersatukan dalam perbedaan','Membuat konflik','Menghilangkan budaya'],a:1},
+          {q:'Radikalisme mengancam harmoni karena...',o:['Menghargai perbedaan','Menganggap keyakinan sendiri paling benar','Mempersatukan','Membuka dialog'],a:1},
+          {q:'Toleransi beragama di Indonesia dicontohkan oleh...',o:['Saling membantu saat hari raya berbeda','Menutup tempat ibadah lain','Melarang keyakinan lain','Memaksa konversi'],a:0},
+          {q:'Pancasila sebagai perekat harmoni berfungsi karena...',o:['Memihak satu agama','Mengakomodasi keberagaman','Menyeragamkan budaya','Melarang perbedaan'],a:1}
+        ],
+        3: [
+          {q:'Contoh gotong royong yang mencerminkan harmoni keberagaman adalah...',o:['Kerja bakti hanya satu suku','Kerja bakti lintas agama dan suku','Menolak tetangga berbeda agama','Mengucilkan minoritas'],a:1},
+          {q:'Kasus konflik Poso dan Ambon mengajarkan bahwa...',o:['Konflik tidak bisa selesai','Dialog dan rekonsiliasi bisa memulihkan harmoni','Perlu kekerasan','Perbedaan harus dihapus'],a:1},
+          {q:'Mengapa hoaks SARA berbahaya bagi harmoni? Karena...',o:['Membuat masyarakat cerdas','Memanipulasi informasi untuk memecah belah','Meningkatkan literasi','Mengedukasi'],a:1},
+          {q:'Peran tokoh agama dalam harmoni adalah...',o:['Memperkeruh','Menjadi mediator dan penyejuk','Memihak satu golongan','Menghasut'],a:1},
+          {q:'Sikap etnosentrisme dapat menghambat harmoni karena...',o:['Menghargai semua budaya','Menganggap budaya sendiri paling unggul','Membuka dialog','Mempelajari budaya lain'],a:1},
+          {q:'Pendidikan toleransi paling efektif dimulai dari...',o:['Perguruan tinggi','Keluarga dan sekolah','Pemerintah','Media sosial'],a:1},
+          {q:'Kearifan lokal yang mendukung harmoni di Bali adalah...',o:['Ngaben','Tri Hita Karana','Omed-omedan','Mepandes'],a:1},
+          {q:'Cara mencegah radikalisme di sekolah adalah...',o:['Menutup akses informasi','Menanamkan nilai Pancasila dan kritis terhadap informasi','Melarang semua diskusi','Menghindari keberagaman'],a:1},
+          {q:'Makna Bhinneka Tunggal Ika dalam konteks modern adalah...',o:['Menyeragamkan semua budaya','Berbeda-beda tapi tetap satu dalam NKRI','Menghapus perbedaan','Memisahkan suku'],a:1},
+          {q:'Peran media sosial dalam harmoni keberagaman adalah...',o:['Selalu positif','Bisa memperkuat atau memecah harmoni tergantung penggunaannya','Tidak berpengaruh','Selalu negatif'],a:1}
+        ],
+        4: [
+          {q:'Analisis: Sebuah video viral menyudutkan satu agama di media sosial. Tindakan tepat adalah...',o:['Ikut menyebarkan','Memverifikasi, tidak menyebarkan, dan melaporkan','Membuat video tandingan','Membiarkan'],a:1},
+          {q:'Evaluasi: Apakah toleransi berarti menerima semua ajaran agama lain?',o:['Ya, semua ajaran sama','Tidak, toleransi berarti menghargai tanpa mencampuradukkan keyakinan','Ya, tidak ada bedanya','Tidak, harus memaksa'],a:1},
+          {q:'Kasus: Seorang siswa minoritas dikucilkan di kelas. Solusi terbaik adalah...',o:['Membiarkan','Melibatkan dalam aktivitas kelas dan menumbuhkan empati','Memindahkan siswa','Mengeluarkannya'],a:1},
+          {q:'Sintesis: Bagaimana membangun harmoni di tengah keberagaman digital?',o:['Menutup media sosial','Literasi digital + nilai Pancasila + dialog','Melarang perbedaan','Mengikuti tren'],a:1},
+          {q:'Kritik terhadap pendekatan "Indonesia diseragamkan" adalah...',o:['Tidak ada kritik','Bertentangan dengan Bhinneka Tunggal Ika dan HAM','Sudah diterapkan','Tidak relevan'],a:1},
+          {q:'Peran generasi muda dalam menjaga harmoni adalah...',o:['Acuh tak acuh','Menjadi agen perdamaian dan literasi digital','Mengikuti provokasi','Membuat hoaks'],a:1},
+          {q:'Contoh tindakan yang mencerminkan intoleransi adalah...',o:['Membantu korban bencana lintas agama','Melarang orang lain beribadah','Menghadiri undangan teman beda agama','Berteman dengan siapa saja'],a:1},
+          {q:'Kesimpulan tentang harmoni keberagaman Indonesia adalah...',o:['Tidak mungkin dicapai','Bisa dicapai dengan toleransi, dialog, dan penguatan Pancasila','Butuh kekerasan','Tidak perlu diperjuangkan'],a:1},
+          {q:'Rekomendasi untuk mencegah konflik SARA adalah...',o:['Memisahkan suku','Penegakan hukum + pendidikan multikultural + literasi digital','Membatasi kebebasan','Menutup dialog'],a:1},
+          {q:'Refleksi: Nilai utama yang paling dibutuhkan untuk harmoni adalah...',o:['Keseragaman','Toleransi dan saling menghormati','Kekuasaan','Materi'],a:1}
+        ]
+      }
     },
     {
       id:'bab4', title:'Bab 4: Kasus-Kasus Pelanggaran Hak dan Pengingkaran Kewajiban', short:'Hak & Kewajiban',
-      content:`
-        <h3>A. Hak Asasi Manusia (HAM)</h3>
-        <p>HAM adalah hak dasar yang melekat pada diri manusia sejak lahir. Di Indonesia, HAM dijamin dalam UUD 1945 Pasal 28A-28J.</p>
-        <h3>B. Kewajiban Warga Negara</h3>
-        <ul>
-          <li>Menaati hukum dan pemerintahan</li>
-          <li>Membayar pajak</li>
-          <li>Membela negara</li>
-          <li>Menghormati hak orang lain</li>
-        </ul>
-        <h3>C. Kasus Pelanggaran HAM di Indonesia</h3>
-        <p>Contoh: kasus Trisakti, Semanggi, pelanggaran HAM berat masa lalu, bullying, dan KDRT.</p>
-        <h3>D. Upaya Penegakan HAM</h3>
-        <p>Melalui Komnas HAM, pengadilan HAM, serta pendidikan HAM sejak dini.</p>
-      `,
-      contoh:`Contoh konkrit: Kasus bullying di sekolah adalah pelanggaran HAM ringan terhadap hak anak untuk merasa aman. Contoh lainnya: seorang pekerja yang tidak dibayar upahnya melanggar hak asasi di bidang ekonomi. Kasus KDRT melanggar hak hidup dan rasa aman yang dijamin UUD 1945 Pasal 28A.`,
+      content:`<h3>A. Hak Asasi Manusia (HAM)</h3><p>HAM adalah hak dasar yang melekat pada diri manusia sejak lahir. Di Indonesia, HAM dijamin dalam UUD 1945 Pasal 28A-28J.</p><h3>B. Kewajiban Warga Negara</h3><ul><li>Menaati hukum dan pemerintahan</li><li>Membayar pajak</li><li>Membela negara</li><li>Menghormati hak orang lain</li></ul><h3>C. Kasus Pelanggaran HAM di Indonesia</h3><p>Contoh: kasus Trisakti, Semanggi, pelanggaran HAM berat masa lalu, bullying, dan KDRT.</p><h3>D. Upaya Penegakan HAM</h3><p>Melalui Komnas HAM, pengadilan HAM, serta pendidikan HAM sejak dini.</p>`,
+      contoh:`Contoh konkrit: Kasus bullying di sekolah adalah pelanggaran HAM ringan terhadap hak anak untuk merasa aman. Contoh lainnya: seorang pekerja yang tidak dibayar upahnya melanggar hak asasi di bidang ekonomi.`,
       rangkuman:`• HAM adalah hak dasar yang melekat sejak lahir dan dijamin UUD 1945 Pasal 28A-28J.<br>• Kewajiban warga negara: menaati hukum, membayar pajak, membela negara, menghormati hak orang lain.<br>• Kasus pelanggaran HAM: Trisakti, Semanggi, bullying, dan KDRT.<br>• Upaya penegakan HAM: Komnas HAM, pengadilan HAM, dan pendidikan HAM.`,
-      refleksi:`Apakah saya sudah melaksanakan kewajiban saya sebagai siswa dan warga negara? Ketika melihat pelanggaran HAM di sekitar saya, apakah saya berani melapor atau membantu korban? Bagaimana saya bisa menjadi pelopor penegakan HAM di lingkungan saya?`,
-      questions:[
-        {q:'HAM adalah hak yang melekat pada manusia sejak...',o:['Sekolah','Lahir','Dewasa','Menikah'],a:1},
-        {q:'Jaminan HAM dalam UUD 1945 terdapat pada pasal...',o:['28A-28J','1-3','30','33'],a:0},
-        {q:'Berikut yang merupakan kewajiban warga negara adalah...',o:['Mendapat pendidikan','Membayar pajak','Mendapat pekerjaan','Mendapat perlindungan'],a:1},
-        {q:'Lembaga yang menangani HAM di Indonesia adalah...',o:['Komnas HAM','KPK','BPK','KY'],a:0},
-        {q:'Contoh pelanggaran HAM ringan adalah...',o:['Genosida','Bullying','Kejahatan perang','Pembersihan etnis'],a:1},
-        {q:'KDRT merupakan pelanggaran HAM karena...',o:['Melanggar hak asasi','Melindungi korban','Menegakkan hukum','Mendidik'],a:0},
-        {q:'Pengadilan HAM di Indonesia dibentuk berdasarkan...',o:['UU No. 26 Tahun 2000','UUD 1945','UU No. 39 Tahun 1999','Tap MPR'],a:0},
-        {q:'Membela negara merupakan kewajiban yang diatur dalam UUD 1945 pasal...',o:['27','30','31','33'],a:1},
-        {q:'Pendidikan HAM penting untuk...',o:['Mencegah pelanggaran HAM','Meningkatkan pelanggaran','Membatasi hak','Mengurangi kesadaran'],a:0},
-        {q:'Hak dan kewajiban warga negara harus dilaksanakan secara...',o:['Terpisah','Seimbang','Satu arah','Bebas'],a:1}
-      ]
+      refleksi:`Apakah saya sudah melaksanakan kewajiban saya sebagai siswa dan warga negara? Apakah saya sudah menghormati hak orang lain?`,
+      levels: {
+        1: [
+          {q:'HAM adalah hak yang melekat pada manusia sejak...',o:['Sekolah','Lahir','Dewasa','Menikah'],a:1},
+          {q:'Jaminan HAM dalam UUD 1945 terdapat pada pasal...',o:['28A-28J','1-3','30','33'],a:0},
+          {q:'Lembaga yang menangani HAM di Indonesia adalah...',o:['Komnas HAM','KPK','BPK','KY'],a:0},
+          {q:'Berikut yang merupakan kewajiban warga negara adalah...',o:['Mendapat pendidikan','Membayar pajak','Mendapat pekerjaan','Mendapat perlindungan'],a:1},
+          {q:'HAM singkatan dari...',o:['Hak Asasi Manusia','Hukum Adat Manusia','Hak Asasi Masyarakat','Hukum Asasi Manusia'],a:0},
+          {q:'KDRT merupakan pelanggaran HAM karena...',o:['Melanggar hak asasi','Melindungi korban','Menegakkan hukum','Mendidik'],a:0},
+          {q:'Contoh pelanggaran HAM ringan adalah...',o:['Genosida','Bullying','Kejahatan perang','Pembersihan etnis'],a:1},
+          {q:'Membela negara merupakan kewajiban yang diatur dalam UUD 1945 pasal...',o:['27','30','31','33'],a:1},
+          {q:'UU yang mengatur tentang HAM di Indonesia adalah...',o:['UU No. 39 Tahun 1999','UU No. 22 Tahun 2009','UU No. 8 Tahun 1981','UU No. 20 Tahun 2003'],a:0},
+          {q:'Hak memperoleh pendidikan dijamin dalam UUD 1945 pasal...',o:['31','30','28','33'],a:0}
+        ],
+        2: [
+          {q:'Hak dan kewajiban warga negara harus dilaksanakan secara...',o:['Terpisah','Seimbang','Satu arah','Bebas'],a:1},
+          {q:'Kasus penunggakan pajak merugikan...',o:['Pribadi','Negara dan masyarakat','Perusahaan','Pejabat'],a:1},
+          {q:'Pendidikan HAM penting untuk...',o:['Mencegah pelanggaran HAM','Meningkatkan pelanggaran','Membatasi hak','Mengurangi kesadaran'],a:0},
+          {q:'Contoh hak warga negara di bidang politik adalah...',o:['Membayar pajak','Memilih dalam pemilu','Menjaga kebersihan','Membela negara'],a:1},
+          {q:'Sanksi bagi pelanggar hukum lalu lintas diatur dalam...',o:['UU No. 22 Tahun 2009','UU No. 39 Tahun 1999','UU No. 26 Tahun 2000','UU No. 20 Tahun 2003'],a:0},
+          {q:'Hak atas pekerjaan dan penghidupan yang layak dijamin pasal...',o:['27 Ayat 2','30 Ayat 1','31 Ayat 1','33 Ayat 1'],a:0},
+          {q:'Pengadilan HAM di Indonesia dibentuk berdasarkan...',o:['UU No. 26 Tahun 2000','UUD 1945','UU No. 39 Tahun 1999','Tap MPR'],a:0},
+          {q:'Contoh pengingkaran kewajiban warga negara adalah...',o:['Membayar pajak','Merusak fasilitas umum','Mengikuti wajib belajar','Menghormati hak orang lain'],a:1},
+          {q:'Sikap yang harus dikembangkan untuk mencegah pelanggaran hak adalah...',o:['Toleransi','Egoisme','Individualisme','Diskriminasi'],a:0},
+          {q:'Contoh pelanggaran hak pendidikan adalah...',o:['Anak putus sekolah','Anak rajin belajar','Anak mengikuti ujian','Anak membaca buku'],a:0}
+        ],
+        3: [
+          {q:'Kasus bullying di sekolah melanggar hak...',o:['Hak hidup','Hak rasa aman','Hak milik','Hak berdagang'],a:1},
+          {q:'Mengapa hak dan kewajiban harus seimbang? Karena...',o:['Agar tidak ada tuntutan berlebihan','Supaya bebas','Agar negara kuat','Agar rakyat patuh'],a:0},
+          {q:'Kasus Trisakti 1998 merupakan contoh pelanggaran HAM di bidang...',o:['Ekonomi','Hak hidup','Pendidikan','Budaya'],a:1},
+          {q:'Peran Komnas HAM adalah...',o:['Menghukum pelanggar','Menyelidiki dan memantau pelanggaran HAM','Membuat UU','Mengadili perkara'],a:1},
+          {q:'Kasus KDRT sering tidak terungkap karena...',o:['Tidak ada korban','Korban takut melapor dan budaya patriarki','Pelaku dihukum','Media meliput'],a:1},
+          {q:'Contoh hak asasi di bidang ekonomi adalah...',o:['Hak memilih','Hak mendapat upah layak','Hak beribadah','Hak berserikat'],a:1},
+          {q:'Mengapa pendidikan HAM harus dimulai sejak dini? Karena...',o:['Anak mudah bosan','Menanamkan kesadaran sejak awal sehingga dewasa sudah terbiasa menghargai hak','Hanya formalitas','Tidak penting'],a:1},
+          {q:'Pelanggaran HAM berat di Indonesia diadili di...',o:['Pengadilan negeri','Pengadilan HAM','Pengadilan agama','Pengadilan adat'],a:1},
+          {q:'Upaya preventif mencegah pelanggaran HAM adalah...',o:['Penindakan setelah terjadi','Pendidikan, sosialisasi, dan penegakan hukum','Pembiaran','Kekerasan'],a:1},
+          {q:'Mengapa hak dan kewajiban diibaratkan dua sisi mata uang? Karena...',o:['Tidak berhubungan','Selalu berpasangan dan tidak bisa dipisahkan','Sama-sama logam','Keduanya mahal'],a:1}
+        ],
+        4: [
+          {q:'Analisis: Seorang siswa membully teman secara online. Tindakan tepat adalah...',o:['Ikut menyebarkan','Melaporkan ke guru dan mendukung korban','Membiarkan','Menertawakan'],a:1},
+          {q:'Evaluasi: Apakah hak kebebasan berpendapat boleh dilakukan tanpa batas?',o:['Ya, bebas mutlak','Tidak, harus bertanggung jawab dan tidak melanggar hak orang lain','Ya, jika lewat medsos','Tidak, dilarang total'],a:1},
+          {q:'Kasus: Perusahaan membuang limbah ke sungai. Ini melanggar hak warga atas...',o:['Pendidikan','Lingkungan yang sehat','Pekerjaan','Politik'],a:1},
+          {q:'Sintesis terbaik antara hak dan kewajiban warga negara adalah...',o:['Menuntut hak tanpa kewajiban','Melaksanakan kewajiban dulu baru menuntut hak','Hanya kewajiban','Hanya hak'],a:1},
+          {q:'Kritik terhadap penegakan HAM di Indonesia adalah...',o:['Sudah sempurna','Masih ada ketimpangan dan lambatnya penanganan kasus','Tidak pernah terjadi','Terlalu cepat'],a:1},
+          {q:'Peran generasi muda dalam penegakan HAM adalah...',o:['Acuh tak acuh','Menjadi pelopor kesadaran HAM dan anti-kekerasan','Melanggar HAM','Membiarkan'],a:1},
+          {q:'Contoh kasus pelanggaran HAM ringan di sekolah adalah...',o:['Bullying','Gotong royong','Kerja kelompok','Ujian'],a:0},
+          {q:'Kesimpulan tentang hak dan kewajiban warga negara adalah...',o:['Hanya hak yang penting','Harus dilaksanakan seimbang untuk kehidupan harmonis','Hanya kewajiban','Tidak penting'],a:1},
+          {q:'Rekomendasi agar penegakan HAM lebih efektif adalah...',o:['Memperkuat lembaga HAM, pendidikan, dan penegakan hukum','Membubarkan Komnas HAM','Menghapus UU HAM','Membatasi kebebasan'],a:0},
+          {q:'Nilai utama dalam penegakan HAM adalah...',o:['Kekuasaan','Keadilan dan penghormatan martabat manusia','Materi','Ketenaran'],a:1}
+        ]
+      }
     }
   ],
   2: [
     {
       id:'bab5', title:'Bab 5: Peran Indonesia dalam Hubungan Internasional', short:'Hubungan Internasional',
-      content:`
-        <h3>A. Politik Luar Negeri Indonesia</h3>
-        <p>Politik luar negeri Indonesia bersifat bebas aktif, artinya tidak memihak blok mana pun dan aktif menjaga perdamaian dunia.</p>
-        <h3>B. Peran Indonesia di ASEAN</h3>
-        <p>Indonesia merupakan salah satu pendiri ASEAN dan berperan aktif dalam berbagai kerja sama ekonomi, politik, dan sosial budaya.</p>
-        <h3>C. Peran Indonesia di PBB</h3>
-        <ul>
-          <li>Anggota tidak tetap Dewan Keamanan PBB</li>
-          <li>Pengirim pasukan perdamaian (Kontingen Garuda)</li>
-          <li>Pendukung Deklarasi Hak Asasi Manusia</li>
-        </ul>
-        <h3>D. Kerja Sama Internasional</h3>
-        <p>Indonesia terlibat dalam G20, APEC, OKI, dan berbagai organisasi internasional lainnya.</p>
-      `,
-      contoh:`Contoh konkrit: Indonesia mengirim Kontingen Garuda ke Lebanon (UNIFIL) dan Kongo (MONUSCO) sebagai pasukan perdamaian PBB. Indonesia juga menjadi tuan rumah KTT G20 di Bali tahun 2022 yang menghasilkan deklarasi bersama pemulihan ekonomi global.`,
+      content:`<h3>A. Politik Luar Negeri Indonesia</h3><p>Politik luar negeri Indonesia bersifat bebas aktif, artinya tidak memihak blok mana pun dan aktif menjaga perdamaian dunia.</p><h3>B. Peran Indonesia di ASEAN</h3><p>Indonesia merupakan salah satu pendiri ASEAN dan berperan aktif dalam berbagai kerja sama ekonomi, politik, dan sosial budaya.</p><h3>C. Peran Indonesia di PBB</h3><ul><li>Anggota tidak tetap Dewan Keamanan PBB</li><li>Pengirim pasukan perdamaian (Kontingen Garuda)</li><li>Pendukung Deklarasi Hak Asasi Manusia</li></ul><h3>D. Kerja Sama Internasional</h3><p>Indonesia terlibat dalam G20, APEC, OKI, dan berbagai organisasi internasional lainnya.</p>`,
+      contoh:`Contoh konkrit: Indonesia mengirim Kontingen Garuda ke Lebanon (UNIFIL) dan Kongo (MONUSCO) sebagai pasukan perdamaian PBB. Indonesia juga menjadi tuan rumah KTT G20 di Bali tahun 2022.`,
       rangkuman:`• Politik luar negeri Indonesia bersifat bebas aktif.<br>• Indonesia adalah salah satu pendiri ASEAN (8 Agustus 1967).<br>• Peran Indonesia di PBB: anggota tidak tetap DK PBB dan pengirim Kontingen Garuda.<br>• Indonesia aktif di G20, APEC, dan OKI.`,
-      refleksi:`Bagaimana saya bisa berperan sebagai duta bangsa di lingkungan saya? Apakah saya bangga dengan peran Indonesia di dunia internasional? Bagaimana saya memanfaatkan media sosial untuk memperkenalkan budaya Indonesia ke dunia?`,
-      questions:[
-        {q:'Politik luar negeri Indonesia bersifat...',o:['Bebas aktif','Bebas pasif','Netral pasif','Terikat'],a:0},
-        {q:'Indonesia merupakan salah satu pendiri organisasi...',o:['ASEAN','NATO','Uni Eropa','OPEC'],a:0},
-        {q:'Kontingen Garuda adalah pasukan Indonesia untuk...',o:['Perang','Misi perdamaian PBB','Latihan militer','Pertahanan dalam negeri'],a:1},
-        {q:'Sifat bebas aktif dalam politik luar negeri berarti...',o:['Tidak memihak blok manapun','Ikut blok Barat','Ikut blok Timur','Netral total'],a:0},
-        {q:'Indonesia pernah menjadi anggota tidak tetap Dewan Keamanan PBB sebanyak...',o:['1 kali','3 kali','5 kali','Belum pernah'],a:1},
-        {q:'G20 adalah forum kerja sama di bidang...',o:['Ekonomi','Militer','Olahraga','Budaya'],a:0},
-        {q:'Tujuan politik luar negeri Indonesia adalah...',o:['Menjajah negara lain','Mewujudkan perdamaian dunia','Memperluas wilayah','Mendominasi kawasan'],a:1},
-        {q:'ASEAN didirikan pada tanggal...',o:['8 Agustus 1967','17 Agustus 1945','1 Juni 1945','10 November 1945'],a:0},
-        {q:'Indonesia bergabung dalam OKI karena...',o:['Negara Islam','Solidaritas negara Muslim','Kepentingan ekonomi','Tekanan negara lain'],a:1},
-        {q:'Manfaat kerja sama internasional bagi Indonesia adalah...',o:['Isolasi','Kemajuan pembangunan','Konflik','Ketergantungan'],a:1}
-      ]
+      refleksi:`Bagaimana saya bisa berperan sebagai duta bangsa di lingkungan saya? Apakah saya bangga dengan peran Indonesia di dunia internasional?`,
+      levels: {
+        1: [
+          {q:'Politik luar negeri Indonesia bersifat...',o:['Bebas aktif','Bebas pasif','Netral pasif','Terikat'],a:0},
+          {q:'Indonesia merupakan salah satu pendiri organisasi...',o:['ASEAN','NATO','Uni Eropa','OPEC'],a:0},
+          {q:'ASEAN didirikan pada tanggal...',o:['8 Agustus 1967','17 Agustus 1945','1 Juni 1945','10 November 1945'],a:0},
+          {q:'Pasukan perdamaian Indonesia dikenal dengan sebutan...',o:['Kontingen Garuda','Kontingen Rajawali','Kontingen Elang','Kontingen Merpati'],a:0},
+          {q:'Konferensi Asia Afrika diselenggarakan di...',o:['Bandung','Jakarta','Yogyakarta','Surabaya'],a:0},
+          {q:'Politik luar negeri bebas aktif tertuang dalam...',o:['Pembukaan UUD 1945 alinea ke-4','Pasal 1 UUD 1945','Pasal 27 UUD 1945','Tap MPR'],a:0},
+          {q:'G20 adalah forum kerja sama di bidang...',o:['Ekonomi','Militer','Olahraga','Budaya'],a:0},
+          {q:'Indonesia bergabung dalam OKI karena solidaritas...',o:['Negara Muslim','Negara Asia','Negara berkembang','Negara maju'],a:0},
+          {q:'Konferensi Asia Afrika terjadi pada tahun...',o:['1955','1945','1965','1967'],a:0},
+          {q:'PBB singkatan dari...',o:['Perserikatan Bangsa-Bangsa','Perhimpunan Bangsa-Bangsa','Persekutuan Bangsa Barat','Perkumpulan Bangsa-Bangsa'],a:0}
+        ],
+        2: [
+          {q:'Sifat bebas aktif dalam politik luar negeri berarti...',o:['Tidak memihak blok manapun','Ikut blok Barat','Ikut blok Timur','Netral total'],a:0},
+          {q:'Indonesia pernah menjadi anggota tidak tetap Dewan Keamanan PBB sebanyak...',o:['1 kali','3 kali','5 kali','Belum pernah'],a:1},
+          {q:'Tujuan politik luar negeri Indonesia adalah...',o:['Menjajah negara lain','Mewujudkan perdamaian dunia','Memperluas wilayah','Mendominasi kawasan'],a:1},
+          {q:'Kontingen Garuda adalah pasukan Indonesia untuk...',o:['Perang','Misi perdamaian PBB','Latihan militer','Pertahanan dalam negeri'],a:1},
+          {q:'Manfaat kerja sama internasional bagi Indonesia adalah...',o:['Isolasi','Kemajuan pembangunan','Konflik','Ketergantungan'],a:1},
+          {q:'Indonesia pernah menjadi mediator perdamaian di negara...',o:['Filipina','Vietnam','Korea','Jepang'],a:0},
+          {q:'GNB (Gerakan Non-Blok) berdiri pada tahun...',o:['1961','1955','1945','1970'],a:0},
+          {q:'APEC adalah forum kerja sama negara di kawasan...',o:['Asia Pasifik','Eropa','Afrika','Amerika Latin'],a:0},
+          {q:'Negara-negara pendiri ASEAN adalah Indonesia, Malaysia, Filipina, Singapura, dan...',o:['Thailand','Vietnam','Kamboja','Laos'],a:0},
+          {q:'Indonesia menjadi tuan rumah KTT G20 pada tahun...',o:['2022','2020','2021','2023'],a:0}
+        ],
+        3: [
+          {q:'Mengapa Indonesia menganut politik luar negeri bebas aktif? Karena...',o:['Ikut tekanan negara besar','Ingin berperan aktif dalam perdamaian tanpa terikat blok','Tidak punya pilihan','Ingin isolasi'],a:1},
+          {q:'Kontribusi Indonesia dalam ASEAN antara lain...',o:['Menjadi pendiri dan penggagas komunitas ASEAN','Mendominasi','Menarik diri','Tidak berkontribusi'],a:0},
+          {q:'Peran Indonesia dalam penyelesaian konflik Kamboja adalah...',o:['Ikut berperang','Menjadi mediator perdamaian','Membiarkan','Mendukung pihak tertentu'],a:1},
+          {q:'Kontingen Garuda mencerminkan komitmen Indonesia pada...',o:['Perang','Perdamaian dunia','Dominasi','Militerisasi'],a:1},
+          {q:'Indonesia di G20 berperan untuk...',o:['Kepentingan satu negara','Mewakili negara berkembang dan pemulihan ekonomi global','Mendominasi','Menolak kerja sama'],a:1},
+          {q:'Politik luar negeri bebas aktif diwujudkan Indonesia melalui...',o:['Bergabung NATO','Tidak memihak blok dan aktif perdamaian','Ikut perang','Isolasi'],a:1},
+          {q:'Peran Indonesia di OKI adalah...',o:['Menjadi pendiri','Anggota aktif yang memperjuangkan solidaritas Muslim dan perdamaian','Menarik diri','Menolak'],a:1},
+          {q:'Konferensi Asia Afrika 1955 menghasilkan...',o:['Dasasila Bandung','Piagam PBB','Deklarasi ASEAN','Perjanjian Paris'],a:0},
+          {q:'Mengapa Indonesia aktif dalam misi perdamaian PBB? Karena...',o:['Kewajiban PBB','Mewujudkan cita-cita kemerdekaan untuk perdamaian dunia','Ingin pamer','Tekanan negara lain'],a:1},
+          {q:'Sikap Indonesia terhadap konflik internasional adalah...',o:['Memihak satu pihak','Mendorong penyelesaian damai','Memperkeruh','Ikut perang'],a:1}
+        ],
+        4: [
+          {q:'Analisis: Jika Indonesia terlibat sengketa wilayah dengan negara lain, sikap yang tepat sesuai politik bebas aktif adalah...',o:['Perang terbuka','Diplomasi dan penyelesaian damai','Mengalah total','Mengajak sekutu berperang'],a:1},
+          {q:'Evaluasi: Apakah politik bebas aktif masih relevan di era globalisasi?',o:['Tidak relevan','Relevan dengan penyesuaian tantangan global','Perlu diganti','Tidak jelas'],a:1},
+          {q:'Kasus: Indonesia diminta memilih salah satu blok besar dunia. Sikap yang tepat adalah...',o:['Memilih satu blok','Menolak terikat blok dan tetap aktif perdamaian','Ikut tekanan','Isolasi'],a:1},
+          {q:'Sintesis peran Indonesia dalam perdamaian dunia adalah...',o:['Pasif','Aktif melalui mediasi, misi perdamaian, dan kerja sama multilateral','Hanya formalitas','Tidak ada peran'],a:1},
+          {q:'Kritik terhadap peran Indonesia di dunia internasional adalah...',o:['Terlalu aktif','Perlu lebih optimal dan konsisten di berbagai forum','Tidak ada kritik','Sudah sempurna'],a:1},
+          {q:'Peran generasi muda dalam mendukung politik luar negeri Indonesia adalah...',o:['Acuh tak acuh','Menjadi duta budaya dan memperkenalkan Indonesia ke dunia','Menolak globalisasi','Membenci negara lain'],a:1},
+          {q:'Indonesia sebagai anggota tidak tetap DK PBB memiliki peran...',o:['Veto','Ikut memutuskan resolusi perdamaian','Tidak ada peran','Mengawasi pemilu'],a:1},
+          {q:'Kesimpulan tentang politik luar negeri Indonesia adalah...',o:['Mengikuti blok besar','Bebas aktif dan berperan nyata dalam perdamaian dunia','Isolasi','Netral total'],a:1},
+          {q:'Rekomendasi untuk memperkuat peran Indonesia di dunia adalah...',o:['Isolasi','Diplomasi aktif + kerja sama multilateral + penguatan SDM','Konfrontasi','Militerisasi'],a:1},
+          {q:'Nilai utama yang diperjuangkan Indonesia dalam hubungan internasional adalah...',o:['Dominasi','Perdamaian dan keadilan dunia','Kekuasaan','Materi'],a:1}
+        ]
+      }
     },
     {
       id:'bab6', title:'Bab 6: Ancaman terhadap Negara dalam Bingkai Bhinneka Tunggal Ika', short:'Ancaman Negara',
-      content:`
-        <h3>A. Jenis Ancaman</h3>
-        <ul>
-          <li>Ancaman militer: agresi, spionase, sabotase, terorisme bersenjata</li>
-          <li>Ancaman non-militer: ideologi, politik, ekonomi, sosial budaya, teknologi</li>
-        </ul>
-        <h3>B. Ancaman Ideologi</h3>
-        <p>Ancaman ideologi berupa masuknya paham yang bertentangan dengan Pancasila seperti komunisme, liberalisme ekstrem, dan radikalisme.</p>
-        <h3>C. Ancaman Sosial Budaya</h3>
-        <p>Globalisasi membawa ancaman lunturnya budaya lokal, individualisme, dan pergaulan bebas.</p>
-        <h3>D. Strategi Menghadapi Ancaman</h3>
-        <p>Pertahanan keamanan, penguatan ideologi Pancasila, dan bela negara oleh seluruh warga.</p>
-      `,
-      contoh:`Contoh konkrit: Serangan siber ke situs pemerintah adalah ancaman non-militer di bidang teknologi. Hoaks di media sosial tentang isu SARA adalah ancaman ideologi dan sosial budaya. Penyelundupan narkoba adalah ancaman non-militer yang merusak generasi muda.`,
+      content:`<h3>A. Jenis Ancaman</h3><ul><li>Ancaman militer: agresi, spionase, sabotase, terorisme bersenjata</li><li>Ancaman non-militer: ideologi, politik, ekonomi, sosial budaya, teknologi</li></ul><h3>B. Ancaman Ideologi</h3><p>Ancaman ideologi berupa masuknya paham yang bertentangan dengan Pancasila seperti komunisme, liberalisme ekstrem, dan radikalisme.</p><h3>C. Ancaman Sosial Budaya</h3><p>Globalisasi membawa ancaman lunturnya budaya lokal, individualisme, dan pergaulan bebas.</p><h3>D. Strategi Menghadapi Ancaman</h3><p>Pertahanan keamanan, penguatan ideologi Pancasila, dan bela negara oleh seluruh warga.</p>`,
+      contoh:`Contoh konkrit: Serangan siber ke situs pemerintah adalah ancaman non-militer di bidang teknologi. Hoaks di media sosial tentang isu SARA adalah ancaman ideologi dan sosial budaya.`,
       rangkuman:`• Ancaman dibagi dua: militer dan non-militer.<br>• Ancaman militer: agresi, spionase, sabotase, terorisme.<br>• Ancaman non-militer: ideologi, politik, ekonomi, sosial budaya, teknologi.<br>• Strategi: pertahanan keamanan, penguatan Pancasila, dan bela negara.`,
-      refleksi:`Apakah saya sudah waspada terhadap ancaman hoaks dan radikalisme di media sosial? Bagaimana saya bisa berkontribusi dalam menjaga keutuhan NKRI? Sudahkah saya memahami bahwa bela negara bukan hanya tugas TNI, tetapi seluruh warga?`,
-      questions:[
-        {q:'Ancaman militer terhadap negara contohnya adalah...',o:['Spionase','Hoaks','Individualisme','Globalisasi'],a:0},
-        {q:'Ancaman non-militer di bidang ideologi adalah...',o:['Agresi','Radikalisme','Spionase','Sabotase'],a:1},
-        {q:'Terorisme merupakan ancaman...',o:['Militer','Non-militer','Sosial','Budaya'],a:0},
-        {q:'Globalisasi dapat mengancam budaya lokal berupa...',o:['Pelestarian budaya','Lunturnya budaya lokal','Penguatan tradisi','Kemajuan budaya'],a:1},
-        {q:'Sikap individualisme bertentangan dengan nilai...',o:['Gotong royong','Egoisme','Materialisme','Liberalisme'],a:0},
-        {q:'Bela negara merupakan kewajiban...',o:['TNI saja','Polri saja','Seluruh warga negara','Pejabat'],a:2},
-        {q:'Ancaman terhadap ideologi Pancasila dapat dicegah dengan...',o:['Penguatan pendidikan Pancasila','Membiarkan','Menolak Pancasila','Mengikuti paham asing'],a:0},
-        {q:'Pergaulan bebas merupakan ancaman di bidang...',o:['Politik','Sosial budaya','Ekonomi','Militer'],a:1},
-        {q:'Sistem pertahanan keamanan negara Indonesia bersifat...',o:['Sentralistik','Semesta','Parsial','Tertutup'],a:1},
-        {q:'Bhinneka Tunggal Ika menjadi perekat dalam menghadapi...',o:['Ancaman perpecahan','Kemajuan','Kerja sama','Pembangunan'],a:0}
-      ]
+      refleksi:`Apakah saya sudah waspada terhadap ancaman hoaks dan radikalisme di media sosial? Bagaimana saya bisa berkontribusi menjaga keutuhan NKRI?`,
+      levels: {
+        1: [
+          {q:'Ancaman militer terhadap negara contohnya adalah...',o:['Spionase','Hoaks','Individualisme','Globalisasi'],a:0},
+          {q:'Ancaman non-militer di bidang ideologi adalah...',o:['Agresi','Radikalisme','Spionase','Sabotase'],a:1},
+          {q:'Terorisme merupakan ancaman...',o:['Militer','Non-militer','Sosial','Budaya'],a:0},
+          {q:'Bela negara merupakan kewajiban...',o:['TNI saja','Polri saja','Seluruh warga negara','Pejabat'],a:2},
+          {q:'Sistem pertahanan keamanan negara Indonesia bersifat...',o:['Sentralistik','Semesta','Parsial','Tertutup'],a:1},
+          {q:'Bhinneka Tunggal Ika menjadi perekat dalam menghadapi...',o:['Ancaman perpecahan','Kemajuan','Kerja sama','Pembangunan'],a:0},
+          {q:'TNI singkatan dari...',o:['Tentara Nasional Indonesia','Tentara Negara Indonesia','Tentara Nasional Internasional','Tentara Negara Internasional'],a:0},
+          {q:'Ancaman terhadap ideologi Pancasila dapat dicegah dengan...',o:['Penguatan pendidikan Pancasila','Membiarkan','Menolak Pancasila','Mengikuti paham asing'],a:0},
+          {q:'Globalisasi dapat mengancam budaya lokal berupa...',o:['Pelestarian budaya','Lunturnya budaya lokal','Penguatan tradisi','Kemajuan budaya'],a:1},
+          {q:'Pergaulan bebas merupakan ancaman di bidang...',o:['Politik','Sosial budaya','Ekonomi','Militer'],a:1}
+        ],
+        2: [
+          {q:'Sikap individualisme bertentangan dengan nilai...',o:['Gotong royong','Egoisme','Materialisme','Liberalisme'],a:0},
+          {q:'Ancaman siber termasuk ancaman di bidang...',o:['Militer','Teknologi','Politik','Budaya'],a:1},
+          {q:'Hoaks SARA di media sosial merupakan ancaman...',o:['Militer','Ideologi dan sosial budaya','Ekonomi','Politik luar negeri'],a:1},
+          {q:'Penanggulangan terorisme di Indonesia dilakukan oleh...',o:['Densus 88','Satpol PP','BPK','KPK'],a:0},
+          {q:'Kerja sama internasional penting untuk menghadapi ancaman...',o:['Global','Lokal','Tradisional','Sederhana'],a:0},
+          {q:'Radikalisme mengancam persatuan karena...',o:['Menghargai perbedaan','Menganggap pahamnya paling benar','Membuka dialog','Mengedukasi'],a:1},
+          {q:'Bela negara diatur dalam UUD 1945 pasal...',o:['27 Ayat 3','30 Ayat 1','A dan B benar','Tidak ada'],a:2},
+          {q:'Contoh ancaman non-militer di bidang ekonomi adalah...',o:['Perang','Penyelundupan narkoba','Agresi','Spionase'],a:1},
+          {q:'Wujud bela negara bagi pelajar adalah...',o:['Belajar tekun dan taat hukum','Membawa senjata','Berperang','Membuat onar'],a:0},
+          {q:'Ancaman terhadap NKRI harus dihadapi dengan...',o:['Kekerasan','Semangat persatuan dan bela negara','Apatis','Membiarkan'],a:1}
+        ],
+        3: [
+          {q:'Mengapa ancaman non-militer lebih berbahaya dari militer? Karena...',o:['Lebih mudah dihadapi','Tidak terlihat dan menyusup ke semua bidang kehidupan','Tidak berbahaya','Hanya di media'],a:1},
+          {q:'Kasus: Seorang siswa terpapar paham radikal di internet. Solusi terbaik adalah...',o:['Membiarkan','Membimbing dan memberikan literasi digital + nilai Pancasila','Mengucilkan','Menghukum'],a:1},
+          {q:'Peran media sosial dalam memperkuat NKRI adalah...',o:['Selalu negatif','Bisa menjadi alat memperkuat persatuan jika digunakan bijak','Tidak berpengaruh','Selalu positif'],a:1},
+          {q:'Strategi utama menghadapi ancaman ideologi adalah...',o:['Menutup akses','Penguatan nilai Pancasila dan pendidikan','Melarang diskusi','Kekerasan'],a:1},
+          {q:'Contoh cyber crime yang mengancam NKRI adalah...',o:['Pembelajaran online','Serangan siber ke situs pemerintah','Belanja online','Video call'],a:1},
+          {q:'Sishankamrata berarti...',o:['Sistem pertahanan militer saja','Sistem pertahanan keamanan rakyat semesta','Sistem keamanan internasional','Sistem pertahanan politik'],a:1},
+          {q:'Peran TNI dan Polri dalam menghadapi ancaman adalah...',o:['Hanya menjaga perdamaian','Sebagai garda terdepan pertahanan dan keamanan','Tidak ada peran','Hanya formalitas'],a:1},
+          {q:'Kearifan lokal membantu menghadapi ancaman sosial budaya karena...',o:['Melestarikan identitas bangsa','Memisahkan suku','Menolak kemajuan','Membatasi pergaulan'],a:0},
+          {q:'Mengapa hoaks sangat berbahaya bagi NKRI? Karena...',o:['Membuat masyarakat pintar','Memecah belah persatuan dan memicu konflik','Mengedukasi','Menghibur'],a:1},
+          {q:'Sikap yang tepat terhadap budaya asing adalah...',o:['Menerima semua','Selektif sesuai nilai Pancasila','Menolak semua','Acuh tak acuh'],a:1}
+        ],
+        4: [
+          {q:'Analisis: Sebuah grup media sosial menyebarkan hoaks SARA. Tindakan tepat adalah...',o:['Ikut menyebarkan','Verifikasi, laporkan, dan edukasi','Membiarkan','Membuat hoaks baru'],a:1},
+          {q:'Evaluasi: Apakah bela negara hanya tugas TNI?',o:['Ya, hanya TNI','Tidak, seluruh warga negara termasuk pelajar','Hanya saat perang','Hanya pejabat'],a:1},
+          {q:'Kasus: Seorang warga negara mengikuti paham yang bertentangan dengan Pancasila. Solusi terbaik adalah...',o:['Dikucilkan','Pendekatan persuasif + pendidikan Pancasila','Dipenjara seumur hidup','Dibiarkan'],a:1},
+          {q:'Sintesis terbaik menghadapi ancaman era digital adalah...',o:['Menutup internet','Literasi digital + penguatan Pancasila + kerja sama','Melarang medsos','Mengikuti tren asing'],a:1},
+          {q:'Kritik terhadap penanganan ancaman di Indonesia adalah...',o:['Sudah sempurna','Masih perlu koordinasi antar lembaga dan kesadaran masyarakat','Tidak ada','Terlalu berlebihan'],a:1},
+          {q:'Peran generasi muda dalam menghadapi ancaman NKRI adalah...',o:['Acuh tak acuh','Menjadi agen literasi digital dan pengamal Pancasila','Mengikuti provokasi','Membuat hoaks'],a:1},
+          {q:'Contoh ancaman ideologi yang nyata di Indonesia adalah...',o:['Radikalisme dan komunisme','Gotong royong','Pendidikan','Pemilu'],a:0},
+          {q:'Kesimpulan tentang ancaman terhadap NKRI adalah...',o:['Tidak perlu diwaspadai','Harus diwaspadai dan dihadapi bersama dengan semangat persatuan','Hanya tugas TNI','Tidak ada ancaman'],a:1},
+          {q:'Rekomendasi agar NKRI kuat menghadapi ancaman adalah...',o:['Isolasi','Penguatan ideologi, ekonomi, dan persatuan + kerja sama','Kekerasan','Diskriminasi'],a:1},
+          {q:'Nilai utama dalam menghadapi ancaman adalah...',o:['Kekuatan militer saja','Persatuan, kewaspadaan, dan pengamalan Pancasila','Kekayaan','Kekuasaan'],a:1}
+        ]
+      }
     },
     {
       id:'bab7', title:'Bab 7: Integrasi Nasional', short:'Integrasi Nasional',
-      content:`
-        <h3>A. Pengertian Integrasi Nasional</h3>
-        <p>Integrasi nasional adalah proses penyatuan berbagai kelompok sosial budaya dalam satu kesatuan wilayah dan identitas nasional.</p>
-        <h3>B. Faktor Pendorong Integrasi</h3>
-        <ul>
-          <li>Rasa senasib sepenanggungan</li>
-          <li>Bahasa Indonesia sebagai bahasa persatuan</li>
-          <li>Semboyan Bhinneka Tunggal Ika</li>
-          <li>Pancasila sebagai dasar negara</li>
-        </ul>
-        <h3>C. Faktor Penghambat Integrasi</h3>
-        <ul>
-          <li>Primordialisme berlebihan</li>
-          <li>Ketidakmerataan pembangunan</li>
-          <li>Konflik antaretnis</li>
-          <li>Lemahnya penegakan hukum</li>
-        </ul>
-        <h3>D. Upaya Membangun Integrasi</h3>
-        <p>Pemerataan pembangunan, dialog antarkelompok, pendidikan multikultural, dan penguatan nasionalisme.</p>
-      `,
-      contoh:`Contoh konkrit: Program dana desa adalah upaya pemerataan pembangunan untuk memperkuat integrasi nasional. Sumpah Pemuda 1928 menjadi tonggak integrasi melalui bahasa persatuan. Festival budaya seperti "Pekan Kebudayaan Nasional" mempererat persatuan melalui keberagaman.`,
+      content:`<h3>A. Pengertian Integrasi Nasional</h3><p>Integrasi nasional adalah proses penyatuan berbagai kelompok sosial budaya dalam satu kesatuan wilayah dan identitas nasional.</p><h3>B. Faktor Pendorong Integrasi</h3><ul><li>Rasa senasib sepenanggungan</li><li>Bahasa Indonesia sebagai bahasa persatuan</li><li>Semboyan Bhinneka Tunggal Ika</li><li>Pancasila sebagai dasar negara</li></ul><h3>C. Faktor Penghambat Integrasi</h3><ul><li>Primordialisme berlebihan</li><li>Ketidakmerataan pembangunan</li><li>Konflik antaretnis</li><li>Lemahnya penegakan hukum</li></ul><h3>D. Upaya Membangun Integrasi</h3><p>Pemerataan pembangunan, dialog antarkelompok, pendidikan multikultural, dan penguatan nasionalisme.</p>`,
+      contoh:`Contoh konkrit: Program dana desa adalah upaya pemerataan pembangunan untuk memperkuat integrasi nasional. Sumpah Pemuda 1928 menjadi tonggak integrasi melalui bahasa persatuan.`,
       rangkuman:`• Integrasi nasional adalah penyatuan berbagai kelompok dalam satu identitas bangsa.<br>• Faktor pendorong: senasib sepenanggungan, bahasa persatuan, Bhinneka Tunggal Ika, Pancasila.<br>• Faktor penghambat: primordialisme, ketidakmerataan, konflik, lemahnya hukum.<br>• Upaya: pemerataan, dialog, pendidikan multikultural, dan nasionalisme.`,
-      refleksi:`Bagaimana saya bisa berkontribusi dalam menjaga integrasi nasional? Apakah saya sudah menggunakan Bahasa Indonesia dengan baik sebagai bahasa persatuan? Sudahkah saya menghargai keberagaman sebagai bagian dari identitas bangsa?`,
-      questions:[
-        {q:'Integrasi nasional adalah proses...',o:['Pemisahan kelompok','Penyatuan berbagai kelompok','Penyeragaman budaya','Pembatasan wilayah'],a:1},
-        {q:'Bahasa Indonesia berfungsi sebagai...',o:['Bahasa daerah','Bahasa persatuan','Bahasa asing','Bahasa resmi daerah'],a:1},
-        {q:'Faktor pendorong integrasi nasional adalah...',o:['Primordialisme','Rasa senasib sepenanggungan','Konflik','Diskriminasi'],a:1},
-        {q:'Primordialisme berlebihan dapat menghambat integrasi karena...',o:['Mempererat persatuan','Mengutamakan kelompok sendiri','Meningkatkan toleransi','Memperkuat nasionalisme'],a:1},
-        {q:'Upaya membangun integrasi nasional dapat dilakukan dengan...',o:['Pemerataan pembangunan','Membatasi komunikasi','Menutup diri','Mengisolasi daerah'],a:0},
-        {q:'Pancasila sebagai dasar negara berfungsi untuk...',o:['Memecah belah','Mempersatukan bangsa','Membatasi hak','Menghambat kemajuan'],a:1},
-        {q:'Konflik antaretnis merupakan faktor...',o:['Pendorong integrasi','Penghambat integrasi','Pemersatu','Penguat persatuan'],a:1},
-        {q:'Nasionalisme adalah sikap...',o:['Cinta tanah air','Membenci negara lain','Individualisme','Egoisme'],a:0},
-        {q:'Pendidikan multikultural penting untuk...',o:['Menyeragamkan budaya','Menghargai keberagaman','Memisahkan suku','Menolak perbedaan'],a:1},
-        {q:'Tujuan utama integrasi nasional adalah...',o:['Perpecahan','Persatuan dan kesatuan bangsa','Dominasi satu kelompok','Konflik'],a:1}
-      ]
+      refleksi:`Bagaimana saya bisa berkontribusi dalam menjaga integrasi nasional? Apakah saya sudah menggunakan Bahasa Indonesia dengan baik sebagai bahasa persatuan?`,
+      levels: {
+        1: [
+          {q:'Integrasi nasional adalah proses...',o:['Pemisahan kelompok','Penyatuan berbagai kelompok','Penyeragaman budaya','Pembatasan wilayah'],a:1},
+          {q:'Bahasa Indonesia berfungsi sebagai...',o:['Bahasa daerah','Bahasa persatuan','Bahasa asing','Bahasa resmi daerah'],a:1},
+          {q:'Faktor pendorong integrasi nasional adalah...',o:['Primordialisme','Rasa senasib sepenanggungan','Konflik','Diskriminasi'],a:1},
+          {q:'Pancasila sebagai dasar negara berfungsi untuk...',o:['Memecah belah','Mempersatukan bangsa','Membatasi hak','Menghambat kemajuan'],a:1},
+          {q:'Sumpah Pemuda terjadi pada tahun...',o:['1928','1945','1908','1965'],a:0},
+          {q:'Konflik antaretnis merupakan faktor...',o:['Pendorong integrasi','Penghambat integrasi','Pemersatu','Penguat persatuan'],a:1},
+          {q:'Nasionalisme adalah sikap...',o:['Cinta tanah air','Membenci negara lain','Individualisme','Egoisme'],a:0},
+          {q:'Pendidikan multikultural penting untuk...',o:['Menyeragamkan budaya','Menghargai keberagaman','Memisahkan suku','Menolak perbedaan'],a:1},
+          {q:'Tujuan utama integrasi nasional adalah...',o:['Perpecahan','Persatuan dan kesatuan bangsa','Dominasi satu kelompok','Konflik'],a:1},
+          {q:'Bhinneka Tunggal Ika artinya...',o:['Berbeda-beda tetapi tetap satu','Bersatu kita kuat','Satu untuk semua','Bersama kita bisa'],a:0}
+        ],
+        2: [
+          {q:'Primordialisme berlebihan dapat menghambat integrasi karena...',o:['Mempererat persatuan','Mengutamakan kelompok sendiri','Meningkatkan toleransi','Memperkuat nasionalisme'],a:1},
+          {q:'Upaya membangun integrasi nasional dapat dilakukan dengan...',o:['Pemerataan pembangunan','Membatasi komunikasi','Menutup diri','Mengisolasi daerah'],a:0},
+          {q:'Contoh faktor penghambat integrasi adalah...',o:['Toleransi','Ketidakmerataan pembangunan','Gotong royong','Dialog'],a:1},
+          {q:'Semboyan Bhinneka Tunggal Ika tercantum dalam...',o:['Pita Garuda Pancasila','Pembukaan UUD','Pasal 1','Tap MPR'],a:0},
+          {q:'Gotong royong mendukung integrasi karena...',o:['Memisahkan warga','Menyatukan dalam kerja sama','Menimbulkan konflik','Membatasi interaksi'],a:1},
+          {q:'Contoh program pemerataan pembangunan adalah...',o:['Dana Desa','Kartu Kredit','Kartu ATM','Pajak'],a:0},
+          {q:'Dialog antarkelompok penting untuk...',o:['Memperkeruh konflik','Membangun saling pengertian','Memisahkan kelompok','Menambah konflik'],a:1},
+          {q:'Konflik antaretnis bisa dicegah dengan...',o:['Diskriminasi','Toleransi dan dialog','Primordialisme','Provokasi'],a:1},
+          {q:'Nasionalisme di era globalisasi diwujudkan dengan...',o:['Menolak semua budaya asing','Mencintai produk dalam negeri dan berprestasi','Isolasi','Membenci negara lain'],a:1},
+          {q:'Peran media dalam integrasi nasional adalah...',o:['Selalu negatif','Menyebarkan informasi positif yang mempererat persatuan','Memecah belah','Tidak berpengaruh'],a:1}
+        ],
+        3: [
+          {q:'Kasus: Ketidakmerataan pembangunan antara Jawa dan Papua memicu ketegangan. Solusi terbaik adalah...',o:['Membiarkan','Pemerataan pembangunan dan dialog','Memisahkan wilayah','Menindas'],a:1},
+          {q:'Mengapa primordialisme berlebihan berbahaya bagi integrasi? Karena...',o:['Menguatkan persatuan','Mengutamakan kelompok sendiri di atas kepentingan bangsa','Meningkatkan toleransi','Membangun dialog'],a:1},
+          {q:'Peran Pancasila dalam integrasi nasional adalah...',o:['Memecah belah','Menjadi perekat dan pedoman bersama','Membatasi hak','Menghambat'],a:1},
+          {q:'Contoh gerakan separatisme di Indonesia adalah...',o:['GAM di Aceh','Sumpah Pemuda','Trisakti','Reformasi'],a:0},
+          {q:'Penyelesaian konflik Aceh dilakukan melalui...',o:['Perang','Perjanjian damai Helsinki 2005','Kekerasan','Isolasi'],a:1},
+          {q:'Upaya preventif konflik antaretnis adalah...',o:['Provokasi','Pendidikan multikultural dan dialog','Diskriminasi','Primordialisme'],a:1},
+          {q:'Bahasa Indonesia berperan penting dalam integrasi karena...',o:['Bahasa asing','Menjadi alat komunikasi lintas suku','Bahasa daerah','Bahasa resmi daerah'],a:1},
+          {q:'Generasi muda berperan dalam integrasi melalui...',o:['Acuh tak acuh','Menghargai keberagaman dan menggunakan bahasa Indonesia yang baik','Membenci perbedaan','Membuat konflik'],a:1},
+          {q:'Nasionalisme yang tepat di era global adalah...',o:['Chauvinisme','Cinta tanah air sambil menghargai negara lain','Menolak globalisasi','Isolasi'],a:1},
+          {q:'Contoh kegiatan yang memperkuat integrasi adalah...',o:['Tawuran','Festival budaya nasional','Diskriminasi','Konflik'],a:1}
+        ],
+        4: [
+          {q:'Analisis: Sebuah kelompok menyebarkan ujaran kebencian antaretnis. Tindakan tepat adalah...',o:['Ikut menyebarkan','Laporkan dan edukasi masyarakat','Membiarkan','Memperkeruh'],a:1},
+          {q:'Evaluasi: Apakah keberagaman budaya menghambat integrasi?',o:['Ya, selalu','Tidak, jika dikelola dengan baik keberagaman menjadi kekuatan','Ya, harus dihapus','Tidak jelas'],a:1},
+          {q:'Kasus: Ketimpangan ekonomi antar daerah memicu konflik. Solusi strategis adalah...',o:['Membiarkan','Pemerataan pembangunan berkelanjutan + dialog','Memisahkan daerah','Menindas'],a:1},
+          {q:'Sintesis peran Pancasila dalam integrasi era digital adalah...',o:['Tidak relevan','Menjadi pedoman dalam interaksi digital yang menghargai keberagaman','Perlu diganti','Hanya formalitas'],a:1},
+          {q:'Kritik terhadap pembangunan Indonesia selama ini adalah...',o:['Sudah merata','Masih ada ketimpangan antar wilayah','Tidak ada','Terlalu cepat'],a:1},
+          {q:'Peran media sosial dalam integrasi nasional adalah...',o:['Selalu memecah','Bisa memperkuat jika digunakan bijak, memecah jika tidak','Tidak berpengaruh','Selalu positif'],a:1},
+          {q:'Contoh ancaman integrasi di era digital adalah...',o:['Gotong royong','Hoaks dan ujaran kebencian','Festival budaya','Pendidikan'],a:1},
+          {q:'Kesimpulan tentang integrasi nasional adalah...',o:['Tidak mungkin dicapai','Bisa dicapai dengan pemerataan, dialog, dan penguatan Pancasila','Perlu kekerasan','Tidak perlu diperjuangkan'],a:1},
+          {q:'Rekomendasi untuk memperkuat integrasi adalah...',o:['Isolasi','Pemerataan + pendidikan multikultural + dialog + nasionalisme','Kekerasan','Diskriminasi'],a:1},
+          {q:'Nilai utama yang dibutuhkan untuk integrasi nasional adalah...',o:['Kekuasaan','Persatuan dalam keberagaman','Materi','Dominasi'],a:1}
+        ]
+      }
     }
   ]
 };
 
 /* =========================================================
-   STATE & STORAGE - MULTI USER
+   STATE
    ========================================================= */
-const STORAGE_KEY = 'pkn11_gamifikasi_v1';
+const STORAGE_KEY = 'pkn11_gamifikasi_v3';
 const ALL_CLASSES = ['XI MIPA 1','XI MIPA 2','XI MIPA 3','XI MIPA 4','XI MIPA 5'];
 
 let state = {
@@ -1441,6 +1744,7 @@ let state = {
   session: null,
   currentBab: null,
   currentSemester: 1,
+  currentQuizLevel: 1,
   quizIndex: 0,
   quizCorrect: 0,
   quizAnswered: false,
@@ -1448,7 +1752,8 @@ let state = {
   authRole: 'guru',
   selectedKelasForLogin: '',
   tempRegLogo: '',
-  tempRegTeacherPhoto: ''
+  tempRegTeacherPhoto: '',
+  rekapTab: 'nilai'
 };
 
 function loadState() {
@@ -1463,27 +1768,16 @@ function loadState() {
 function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      teachers: state.teachers,
-      students: state.students,
-      classData: state.classData,
-      session: state.session
+      teachers: state.teachers, students: state.students,
+      classData: state.classData, session: state.session
     }));
   } catch(e) { console.warn('Save error:', e); alert('Gagal menyimpan! Data mungkin terlalu besar.'); }
 }
 
-function generateId() {
-  return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
-}
-
-function getClassKey(teacherId, kelas) {
-  return teacherId + '|' + kelas;
-}
-
+function generateId() { return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2,9); }
+function getClassKey(teacherId, kelas) { return teacherId + '|' + kelas; }
 function createEmptyClassData() {
-  return {
-    xp: 0, badges: [], readBabs: {}, completed: {},
-    quizHistory: [], students: [], pancasilaProgress: 0
-  };
+  return { xp:0, badges:[], readBabs:{}, completed:{}, quizHistory:[], students:[], pancasilaProgress:0 };
 }
 
 function getActiveClassData() {
@@ -1505,14 +1799,36 @@ function getCurrentTeacher() {
   if (state.session.role === 'siswa') return state.teachers.find(t => t.id === state.session.teacherId);
   return null;
 }
-
 function getCurrentStudent() {
   if (!state.session || state.session.role !== 'siswa') return null;
   return state.students.find(s => s.id === state.session.userId);
 }
 
 /* =========================================================
-   UPDATE HEADER & SIDEBAR
+   HELPER: Hitung statistik per level per bab
+   ========================================================= */
+function getLevelStats(babId, studentName, studentNisn, cd) {
+  // Return: { levelId: { attempts, passed, bestScore } }
+  const stats = {};
+  QUIZ_LEVELS.forEach(lv => {
+    const hist = cd.quizHistory.filter(h =>
+      h.babId === babId &&
+      h.studentName === studentName &&
+      h.studentNisn === studentNisn &&
+      h.level === lv.id
+    );
+    stats[lv.id] = {
+      attempts: hist.length,
+      passed: hist.some(h => h.score === h.total),
+      bestScore: hist.length > 0 ? Math.max(...hist.map(h => h.score)) : 0,
+      bestTotal: hist.length > 0 ? hist[0].total : 10
+    };
+  });
+  return stats;
+}
+
+/* =========================================================
+   UPDATE HEADER
    ========================================================= */
 function updateHeader() {
   const cd = getActiveClassData();
@@ -1523,61 +1839,78 @@ function updateHeader() {
   document.getElementById('badgeDisplay').textContent = '🏅 ' + (cd.badges.length || 0);
 
   const headerLogo = document.getElementById('headerLogo');
-  if (teacher && teacher.sekolah && teacher.sekolah.logo) {
-    headerLogo.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
-  } else {
-    headerLogo.innerHTML = `<span class="placeholder">🏫</span>`;
-  }
+  if (teacher && teacher.sekolah && teacher.sekolah.logo) headerLogo.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
+  else headerLogo.innerHTML = `<span class="placeholder">🏫</span>`;
 
   document.getElementById('headerSchoolName').textContent = (teacher && teacher.sekolah) ? teacher.sekolah.nama : '-';
 
   const headerPhoto = document.getElementById('headerTeacherPhoto');
-  if (state.session && state.session.role === 'guru' && teacher && teacher.foto) {
-    headerPhoto.innerHTML = `<img src="${teacher.foto}" alt="Guru">`;
-  } else if (state.session && state.session.role === 'siswa' && student && student.foto) {
-    headerPhoto.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
-  } else {
-    headerPhoto.innerHTML = `<span class="placeholder">${state.session && state.session.role === 'siswa' ? '👨‍🎓' : '👨‍🏫'}</span>`;
-  }
+  if (state.session && state.session.role === 'guru' && teacher && teacher.foto) headerPhoto.innerHTML = `<img src="${teacher.foto}" alt="Guru">`;
+  else if (state.session && state.session.role === 'siswa' && student && student.foto) headerPhoto.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
+  else headerPhoto.innerHTML = `<span class="placeholder">${state.session && state.session.role === 'siswa' ? '👨‍🎓' : '👨‍🏫'}</span>`;
 
   if (state.session) {
-    let infoText = '';
-    let classText = '-';
-    if (state.session.role === 'guru' && teacher) {
-      infoText = '👨‍🏫 ' + teacher.nama;
-      classText = state.session.kelas || '-';
-    } else if (state.session.role === 'siswa' && student) {
-      infoText = '👨‍🎓 ' + student.nama;
-      classText = student.kelas || '-';
-    }
+    let infoText = '', classText = '-';
+    if (state.session.role === 'guru' && teacher) { infoText = '👨‍🏫 ' + teacher.nama; classText = state.session.kelas || '-'; }
+    else if (state.session.role === 'siswa' && student) { infoText = '👨‍🎓 ' + student.nama; classText = student.kelas || '-'; }
     document.getElementById('headerTeacher').textContent = infoText;
     document.getElementById('headerClassBadge').textContent = classText;
 
     document.getElementById('sidebarTitle').textContent = state.session.role === 'guru' ? '📋 Panel Guru' : '📋 Panel Siswa';
-    const sName = document.getElementById('sidebarTeacherName');
-    const sClass = document.getElementById('sidebarTeacherClass');
-    const sCount = document.getElementById('sidebarStudentCount');
-    if (state.session.role === 'guru') sName.textContent = teacher.nama;
-    else sName.textContent = student.nama;
-    sClass.textContent = state.session.kelas || '-';
-    sCount.textContent = (cd.students || []).length + ' siswa';
+    document.getElementById('sidebarTeacherName').textContent = state.session.role === 'guru' ? teacher.nama : student.nama;
+    document.getElementById('sidebarTeacherClass').textContent = state.session.kelas || '-';
+    document.getElementById('sidebarStudentCount').textContent = (cd.students || []).length + ' siswa';
 
     const sidebarLogo = document.getElementById('sidebarLogo');
-    if (teacher && teacher.sekolah && teacher.sekolah.logo) {
-      sidebarLogo.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
-    } else {
-      sidebarLogo.innerHTML = `<span class="placeholder">🏫</span>`;
-    }
+    if (teacher && teacher.sekolah && teacher.sekolah.logo) sidebarLogo.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
+    else sidebarLogo.innerHTML = `<span class="placeholder">🏫</span>`;
     document.getElementById('sidebarSchoolName').textContent = (teacher && teacher.sekolah) ? teacher.sekolah.nama : '-';
 
     const sidebarPhoto = document.getElementById('sidebarTeacherPhoto');
-    if (state.session.role === 'guru' && teacher && teacher.foto) {
-      sidebarPhoto.innerHTML = `<img src="${teacher.foto}" alt="Guru">`;
-    } else if (state.session.role === 'siswa' && student && student.foto) {
-      sidebarPhoto.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
-    } else {
-      sidebarPhoto.innerHTML = `<span class="placeholder">${state.session.role === 'siswa' ? '👨‍🎓' : '👨‍🏫'}</span>`;
+    if (state.session.role === 'guru' && teacher && teacher.foto) sidebarPhoto.innerHTML = `<img src="${teacher.foto}" alt="Guru">`;
+    else if (state.session.role === 'siswa' && student && student.foto) sidebarPhoto.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
+    else sidebarPhoto.innerHTML = `<span class="placeholder">${state.session.role === 'siswa' ? '👨‍🎓' : '👨‍🏫'}</span>`;
+
+    // Welcome cards
+    const wl = document.getElementById('welcomeLogo');
+    if (wl) {
+      if (teacher && teacher.sekolah && teacher.sekolah.logo) wl.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
+      else wl.innerHTML = `<span class="placeholder">🏫</span>`;
     }
+    const ws = document.getElementById('welcomeSchool');
+    if (ws) ws.textContent = (teacher && teacher.sekolah) ? teacher.sekolah.nama : '-';
+    const wtp = document.getElementById('welcomeTeacherPhoto');
+    if (wtp) {
+      if (teacher && teacher.foto) wtp.innerHTML = `<img src="${teacher.foto}" alt="Guru">`;
+      else wtp.innerHTML = `<span class="placeholder">👨‍🏫</span>`;
+    }
+    const wtn = document.getElementById('welcomeTeacherName');
+    if (wtn) wtn.textContent = teacher ? teacher.nama : '-';
+
+    const acn = document.getElementById('activeClassName');
+    if (acn) acn.textContent = state.session.kelas || '-';
+    const acm = document.getElementById('activeClassMeta');
+    if (acm) acm.textContent = (cd.students || []).length + ' siswa • ' + (cd.quizHistory || []).length + ' percobaan kuis';
+
+    const wls = document.getElementById('welcomeLogoSiswa');
+    if (wls) {
+      if (teacher && teacher.sekolah && teacher.sekolah.logo) wls.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
+      else wls.innerHTML = `<span class="placeholder">🏫</span>`;
+    }
+    const wss = document.getElementById('welcomeSchoolSiswa');
+    if (wss) wss.textContent = (teacher && teacher.sekolah) ? teacher.sekolah.nama : '-';
+    const wsp = document.getElementById('welcomeStudentPhoto');
+    if (wsp) {
+      if (student && student.foto) wsp.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
+      else wsp.innerHTML = `<span class="placeholder">👨‍🎓</span>`;
+    }
+    const wsn = document.getElementById('welcomeStudentName');
+    if (wsn) wsn.textContent = student ? student.nama : '-';
+
+    const scn = document.getElementById('siswaClassName');
+    if (scn) scn.textContent = student ? student.kelas : '-';
+    const scm = document.getElementById('siswaClassMeta');
+    if (scm) scm.textContent = 'Guru: ' + (teacher ? teacher.nama : '-') + ' • ' + (cd.students || []).length + ' siswa di kelas';
 
     renderSidebarMenu();
   } else {
@@ -1589,7 +1922,6 @@ function updateHeader() {
 function renderSidebarMenu() {
   const menu = document.getElementById('sidebarMenu');
   if (!state.session) { menu.innerHTML = ''; return; }
-
   if (state.session.role === 'guru') {
     menu.innerHTML = `
       <div class="sidebar-menu-item" onclick="goTo('screenSemester')"><span class="icon">🏠</span><span>Beranda</span></div>
@@ -1597,16 +1929,22 @@ function renderSidebarMenu() {
       <div class="sidebar-menu-item" onclick="renderRekap();goTo('screenRekap')"><span class="icon">📊</span><span>Rekap Nilai</span></div>
       <div class="sidebar-menu-item" onclick="renderBadges();goTo('screenBadges')"><span class="icon">🏅</span><span>Koleksi Badge</span></div>
       <div class="sidebar-menu-item" onclick="renderProfile();goTo('screenProfile')"><span class="icon">👤</span><span>Profil Guru</span></div>
-      <div class="sidebar-menu-item" onclick="handleLogout()"><span class="icon">🚪</span><span>Keluar</span></div>
+      <div class="sidebar-menu-item logout" onclick="handleLogout()"><span class="icon">🚪</span><span>Logout</span></div>
     `;
   } else {
     menu.innerHTML = `
       <div class="sidebar-menu-item" onclick="goTo('screenSemesterSiswa')"><span class="icon">🏠</span><span>Beranda</span></div>
       <div class="sidebar-menu-item" onclick="renderBadges();goTo('screenBadges')"><span class="icon">🏅</span><span>Koleksi Badge</span></div>
       <div class="sidebar-menu-item" onclick="renderProfile();goTo('screenProfile')"><span class="icon">👤</span><span>Profil Saya</span></div>
-      <div class="sidebar-menu-item" onclick="handleLogout()"><span class="icon">🚪</span><span>Keluar</span></div>
+      <div class="sidebar-menu-item logout" onclick="handleLogout()"><span class="icon">🚪</span><span>Logout</span></div>
     `;
   }
+}
+
+function openProfileFromHeader() {
+  if (!state.session) return;
+  renderProfile();
+  goTo('screenProfile');
 }
 
 /* =========================================================
@@ -1618,7 +1956,6 @@ function switchAuthTab(tab) {
   document.getElementById('loginSection').style.display = tab === 'login' ? 'block' : 'none';
   document.getElementById('registerSection').style.display = tab === 'register' ? 'block' : 'none';
 }
-
 function switchRole(role) {
   state.authRole = role;
   document.getElementById('roleTabGuru').classList.toggle('active', role === 'guru');
@@ -1627,12 +1964,8 @@ function switchRole(role) {
   document.getElementById('loginSiswaForm').style.display = role === 'siswa' ? 'block' : 'none';
 }
 
-/* =========================================================
-   REGISTRASI GURU
-   ========================================================= */
 function handleLogoUploadReg(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   processImage(file, 300, (dataUrl) => {
     state.tempRegLogo = dataUrl;
     updateUploadPreview('regUploadLogoPreview', 'regUploadLogoItem', dataUrl, '🏫');
@@ -1644,8 +1977,7 @@ function removeLogoReg() {
   document.getElementById('regLogoFile').value = '';
 }
 function handleTeacherUploadReg(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   processImage(file, 300, (dataUrl) => {
     state.tempRegTeacherPhoto = dataUrl;
     updateUploadPreview('regUploadTeacherPreview', 'regUploadTeacherItem', dataUrl, '👨‍🏫');
@@ -1669,30 +2001,20 @@ function handleRegisterGuru() {
   if (!pwd || pwd.length < 4) { alert('Password minimal 4 karakter!'); return; }
   if (pwd !== pwd2) { alert('Password tidak sama!'); return; }
 
-  const existing = state.teachers.find(t =>
-    t.nama.toLowerCase() === nama.toLowerCase() &&
-    t.sekolah.nama.toLowerCase() === sekolah.toLowerCase()
-  );
-  if (existing) { alert('Guru dengan nama "' + nama + '" di sekolah "' + sekolah + '" sudah terdaftar!'); return; }
+  const existing = state.teachers.find(t => t.nama.toLowerCase() === nama.toLowerCase() && t.sekolah.nama.toLowerCase() === sekolah.toLowerCase());
+  if (existing) { alert('Guru sudah terdaftar!'); return; }
 
   state.teachers.push({
-    id: generateId(),
-    nama, email, password: pwd,
+    id: generateId(), nama, email, password: pwd,
     sekolah: { nama: sekolah, logo: state.tempRegLogo || '' },
     foto: state.tempRegTeacherPhoto || '',
     createdAt: new Date().toISOString()
   });
   saveState();
 
-  document.getElementById('regNamaSekolah').value = '';
-  document.getElementById('regNamaGuru').value = '';
-  document.getElementById('regEmail').value = '';
-  document.getElementById('regPassword').value = '';
-  document.getElementById('regPassword2').value = '';
-  removeLogoReg();
-  removeTeacherPhotoReg();
-  state.tempRegLogo = '';
-  state.tempRegTeacherPhoto = '';
+  ['regNamaSekolah','regNamaGuru','regEmail','regPassword','regPassword2'].forEach(id => document.getElementById(id).value = '');
+  removeLogoReg(); removeTeacherPhotoReg();
+  state.tempRegLogo = ''; state.tempRegTeacherPhoto = '';
 
   alert('✅ Registrasi berhasil!\n\nLogin dengan:\nSekolah: ' + sekolah + '\nNama: ' + nama);
   switchAuthTab('login');
@@ -1701,9 +2023,6 @@ function handleRegisterGuru() {
   document.getElementById('loginGuruNama').value = nama;
 }
 
-/* =========================================================
-   LOGIN GURU
-   ========================================================= */
 function handleLoginGuru() {
   const sekolah = document.getElementById('loginGuruSekolah').value.trim();
   const nama = document.getElementById('loginGuruNama').value.trim();
@@ -1718,21 +2037,16 @@ function handleLoginGuru() {
     t.sekolah.nama.toLowerCase() === sekolah.toLowerCase() &&
     t.password === pwd
   );
-
   if (!teacher) { alert('❌ Login gagal! Nama, sekolah, atau password salah.'); return; }
 
   state.session = { role:'guru', userId: teacher.id, kelas:'' };
   saveState();
   updateHeader();
   document.getElementById('loginGuruPassword').value = '';
-
   renderPilihKelas();
   goTo('screenPilihKelas');
 }
 
-/* =========================================================
-   LOGIN SISWA
-   ========================================================= */
 function handleLoginSiswa() {
   const sekolah = document.getElementById('loginSiswaSekolah').value.trim();
   const nama = document.getElementById('loginSiswaNama').value.trim();
@@ -1742,9 +2056,7 @@ function handleLoginSiswa() {
   if (!nama) { alert('Nama siswa harus diisi!'); return; }
   if (!nisn) { alert('NISN harus diisi!'); return; }
 
-  let foundStudent = null;
-  let foundTeacher = null;
-  let foundKelas = null;
+  let foundStudent = null, foundTeacher = null, foundKelas = null;
 
   for (const teacher of state.teachers) {
     if (teacher.sekolah.nama.toLowerCase() === sekolah.toLowerCase()) {
@@ -1760,15 +2072,9 @@ function handleLoginSiswa() {
     if (foundStudent) break;
   }
 
-  if (!foundStudent) {
-    alert('❌ Login gagal! Nama & NISN tidak ditemukan di sekolah "' + sekolah + '".');
-    return;
-  }
+  if (!foundStudent) { alert('❌ Login gagal! Nama & NISN tidak ditemukan.'); return; }
 
-  let studentAccount = state.students.find(s =>
-    s.nama.toLowerCase() === nama.toLowerCase() && s.nisn === nisn && s.teacherId === foundTeacher.id
-  );
-
+  let studentAccount = state.students.find(s => s.nama.toLowerCase() === nama.toLowerCase() && s.nisn === nisn && s.teacherId === foundTeacher.id);
   if (!studentAccount) {
     studentAccount = {
       id: generateId(), nama: foundStudent.nama, nisn: foundStudent.nisn,
@@ -1781,11 +2087,7 @@ function handleLoginSiswa() {
   state.session = { role:'siswa', userId: studentAccount.id, teacherId: foundTeacher.id, kelas: foundKelas };
   saveState();
   updateHeader();
-
-  document.getElementById('loginSiswaSekolah').value = '';
-  document.getElementById('loginSiswaNama').value = '';
-  document.getElementById('loginSiswaNisn').value = '';
-
+  ['loginSiswaSekolah','loginSiswaNama','loginSiswaNisn'].forEach(id => document.getElementById(id).value = '');
   renderSemesterSiswa();
   goTo('screenSemesterSiswa');
 }
@@ -1802,9 +2104,6 @@ function handleLogout() {
   goTo('screenAuth');
 }
 
-/* =========================================================
-   PILIH KELAS
-   ========================================================= */
 function renderPilihKelas() {
   const teacher = getCurrentTeacher();
   if (!teacher) return;
@@ -1828,28 +2127,7 @@ function confirmPilihKelas() {
   goTo('screenSemester');
 }
 
-/* =========================================================
-   SISWA - SEMESTER
-   ========================================================= */
-function renderSemesterSiswa() {
-  const teacher = getCurrentTeacher();
-  const student = getCurrentStudent();
-  if (!teacher || !student) return;
-
-  document.getElementById('welcomeSchoolSiswa').textContent = teacher.sekolah.nama;
-  const wls = document.getElementById('welcomeLogoSiswa');
-  if (teacher.sekolah.logo) wls.innerHTML = `<img src="${teacher.sekolah.logo}" alt="Logo">`;
-  else wls.innerHTML = `<span class="placeholder">🏫</span>`;
-
-  const wsp = document.getElementById('welcomeStudentPhoto');
-  if (student.foto) wsp.innerHTML = `<img src="${student.foto}" alt="Siswa">`;
-  else wsp.innerHTML = `<span class="placeholder">👨‍🎓</span>`;
-  document.getElementById('welcomeStudentName').textContent = student.nama;
-
-  const cd = getActiveClassData();
-  document.getElementById('siswaClassName').textContent = student.kelas;
-  document.getElementById('siswaClassMeta').textContent = 'Guru: ' + teacher.nama + ' • ' + (cd.students || []).length + ' siswa di kelas';
-}
+function renderSemesterSiswa() { updateHeader(); }
 
 function openSemesterSiswa(sem) {
   state.currentSemester = sem;
@@ -1861,63 +2139,24 @@ function openSemesterSiswa(sem) {
 function renderLevelsSiswa(sem) {
   document.getElementById('levelMapTitle').textContent = 'Semester ' + sem + ' • Materi & Kuis';
   document.getElementById('btnBackFromLevels').setAttribute('onclick', "goTo('screenSemesterSiswa')");
-  const list = document.getElementById('levelList');
-  const cd = getActiveClassData();
-  const babs = DATA[sem];
-  list.innerHTML = '';
-  babs.forEach((bab, i) => {
-    const unlocked = isBabUnlocked(sem, i);
-    const hasRead = !!cd.readBabs[bab.id];
-    const completed = !!cd.completed[bab.id];
-    const div = document.createElement('div');
-    let cls = 'level-item';
-    if (!unlocked) cls += ' locked';
-    else if (completed) cls += ' completed';
-    else if (hasRead) cls += ' read';
-    div.className = cls;
-
-    let tag = '';
-    if (completed) tag = '<div class="level-tag tag-done">✓ LULUS</div>';
-    else if (hasRead) tag = '<div class="level-tag tag-read">✓ DIBACA</div>';
-
-    div.innerHTML = `
-      ${tag}
-      <div class="level-circle">${unlocked ? (completed ? '🏆' : (hasRead ? '✓' : i+1)) : '🔒'}</div>
-      <div class="level-info">
-        <h3>Level ${i+1}: ${bab.short}</h3>
-        <p>${bab.title}</p>
-        <div class="progress-bar"><div class="progress-fill" style="width:${completed?100:(hasRead?50:0)}%"></div></div>
-      </div>
-      <div class="level-status">${unlocked ? '▶' : ''}</div>
-    `;
-    if (unlocked) div.onclick = () => openBabSiswa(sem, i);
-    list.appendChild(div);
-  });
+  renderLevelList(sem);
 }
 
-function openBabSiswa(sem, index) {
-  openBab(sem, index);
-}
-
-/* =========================================================
-   LEVEL & MATERI (shared)
-   ========================================================= */
 function openSemester(sem) {
   state.currentSemester = sem;
   saveState();
   renderLevels(sem);
   goTo('screenLevels');
 }
+
 function isBabUnlocked(sem, index) {
   if (index === 0) return true;
   const cd = getActiveClassData();
   const prevBab = DATA[sem][index-1];
   return !!cd.readBabs[prevBab.id];
 }
-function renderLevels(sem) {
-  const isGuru = state.session && state.session.role === 'guru';
-  document.getElementById('levelMapTitle').textContent = 'Semester ' + sem + ' • Peta Level';
-  document.getElementById('btnBackFromLevels').setAttribute('onclick', isGuru ? "goTo('screenSemester')" : "goTo('screenSemesterSiswa')");
+
+function renderLevelList(sem) {
   const list = document.getElementById('levelList');
   const cd = getActiveClassData();
   const babs = DATA[sem];
@@ -1925,25 +2164,43 @@ function renderLevels(sem) {
   babs.forEach((bab, i) => {
     const unlocked = isBabUnlocked(sem, i);
     const hasRead = !!cd.readBabs[bab.id];
-    const completed = !!cd.completed[bab.id];
+    // Cek apakah semua level 1-4 sudah lulus
+    const allLevelsPassed = QUIZ_LEVELS.every(lv => {
+      const hist = cd.quizHistory.filter(h => h.babId === bab.id && h.level === lv.id);
+      // Lulus = ada yang sempurna dari siapa pun di kelas
+      return hist.some(h => h.score === h.total);
+    });
     const div = document.createElement('div');
     let cls = 'level-item';
     if (!unlocked) cls += ' locked';
-    else if (completed) cls += ' completed';
+    else if (allLevelsPassed) cls += ' completed';
     else if (hasRead) cls += ' read';
     div.className = cls;
 
     let tag = '';
-    if (completed) tag = '<div class="level-tag tag-done">✓ KUIS LULUS</div>';
-    else if (hasRead) tag = '<div class="level-tag tag-read">✓ SUDAH DIBACA</div>';
+    if (allLevelsPassed) tag = '<div class="level-tag tag-done">✓ MASTER</div>';
+    else if (hasRead) tag = '<div class="level-tag tag-read">✓ DIBACA</div>';
+
+    // Hitung progress level 1-4 untuk bab ini (untuk user aktif)
+    const userNama = (state.session && state.session.role === 'siswa') ? getCurrentStudent().nama : null;
+    const userNisn = (state.session && state.session.role === 'siswa') ? getCurrentStudent().nisn : null;
+    let levelProgressText = '';
+    if (hasRead) {
+      let passedCount = 0;
+      QUIZ_LEVELS.forEach(lv => {
+        const hist = cd.quizHistory.filter(h => h.babId === bab.id && h.level === lv.id && (userNama ? (h.studentName === userNama && h.studentNisn === userNisn) : true));
+        if (hist.some(h => h.score === h.total)) passedCount++;
+      });
+      levelProgressText = ` • ${passedCount}/4 level lulus`;
+    }
 
     div.innerHTML = `
       ${tag}
-      <div class="level-circle">${unlocked ? (completed ? '🏆' : (hasRead ? '✓' : i+1)) : '🔒'}</div>
+      <div class="level-circle">${unlocked ? (allLevelsPassed ? '🏆' : (hasRead ? '✓' : i+1)) : '🔒'}</div>
       <div class="level-info">
         <h3>Level ${i+1}: ${bab.short}</h3>
-        <p>${bab.title}</p>
-        <div class="progress-bar"><div class="progress-fill" style="width:${completed?100:(hasRead?50:0)}%"></div></div>
+        <p>${bab.title}${levelProgressText}</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:${allLevelsPassed?100:(hasRead?50:0)}%"></div></div>
       </div>
       <div class="level-status">${unlocked ? '▶' : ''}</div>
     `;
@@ -1952,6 +2209,16 @@ function renderLevels(sem) {
   });
 }
 
+function renderLevels(sem) {
+  const isGuru = state.session && state.session.role === 'guru';
+  document.getElementById('levelMapTitle').textContent = 'Semester ' + sem + ' • Peta Level';
+  document.getElementById('btnBackFromLevels').setAttribute('onclick', isGuru ? "goTo('screenSemester')" : "goTo('screenSemesterSiswa')");
+  renderLevelList(sem);
+}
+
+/* =========================================================
+   MATERI + LEVEL QUIZ PICKER
+   ========================================================= */
 function openBab(sem, index) {
   const bab = DATA[sem][index];
   state.currentBab = {sem, index};
@@ -1969,41 +2236,64 @@ function openBab(sem, index) {
   btnDone.textContent = hasRead ? '✅ Materi Sudah Dibaca' : '✅ Selesai Membaca';
   btnDone.disabled = hasRead;
 
-  const btnQuiz = document.getElementById('btnStartQuiz');
-  if (state.session && state.session.role === 'siswa') {
-    btnQuiz.textContent = '📝 Mulai Kuis Sekarang';
-    btnQuiz.setAttribute('onclick', 'startQuizSiswa()');
-  } else {
-    btnQuiz.textContent = '📝 Ikuti Kuis (Pilih Siswa)';
-    btnQuiz.setAttribute('onclick', 'promptStudentData()');
-  }
+  // Render level kuis picker
+  renderQuizLevelPicker(bab, cd);
 
   goTo('screenMaterial');
+}
+
+function renderQuizLevelPicker(bab, cd) {
+  const grid = document.getElementById('quizLevelGrid');
+  const isSiswa = state.session.role === 'siswa';
+  const studentName = isSiswa ? getCurrentStudent().nama : null;
+  const studentNisn = isSiswa ? getCurrentStudent().nisn : null;
+
+  grid.innerHTML = QUIZ_LEVELS.map(lv => {
+    const questions = bab.levels[lv.id];
+    // Statistik untuk level ini
+    let attempts = 0, passed = 0, bestScore = 0;
+    if (isSiswa) {
+      const hist = cd.quizHistory.filter(h => h.babId === bab.id && h.studentName === studentName && h.studentNisn === studentNisn && h.level === lv.id);
+      attempts = hist.length;
+      passed = hist.filter(h => h.score === h.total).length;
+      bestScore = hist.length > 0 ? Math.max(...hist.map(h => h.score)) : 0;
+    } else {
+      const hist = cd.quizHistory.filter(h => h.babId === bab.id && h.level === lv.id);
+      attempts = hist.length;
+      passed = hist.filter(h => h.score === h.total).length;
+      const best = hist.reduce((m, h) => Math.max(m, h.score), 0);
+      bestScore = best;
+    }
+
+    return `
+      <div class="quiz-level-card ${lv.cls}" onclick="startQuizLevel(${lv.id})">
+        <div class="qlc-header">
+          <span class="qlc-level">${lv.name}</span>
+          <span class="qlc-diff">${lv.diff}</span>
+        </div>
+        <div class="qlc-title">${questions.length} Soal</div>
+        <div class="qlc-desc">${lv.desc}</div>
+        <div class="qlc-stats">
+          <div class="qlc-stat attempts">🔁 <b>${attempts}x</b> dikerjakan</div>
+          <div class="qlc-stat pass">✓ <b>${passed}x</b> lulus</div>
+          <div class="qlc-stat">🎯 Best: <b>${bestScore}/${questions.length}</b></div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 function markAsRead() {
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
   const cd = getActiveClassData();
-
-  if (!cd.readBabs[bab.id]) {
-    cd.readBabs[bab.id] = true;
-    cd.xp += 5;
-    saveState();
-    updateHeader();
-  }
-
+  if (!cd.readBabs[bab.id]) { cd.readBabs[bab.id] = true; cd.xp += 5; saveState(); updateHeader(); }
   const isLast = (index === DATA[sem].length - 1);
   showToast(isLast ? '🎉 Semua materi Semester ' + sem + ' selesai!' : '✅ Bab selesai! Bab berikutnya terbuka.');
-
   setTimeout(() => {
-    if (state.session && state.session.role === 'siswa') {
-      renderLevelsSiswa(sem);
-      goTo('screenLevels');
-    } else {
-      renderLevels(sem);
-      goTo('screenLevels');
-    }
+    if (state.session && state.session.role === 'siswa') renderLevelsSiswa(sem);
+    else renderLevels(sem);
+    goTo('screenLevels');
   }, 900);
 }
 
@@ -2027,7 +2317,6 @@ function renderManageStudents() {
   document.getElementById('inputSiswaNisn').value = '';
   renderStudentList();
 }
-
 function renderStudentList() {
   const cd = getActiveClassData();
   const students = cd.students || [];
@@ -2039,16 +2328,12 @@ function renderStudentList() {
     container.innerHTML = `<div class="empty-list"><span class="emoji">👥</span><b>Belum ada siswa</b><br>Tambahkan siswa dengan nama dan NISN di atas.</div>`;
     return;
   }
-
   const sorted = [...students].sort((a, b) => a.nama.localeCompare(b.nama));
-
   container.innerHTML = sorted.map((s, i) => {
     const sudahKerja = cd.quizHistory.some(h => h.studentName === s.nama && h.studentNisn === s.nisn);
     const doneTag = sudahKerja ? '<span class="done-tag">✓ Sudah Kuis</span>' : '';
     const studentAccount = state.students.find(sa => sa.nisn === s.nisn && sa.nama === s.nama);
-    const avatar = studentAccount && studentAccount.foto
-      ? `<img src="${studentAccount.foto}" alt="Siswa">`
-      : `<span>👨‍🎓</span>`;
+    const avatar = studentAccount && studentAccount.foto ? `<img src="${studentAccount.foto}" alt="Siswa">` : `<span>👨‍🎓</span>`;
     return `
       <div class="student-list-item">
         <div class="student-avatar-sm">${avatar}</div>
@@ -2061,43 +2346,27 @@ function renderStudentList() {
     `;
   }).join('');
 }
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-}
-function escapeJs(s) {
-  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
+function escapeJs(s) { return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 
 function addStudent() {
   const nama = document.getElementById('inputSiswaNama').value.trim();
   const nisn = document.getElementById('inputSiswaNisn').value.trim();
-  const kelas = state.session.kelas;
-
   if (!nama) { alert('Nama siswa harus diisi!'); return; }
   if (!nisn) { alert('NISN harus diisi!'); return; }
   if (!/^[0-9]+$/.test(nisn)) { alert('NISN hanya boleh angka!'); return; }
-
   const cd = getActiveClassData();
-  if (cd.students.some(s => s.nama.toLowerCase() === nama.toLowerCase())) {
-    alert('Siswa dengan nama "' + nama + '" sudah ada!'); return;
-  }
-  if (cd.students.some(s => s.nisn === nisn)) {
-    alert('NISN "' + nisn + '" sudah digunakan!'); return;
-  }
-
+  if (cd.students.some(s => s.nama.toLowerCase() === nama.toLowerCase())) { alert('Nama sudah ada!'); return; }
+  if (cd.students.some(s => s.nisn === nisn)) { alert('NISN sudah digunakan!'); return; }
   cd.students.push({ nama, nisn });
   saveState();
   updateHeader();
-
   document.getElementById('inputSiswaNama').value = '';
   document.getElementById('inputSiswaNisn').value = '';
   document.getElementById('inputSiswaNama').focus();
-
   showToast('✅ Siswa "' + nama + '" ditambahkan!');
   renderStudentList();
 }
-
 function deleteStudent(nama, nisn) {
   if (!confirm('Hapus siswa "' + nama + '"?')) return;
   const cd = getActiveClassData();
@@ -2109,61 +2378,68 @@ function deleteStudent(nama, nisn) {
 }
 
 /* =========================================================
-   KUIS
+   QUIZ - MULAI PER LEVEL
    ========================================================= */
-function promptStudentData() {
+function startQuizLevel(levelId) {
   const cd = getActiveClassData();
-  const students = cd.students || [];
-  if (students.length === 0) {
-    if (confirm('Belum ada siswa. Tambahkan siswa dulu?')) {
-      renderManageStudents();
-      goTo('screenManageStudents');
+  const isSiswa = state.session.role === 'siswa';
+
+  if (isSiswa) {
+    const student = getCurrentStudent();
+    state.currentStudent = { nama: student.nama, nisn: student.nisn, kelas: student.kelas };
+  } else {
+    // Guru memilih siswa
+    const students = cd.students || [];
+    if (students.length === 0) {
+      if (confirm('Belum ada siswa. Tambahkan dulu?')) { renderManageStudents(); goTo('screenManageStudents'); }
+      return;
     }
-    return;
+    const nama = prompt('Nama siswa yang mengerjakan kuis:');
+    if (!nama) return;
+    const nisn = prompt('NISN siswa:');
+    if (!nisn) return;
+    const found = students.find(s => s.nama.toLowerCase() === nama.toLowerCase() && s.nisn === nisn);
+    if (!found) { alert('❌ Siswa tidak ditemukan!'); return; }
+    state.currentStudent = { nama: found.nama, nisn: found.nisn, kelas: state.session.kelas };
   }
-  const nama = prompt('Masukkan nama siswa yang mengerjakan kuis:');
-  if (!nama) return;
-  const nisn = prompt('Masukkan NISN siswa:');
-  if (!nisn) return;
 
-  const found = students.find(s => s.nama.toLowerCase() === nama.toLowerCase() && s.nisn === nisn);
-  if (!found) { alert('❌ Siswa tidak ditemukan!'); return; }
-  startQuizWithStudent(found.nama, found.nisn, state.session.kelas);
-}
+  state.currentQuizLevel = levelId;
+  document.getElementById('quizStudentName').textContent = state.currentStudent.nama;
+  document.getElementById('quizStudentClass').textContent = state.currentStudent.kelas;
+  document.getElementById('quizStudentNisn').textContent = state.currentStudent.nisn;
 
-function startQuizSiswa() {
-  const student = getCurrentStudent();
-  if (!student) { alert('Session error!'); return; }
-  startQuizWithStudent(student.nama, student.nisn, student.kelas);
-}
+  const lv = QUIZ_LEVELS.find(l => l.id === levelId);
+  const badge = document.getElementById('quizLevelBadge');
+  badge.textContent = lv.name + ' • ' + lv.diff;
+  badge.className = 'quiz-level-badge ' + lv.cls;
+  document.getElementById('quizTitleBar').textContent = '📝 ' + lv.name + ' - ' + lv.diff;
 
-function startQuizWithStudent(nama, nisn, kelas) {
-  state.currentStudent = { nama, nisn, kelas };
-  document.getElementById('quizStudentName').textContent = nama;
-  document.getElementById('quizStudentClass').textContent = kelas;
-  document.getElementById('quizStudentNisn').textContent = nisn;
-  startQuizDirect();
+  state.quizIndex = 0; state.quizCorrect = 0; state.quizAnswered = false;
+  renderQuiz();
+  goTo('screenQuiz');
 }
 
 function startQuizDirect() {
   if (!state.currentBab) { goTo('screenLevels'); return; }
-  state.quizIndex = 0;
-  state.quizCorrect = 0;
-  state.quizAnswered = false;
+  state.quizIndex = 0; state.quizCorrect = 0; state.quizAnswered = false;
   renderQuiz();
   goTo('screenQuiz');
+}
+
+function confirmExitQuiz() {
+  if (confirm('Keluar dari kuis? Progress akan hilang.')) backToLevels();
 }
 
 function renderQuiz() {
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
-  const q = bab.questions[state.quizIndex];
-  const total = bab.questions.length;
+  const questions = bab.levels[state.currentQuizLevel];
+  const q = questions[state.quizIndex];
+  const total = questions.length;
 
   document.getElementById('quizStudentName').textContent = state.currentStudent.nama;
   document.getElementById('quizStudentClass').textContent = state.currentStudent.kelas;
   document.getElementById('quizStudentNisn').textContent = state.currentStudent.nisn;
-
   document.getElementById('quizProgress').textContent = `Soal ${state.quizIndex+1}/${total}`;
   document.getElementById('quizBarFill').style.width = ((state.quizIndex)/total*100) + '%';
   document.getElementById('quizQuestion').textContent = q.q;
@@ -2186,7 +2462,8 @@ function answerQuestion(selected) {
   state.quizAnswered = true;
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
-  const q = bab.questions[state.quizIndex];
+  const questions = bab.levels[state.currentQuizLevel];
+  const q = questions[state.quizIndex];
   const options = document.querySelectorAll('#quizOptions .option');
   options.forEach((opt, i) => {
     if (i === q.a) opt.classList.add('correct');
@@ -2194,13 +2471,12 @@ function answerQuestion(selected) {
   });
   const isCorrect = selected === q.a;
   if (isCorrect) state.quizCorrect++;
-
   showFeedback(isCorrect, () => {
     if (!isCorrect) {
       setTimeout(() => { alert('❌ Jawaban salah! Kuis diulang dari awal.'); startQuizDirect(); }, 200);
     } else {
       state.quizIndex++;
-      if (state.quizIndex >= bab.questions.length) finishQuiz();
+      if (state.quizIndex >= questions.length) finishQuiz();
       else renderQuiz();
     }
   });
@@ -2209,9 +2485,7 @@ function answerQuestion(selected) {
 /* =========================================================
    FEEDBACK WEBGL
    ========================================================= */
-let feedbackRenderer = null;
-let feedbackAnimId = null;
-
+let feedbackRenderer = null, feedbackAnimId = null;
 function showFeedback(isCorrect, callback) {
   const overlay = document.getElementById('feedbackOverlay');
   const container = document.getElementById('feedbackCanvas');
@@ -2231,7 +2505,6 @@ function showFeedback(isCorrect, callback) {
   scene.background = new THREE.Color(0x0a0a14);
   const camera = new THREE.PerspectiveCamera(50, width/height, 0.1, 100);
   camera.position.z = 5;
-
   const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -2240,21 +2513,16 @@ function showFeedback(isCorrect, callback) {
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.8));
   const dir = new THREE.DirectionalLight(0xffffff, 1);
-  dir.position.set(2,3,4);
-  scene.add(dir);
+  dir.position.set(2,3,4); scene.add(dir);
 
   const flagGroup = new THREE.Group();
-  const poleGeo = new THREE.CylinderGeometry(0.06,0.06,3,16);
-  const poleMat = new THREE.MeshStandardMaterial({color:0xcccccc, metalness:0.7, roughness:0.3});
-  flagGroup.add(new THREE.Mesh(poleGeo, poleMat));
-
+  flagGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,3,16), new THREE.MeshStandardMaterial({color:0xcccccc, metalness:0.7, roughness:0.3})));
   const flagWidth = 1.8, flagHeight = 1.2;
   const flagGeo = new THREE.PlaneGeometry(flagWidth, flagHeight, 20, 10);
   const flagMat = new THREE.MeshStandardMaterial({color:0xffffff, side:THREE.DoubleSide, roughness:0.8});
   const flag = new THREE.Mesh(flagGeo, flagMat);
   flag.position.set(flagWidth/2 + 0.05, 0.9, 0);
   flagGroup.add(flag);
-
   const colors = [];
   const pos = flagGeo.attributes.position;
   for (let i=0; i<pos.count; i++) {
@@ -2289,8 +2557,7 @@ function showFeedback(isCorrect, callback) {
   const starGeo = new THREE.ExtrudeGeometry(starShape, {depth:0.12, bevelEnabled:true, bevelSize:0.03, bevelThickness:0.03, bevelSegments:2});
   const starMat = new THREE.MeshStandardMaterial({color:0xffffff, metalness:0.5, roughness:0.3, emissive:0xffffcc, emissiveIntensity:0.4});
   const star = new THREE.Mesh(starGeo, starMat);
-  star.position.set(0,0,0.15);
-  pancasilaGroup.add(star);
+  star.position.set(0,0,0.15); pancasilaGroup.add(star);
 
   let crossGroup = null;
   if (!isCorrect) {
@@ -2332,10 +2599,7 @@ function showFeedback(isCorrect, callback) {
     cancelAnimationFrame(feedbackAnimId);
     scene.traverse(obj => {
       if (obj.geometry) obj.geometry.dispose();
-      if (obj.material) {
-        if (Array.isArray(obj.material)) obj.material.forEach(m=>m.dispose());
-        else obj.material.dispose();
-      }
+      if (obj.material) { if (Array.isArray(obj.material)) obj.material.forEach(m=>m.dispose()); else obj.material.dispose(); }
     });
     renderer.dispose();
     container.innerHTML = '';
@@ -2349,32 +2613,39 @@ function showFeedback(isCorrect, callback) {
 function finishQuiz() {
   const {sem, index} = state.currentBab;
   const bab = DATA[sem][index];
-  const total = bab.questions.length;
+  const questions = bab.levels[state.currentQuizLevel];
+  const total = questions.length;
   const correct = state.quizCorrect;
   const passed = correct === total;
   const cd = getActiveClassData();
 
   if (!cd.readBabs[bab.id]) cd.readBabs[bab.id] = true;
 
+  // CATAT ke quizHistory DENGAN LEVEL
   cd.quizHistory.push({
     studentName: state.currentStudent.nama,
     studentNisn: state.currentStudent.nisn,
     studentClass: state.currentStudent.kelas,
-    babId: bab.id,
-    babShort: bab.short,
-    babTitle: bab.title,
+    babId: bab.id, babShort: bab.short, babTitle: bab.title,
     semester: sem,
-    score: correct,
-    total: total,
+    level: state.currentQuizLevel,
+    levelName: QUIZ_LEVELS.find(l => l.id === state.currentQuizLevel).name,
+    levelDiff: QUIZ_LEVELS.find(l => l.id === state.currentQuizLevel).diff,
+    score: correct, total: total,
     date: new Date().toISOString(),
     teacherId: state.session.role === 'guru' ? state.session.userId : state.session.teacherId
   });
 
   if (passed) {
-    const alreadyCompleted = !!cd.completed[bab.id];
-    cd.completed[bab.id] = true;
-    if (!alreadyCompleted) {
-      cd.xp += total * 10;
+    // Cek apakah ini pertama kali lulus level ini untuk bab ini
+    const prevPassed = cd.quizHistory.filter(h =>
+      h.babId === bab.id && h.level === state.currentQuizLevel &&
+      h.studentName === state.currentStudent.nama && h.studentNisn === state.currentStudent.nisn &&
+      h.score === h.total
+    ).length > 1; // >1 karena yang barusan sudah masuk
+
+    if (!prevPassed) {
+      cd.xp += total * 10 * state.currentQuizLevel; // XP lebih besar untuk level lebih tinggi
       cd.pancasilaProgress = (cd.pancasilaProgress || 0) + 1;
       const badgeId = 'pancasila_' + cd.pancasilaProgress;
       if (!cd.badges.find(b => b.id === badgeId)) {
@@ -2384,36 +2655,37 @@ function finishQuiz() {
     saveState();
     updateHeader();
 
+    const lv = QUIZ_LEVELS.find(l => l.id === state.currentQuizLevel);
     document.getElementById('resultIcon').textContent = '🎉';
-    document.getElementById('resultTitle').textContent = 'Sempurna!';
+    document.getElementById('resultTitle').textContent = 'Sempurna! ' + lv.name + ' Lulus';
     document.getElementById('resultScore').textContent = correct + '/' + total;
-    document.getElementById('resultText').textContent = alreadyCompleted
+    document.getElementById('resultText').textContent = prevPassed
       ? 'Kuis sudah pernah diselesaikan sebelumnya.'
-      : 'Kamu mendapatkan ' + (total*10) + ' XP dan badge Pancasila!';
+      : 'Kamu mendapatkan ' + (total * 10 * state.currentQuizLevel) + ' XP dan badge Pancasila!';
     document.getElementById('btnRetryQuiz').style.display = 'block';
     goTo('screenResult');
-
-    if (!alreadyCompleted) setTimeout(() => showRewardModal(cd.pancasilaProgress), 500);
+    if (!prevPassed) setTimeout(() => showRewardModal(cd.pancasilaProgress), 500);
   } else {
     saveState();
     updateHeader();
     document.getElementById('resultIcon').textContent = '😅';
     document.getElementById('resultTitle').textContent = 'Belum Sempurna';
     document.getElementById('resultScore').textContent = correct + '/' + total;
-    document.getElementById('resultText').textContent = 'Untuk dapat badge, kamu harus menjawab semua soal dengan benar.';
+    document.getElementById('resultText').textContent = 'Untuk dapat badge, kamu harus menjawab semua soal dengan benar. Coba lagi!';
     document.getElementById('btnRetryQuiz').style.display = 'block';
     goTo('screenResult');
   }
 
   const isSiswa = state.session && state.session.role === 'siswa';
-  document.getElementById('btnResultBack').setAttribute('onclick', isSiswa ? "renderLevelsSiswa(state.currentSemester);goTo('screenLevels')" : "backToLevels()");
+  const backFn = isSiswa ? "renderLevelsSiswa(state.currentSemester);goTo('screenLevels')" : "backToLevels()";
+  document.getElementById('btnResultBack').setAttribute('onclick', backFn);
+  document.getElementById('btnResultBack2').setAttribute('onclick', backFn);
 }
 
 /* =========================================================
    MODAL REWARD
    ========================================================= */
-let rewardRenderer = null;
-let rewardAnimId = null;
+let rewardRenderer = null, rewardAnimId = null;
 function showRewardModal(count) {
   document.getElementById('rewardModal').classList.add('active');
   document.getElementById('rewardDesc').textContent = 'Kamu berhasil menggambar Pancasila secara utuh!';
@@ -2435,8 +2707,7 @@ function showRewardModal(count) {
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.8));
   const dir = new THREE.DirectionalLight(0xffffff, 1);
-  dir.position.set(2,3,4);
-  scene.add(dir);
+  dir.position.set(2,3,4); scene.add(dir);
 
   const group = new THREE.Group();
   const shape = new THREE.Shape();
@@ -2461,8 +2732,7 @@ function showRewardModal(count) {
   const starGeo = new THREE.ExtrudeGeometry(starShape, {depth:0.1, bevelEnabled:true, bevelSize:0.03, bevelThickness:0.03, bevelSegments:2});
   const starMat = new THREE.MeshStandardMaterial({color:0xffffff, metalness:0.5, roughness:0.3, emissive:0xffffcc, emissiveIntensity:0.5});
   const star = new THREE.Mesh(starGeo, starMat);
-  star.position.set(0,0,0.13);
-  group.add(star);
+  star.position.set(0,0,0.13); group.add(star);
   scene.add(group);
 
   let t = 0;
@@ -2478,16 +2748,10 @@ function showRewardModal(count) {
 function closeReward() {
   document.getElementById('rewardModal').classList.remove('active');
   if (rewardAnimId) cancelAnimationFrame(rewardAnimId);
-  if (rewardRenderer) {
-    rewardRenderer.dispose();
-    document.getElementById('badgeCanvasContainer').innerHTML = '';
-  }
+  if (rewardRenderer) { rewardRenderer.dispose(); document.getElementById('badgeCanvasContainer').innerHTML = ''; }
   renderBadges();
-  if (state.session && state.session.role === 'siswa') {
-    renderLevelsSiswa(state.currentSemester);
-  } else {
-    backToLevels();
-  }
+  if (state.session && state.session.role === 'siswa') renderLevelsSiswa(state.currentSemester);
+  else backToLevels();
   goTo('screenLevels');
 }
 
@@ -2500,11 +2764,8 @@ function renderBadges() {
   const cd = getActiveClassData();
   const totalBabs = DATA[1].length + DATA[2].length;
   const btnBack = document.getElementById('btnBackFromBadges');
-  if (state.session && state.session.role === 'siswa') {
-    btnBack.setAttribute('onclick', "goTo('screenSemesterSiswa')");
-  } else {
-    btnBack.setAttribute('onclick', "goTo('screenSemester')");
-  }
+  if (state.session && state.session.role === 'siswa') btnBack.setAttribute('onclick', "goTo('screenSemesterSiswa')");
+  else btnBack.setAttribute('onclick', "goTo('screenSemester')");
   for (let i=1; i<=totalBabs; i++) {
     const badgeId = 'pancasila_' + i;
     const earned = cd.badges.find(b => b.id === badgeId);
@@ -2518,79 +2779,226 @@ function renderBadges() {
 /* =========================================================
    REKAP
    ========================================================= */
+function switchRekapTab(tab) {
+  state.rekapTab = tab;
+  document.querySelectorAll('.rekap-tab').forEach((t, i) => {
+    const tabs = ['nilai','progress','riwayat'];
+    t.classList.toggle('active', tabs[i] === tab);
+  });
+  renderRekapContent();
+}
+
 function renderRekap() {
+  document.querySelectorAll('.rekap-tab').forEach((t, i) => {
+    const tabs = ['nilai','progress','riwayat'];
+    t.classList.toggle('active', tabs[i] === state.rekapTab);
+  });
+  renderRekapContent();
+}
+
+function renderRekapContent() {
   const cd = getActiveClassData();
   const kelasAktif = state.session ? state.session.kelas : '';
   const teacher = getCurrentTeacher();
   const container = document.getElementById('rekapContent');
-
   const history = cd.quizHistory || [];
   const students = cd.students || [];
 
-  let exportBtnHtml = `<button class="btn-success" style="margin-bottom:14px;" onclick="exportToExcel()">📥 Export ke Excel (.xlsx)</button>`;
+  const exportBtnHtml = `<button class="btn-success" style="margin-bottom:14px;" onclick="exportToExcel()">📥 Export ke Excel (.xlsx)</button>`;
 
-  if (history.length === 0) {
+  if (history.length === 0 && students.length === 0) {
     container.innerHTML = `
       <div class="info-banner">
         🏫 <b>${teacher ? teacher.sekolah.nama : '-'}</b><br>
         👨‍🏫 Guru: <b>${teacher ? teacher.nama : '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b>
       </div>
       ${exportBtnHtml}
-      <div class="rekap-empty">🎯<br><br><b>Belum Ada Nilai</b><br>Belum ada siswa yang mengerjakan kuis.</div>
+      <div class="rekap-empty">🎯<br><br><b>Belum Ada Data</b><br>Belum ada siswa / kuis.</div>
     `;
     return;
   }
 
-  const sortedHistory = [...history].sort((a,b) => new Date(b.date) - new Date(a.date));
+  if (state.rekapTab === 'nilai') {
+    renderRekapNilai(container, cd, teacher, kelasAktif, exportBtnHtml);
+  } else if (state.rekapTab === 'progress') {
+    renderRekapProgress(container, cd, teacher, kelasAktif, exportBtnHtml);
+  } else {
+    renderRekapRiwayat(container, cd, teacher, kelasAktif, exportBtnHtml);
+  }
+}
 
-  const studentBest = {};
-  history.forEach(h => {
-    const key = h.studentName + '|' + h.studentNisn;
-    if (!studentBest[key] || h.score > studentBest[key].score) studentBest[key] = h;
+// --- TAB NILAI (nilai terbaik per siswa per bab) ---
+function renderRekapNilai(container, cd, teacher, kelasAktif, exportBtnHtml) {
+  const history = cd.quizHistory || [];
+  const students = cd.students || [];
+
+  const allBabs = [
+    ...DATA[1].map(b => ({...b, sem:1})),
+    ...DATA[2].map(b => ({...b, sem:2}))
+  ];
+
+  // Untuk setiap siswa, untuk setiap bab, ambil nilai terbaik (semua level)
+  const rows = students.map((s, idx) => {
+    const babScores = {};
+    let totalScore = 0, totalAttempts = 0;
+    allBabs.forEach(bab => {
+      const hist = history.filter(h => h.studentName === s.nama && h.studentNisn === s.nisn && h.babId === bab.id);
+      totalAttempts += hist.length;
+      if (hist.length > 0) {
+        const best = hist.reduce((m, h) => h.score > m.score ? h : m, hist[0]);
+        babScores[bab.id] = best.score + '/' + best.total;
+        totalScore += best.score;
+      } else {
+        babScores[bab.id] = '-';
+      }
+    });
+    const avg = students.length > 0 ? Math.round((totalScore / (allBabs.length * 10)) * 100) : 0;
+    return { siswa: s, babScores, totalAttempts, avg };
   });
-  const uniqueStudents = Object.keys(studentBest).length;
-  const totalStudents = students.length;
-  const avgScore = Math.round(history.reduce((sum,h) => sum + (h.score/h.total*100), 0) / history.length);
-  const lulusCount = Object.values(studentBest).filter(h => h.score === h.total).length;
 
   container.innerHTML = `
     <div class="info-banner">
-      🏫 <b>${teacher ? teacher.sekolah.nama : '-'}</b><br>
-      👨‍🏫 Guru: <b>${teacher ? teacher.nama : '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b><br>
-      ${uniqueStudents} dari ${totalStudents} siswa sudah mengerjakan • ${history.length} total percobaan
+      🏫 <b>${teacher ? teacher.sekolah.nama : '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b><br>
+      👨‍🏫 Guru: <b>${teacher ? teacher.nama : '-'}</b> • ${students.length} siswa • ${history.length} total percobaan
     </div>
     ${exportBtnHtml}
-    <div class="rekap-summary">
-      <div class="rekap-stat"><div class="val">${avgScore}</div><div class="lbl">Rata-rata</div></div>
-      <div class="rekap-stat"><div class="val">${uniqueStudents}/${totalStudents}</div><div class="lbl">Siswa Ikut</div></div>
-      <div class="rekap-stat"><div class="val">${lulusCount}</div><div class="lbl">Lulus Sempurna</div></div>
-      <div class="rekap-stat"><div class="val">${history.length}</div><div class="lbl">Total Kuis</div></div>
-    </div>
-    <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">🏆 Nilai Terbaik Per Siswa</h3>
-    <table class="rekap-table">
-      <thead><tr><th>No</th><th>Nama</th><th>NISN</th><th>Nilai</th><th>Status</th></tr></thead>
+    <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">🏆 Nilai Terbaik Per Siswa (Semua Level)</h3>
+    <div style="overflow-x:auto;">
+    <table class="rekap-table" style="min-width:700px;">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nama</th>
+          <th>NISN</th>
+          <th>Percobaan</th>
+          ${allBabs.map(b => `<th style="font-size:9px;">${b.short.substring(0,10)}</th>`).join('')}
+          <th>Rata²</th>
+        </tr>
+      </thead>
       <tbody>
-        ${Object.values(studentBest).sort((a,b) => b.score - a.score).map((h, i) => {
-          const pct = Math.round(h.score/h.total*100);
-          const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
-          const status = h.score === h.total ? '<span class="rekap-badge-status badge-yes">✓ LULUS</span>' : '<span class="rekap-badge-status badge-no">✗ ULANG</span>';
-          return `<tr><td>${i+1}</td><td><b>${escapeHtml(h.studentName)}</b></td><td style="font-size:10px;color:#4fc3f7;">${escapeHtml(h.studentNisn||'-')}</td><td class="score-cell ${cls}">${h.score}/${h.total}</td><td>${status}</td></tr>`;
-        }).join('')}
+        ${rows.map((r, i) => `
+          <tr>
+            <td>${i+1}</td>
+            <td><b>${escapeHtml(r.siswa.nama)}</b></td>
+            <td style="font-size:10px;color:#4fc3f7;">${escapeHtml(r.siswa.nisn || '-')}</td>
+            <td style="font-size:10px;color:#ffd700;">${r.totalAttempts}x</td>
+            ${allBabs.map(b => {
+              const score = r.babScores[b.id];
+              let cls = '';
+              if (score !== '-') {
+                const [s, t] = score.split('/').map(Number);
+                const pct = Math.round(s/t*100);
+                cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
+              }
+              return `<td class="score-cell ${cls}" style="font-size:10px;">${score}</td>`;
+            }).join('')}
+            <td class="score-cell ${r.avg === 100 ? 'score-good' : (r.avg >= 60 ? 'score-mid' : 'score-low')}">${r.avg}%</td>
+          </tr>
+        `).join('')}
       </tbody>
     </table>
-    <h3 style="font-size:13px;color:#ffd700;margin:20px 0 8px;">🕒 Riwayat Semua Percobaan</h3>
-    <table class="rekap-table">
-      <thead><tr><th>Siswa</th><th>Bab</th><th>Nilai</th><th>Waktu</th></tr></thead>
+    </div>
+  `;
+}
+
+// --- TAB PROGRESS PER LEVEL (jumlah pengerjaan per level per siswa) ---
+function renderRekapProgress(container, cd, teacher, kelasAktif, exportBtnHtml) {
+  const history = cd.quizHistory || [];
+  const students = cd.students || [];
+
+  const allBabs = [
+    ...DATA[1].map(b => ({...b, sem:1})),
+    ...DATA[2].map(b => ({...b, sem:2}))
+  ];
+
+  // Buat tabel untuk setiap bab: baris = siswa, kolom = level 1-4, isi = jumlah percobaan (a/p)
+  let html = `
+    <div class="info-banner">
+      🏫 <b>${teacher ? teacher.sekolah.nama : '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b><br>
+      📈 Jumlah pengerjaan per level per siswa (a/p = attempts / passed sempurna)
+    </div>
+    ${exportBtnHtml}
+    <div class="rekap-tabs" style="margin-bottom:14px;">
+      <div class="rekap-tab active">🎯 Jumlah Pengerjaan Per Level</div>
+    </div>
+  `;
+
+  allBabs.forEach(bab => {
+    html += `<h3 style="font-size:13px;color:#ffd700;margin:18px 0 8px;">📚 ${bab.title}</h3>`;
+    html += `<div style="overflow-x:auto;"><table class="rekap-table" style="min-width:640px;">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nama Siswa</th>
+          <th>NISN</th>
+          ${QUIZ_LEVELS.map(lv => `<th style="text-align:center;font-size:9px;"><span class="level-badge-mini ${lv.cls}">${lv.name}</span><br>${lv.diff}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>`;
+
+    if (students.length === 0) {
+      html += `<tr><td colspan="7" style="text-align:center;color:#666;font-size:11px;">Belum ada siswa</td></tr>`;
+    } else {
+      students.forEach((s, i) => {
+        html += `<tr>
+          <td>${i+1}</td>
+          <td><b>${escapeHtml(s.nama)}</b></td>
+          <td style="font-size:10px;color:#4fc3f7;">${escapeHtml(s.nisn || '-')}</td>`;
+        QUIZ_LEVELS.forEach(lv => {
+          const hist = history.filter(h => h.studentName === s.nama && h.studentNisn === s.nisn && h.babId === bab.id && h.level === lv.id);
+          const attempts = hist.length;
+          const passed = hist.filter(h => h.score === h.total).length;
+          let color = attempts === 0 ? '#666' : (passed > 0 ? '#00e676' : '#ffd700');
+          html += `<td style="text-align:center;font-weight:700;color:${color};font-size:11px;">${attempts}x<br><span style="font-size:9px;color:#aaa;">${passed} lulus</span></td>`;
+        });
+        html += `</tr>`;
+      });
+    }
+    html += `</tbody></table></div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// --- TAB RIWAYAT (semua percobaan) ---
+function renderRekapRiwayat(container, cd, teacher, kelasAktif, exportBtnHtml) {
+  const history = cd.quizHistory || [];
+  const sortedHistory = [...history].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  container.innerHTML = `
+    <div class="info-banner">
+      🏫 <b>${teacher ? teacher.sekolah.nama : '-'}</b> • Kelas: <b>${kelasAktif || '-'}</b><br>
+      🕒 ${history.length} percobaan kuis tercatat
+    </div>
+    ${exportBtnHtml}
+    <h3 style="font-size:13px;color:#ffd700;margin:16px 0 8px;">🕒 Riwayat Semua Percobaan</h3>
+    <div style="overflow-x:auto;">
+    <table class="rekap-table" style="min-width:700px;">
+      <thead>
+        <tr><th>Waktu</th><th>Nama</th><th>NISN</th><th>Bab</th><th>Level</th><th>Nilai</th><th>Status</th></tr>
+      </thead>
       <tbody>
-        ${sortedHistory.slice(0, 30).map(h => {
+        ${sortedHistory.slice(0, 100).map(h => {
           const d = new Date(h.date);
           const tgl = d.toLocaleDateString('id-ID', {day:'2-digit', month:'short'}) + ' ' + d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
           const pct = Math.round(h.score/h.total*100);
           const cls = pct === 100 ? 'score-good' : (pct >= 60 ? 'score-mid' : 'score-low');
-          return `<tr><td><b>${escapeHtml(h.studentName)}</b></td><td style="font-size:10px;">${h.babShort}</td><td class="score-cell ${cls}">${h.score}/${h.total}</td><td style="font-size:9px;color:#888;">${tgl}</td></tr>`;
+          const lv = QUIZ_LEVELS.find(l => l.id === h.level) || QUIZ_LEVELS[0];
+          const status = h.score === h.total ? '<span class="rekap-badge-status badge-yes">✓ LULUS</span>' : '<span class="rekap-badge-status badge-no">✗ ULANG</span>';
+          return `<tr>
+            <td style="font-size:9px;color:#888;">${tgl}</td>
+            <td><b>${escapeHtml(h.studentName)}</b></td>
+            <td style="font-size:10px;color:#4fc3f7;">${escapeHtml(h.studentNisn||'-')}</td>
+            <td style="font-size:10px;">${h.babShort}</td>
+            <td><span class="level-badge-mini ${lv.cls}">${lv.name}</span></td>
+            <td class="score-cell ${cls}">${h.score}/${h.total}</td>
+            <td>${status}</td>
+          </tr>`;
         }).join('')}
       </tbody>
     </table>
+    </div>
+    ${sortedHistory.length > 100 ? '<p style="font-size:10px;color:#666;text-align:center;margin-top:10px;">Menampilkan 100 percobaan terbaru</p>' : ''}
   `;
 }
 
@@ -2607,39 +3015,62 @@ function exportToExcel() {
 
   if (history.length === 0 && students.length === 0) { alert('Belum ada data!'); return; }
 
+  const allBabs = [
+    ...DATA[1].map(b => ({...b, sem:1})),
+    ...DATA[2].map(b => ({...b, sem:2}))
+  ];
+
+  // SHEET 1: Daftar Siswa + nilai terbaik per bab
   const siswaRows = students.map((s, i) => {
-    const studentAccount = state.students.find(sa => sa.nisn === s.nisn && sa.nama === s.nama);
-    const nilaiTerbaik = history
-      .filter(h => h.studentName === s.nama && h.studentNisn === s.nisn)
-      .reduce((best, h) => (!best || h.score > best.score) ? h : best, null);
-    return {
-      'No': i+1, 'Nama Siswa': s.nama, 'NISN': s.nisn, 'Kelas': kelasAktif,
-      'Email': studentAccount ? (studentAccount.email || '-') : '-',
-      'Nilai Terbaik': nilaiTerbaik ? nilaiTerbaik.score + '/' + nilaiTerbaik.total : '-',
-      'Status': nilaiTerbaik ? (nilaiTerbaik.score === nilaiTerbaik.total ? 'LULUS' : 'BELUM LULUS') : 'Belum Kuis'
-    };
+    const row = { 'No': i+1, 'Nama Siswa': s.nama, 'NISN': s.nisn, 'Kelas': kelasAktif };
+    allBabs.forEach(bab => {
+      const hist = history.filter(h => h.studentName === s.nama && h.studentNisn === s.nisn && h.babId === bab.id);
+      row[bab.short] = hist.length > 0 ? Math.max(...hist.map(h => h.score)) + '/' + hist[0].total : '-';
+    });
+    const totalAttempts = history.filter(h => h.studentName === s.nama && h.studentNisn === s.nisn).length;
+    row['Total Percobaan'] = totalAttempts;
+    return row;
   });
 
+  // SHEET 2: Progress per level (jumlah pengerjaan per siswa per level per bab)
+  const progressRows = [];
+  students.forEach(s => {
+    allBabs.forEach(bab => {
+      const row = { 'Nama Siswa': s.nama, 'NISN': s.nisn, 'Bab': bab.short };
+      QUIZ_LEVELS.forEach(lv => {
+        const hist = history.filter(h => h.studentName === s.nama && h.studentNisn === s.nisn && h.babId === bab.id && h.level === lv.id);
+        row[lv.name + ' (' + lv.diff + ')'] = hist.length + 'x / ' + hist.filter(h => h.score === h.total).length + ' lulus';
+      });
+      progressRows.push(row);
+    });
+  });
+
+  // SHEET 3: Riwayat Kuis (dengan level)
   const riwayatRows = [...history].sort((a,b) => new Date(b.date) - new Date(a.date)).map((h, i) => {
     const d = new Date(h.date);
+    const lv = QUIZ_LEVELS.find(l => l.id === h.level) || {name:'-', diff:'-'};
     return {
       'No': i+1, 'Tanggal': d.toLocaleDateString('id-ID'), 'Waktu': d.toLocaleTimeString('id-ID'),
       'Nama Siswa': h.studentName, 'NISN': h.studentNisn || '-', 'Kelas': h.studentClass,
       'Bab': h.babShort || h.babTitle, 'Semester': h.semester,
+      'Level': lv.name, 'Kesulitan': lv.diff,
       'Skor': h.score, 'Total Soal': h.total, 'Nilai (%)': Math.round(h.score / h.total * 100),
       'Status': h.score === h.total ? 'LULUS' : 'ULANG'
     };
   });
 
+  // SHEET 4: Nilai Terbaik
   const studentBestMap = {};
   history.forEach(h => {
-    const key = h.studentName + '|' + h.studentNisn;
+    const key = h.studentName + '|' + h.studentNisn + '|' + h.babId;
     if (!studentBestMap[key] || h.score > studentBestMap[key].score) studentBestMap[key] = h;
   });
   const bestRows = Object.values(studentBestMap).sort((a, b) => b.score - a.score).map((h, i) => {
     const d = new Date(h.date);
+    const lv = QUIZ_LEVELS.find(l => l.id === h.level) || {name:'-', diff:'-'};
     return {
       'Ranking': i+1, 'Nama Siswa': h.studentName, 'NISN': h.studentNisn || '-',
+      'Bab': h.babShort, 'Level': lv.name, 'Kesulitan': lv.diff,
       'Nilai Terbaik': h.score + '/' + h.total,
       'Persentase': Math.round(h.score / h.total * 100) + '%',
       'Tanggal': d.toLocaleDateString('id-ID'),
@@ -2647,6 +3078,7 @@ function exportToExcel() {
     };
   });
 
+  // SHEET 5: Info
   const infoRows = [
     { 'Keterangan': 'Nama Sekolah', 'Nilai': teacher ? teacher.sekolah.nama : '-' },
     { 'Keterangan': 'Nama Guru', 'Nilai': teacher ? teacher.nama : '-' },
@@ -2658,24 +3090,20 @@ function exportToExcel() {
 
   const wb = XLSX.utils.book_new();
   const ws1 = XLSX.utils.json_to_sheet(siswaRows.length > 0 ? siswaRows : [{ 'Info': 'Belum ada siswa' }]);
-  const ws2 = XLSX.utils.json_to_sheet(riwayatRows.length > 0 ? riwayatRows : [{ 'Info': 'Belum ada riwayat kuis' }]);
-  const ws3 = XLSX.utils.json_to_sheet(bestRows.length > 0 ? bestRows : [{ 'Info': 'Belum ada nilai' }]);
-  const ws4 = XLSX.utils.json_to_sheet(infoRows);
+  const ws2 = XLSX.utils.json_to_sheet(progressRows.length > 0 ? progressRows : [{ 'Info': 'Belum ada progress' }]);
+  const ws3 = XLSX.utils.json_to_sheet(riwayatRows.length > 0 ? riwayatRows : [{ 'Info': 'Belum ada riwayat' }]);
+  const ws4 = XLSX.utils.json_to_sheet(bestRows.length > 0 ? bestRows : [{ 'Info': 'Belum ada nilai' }]);
+  const ws5 = XLSX.utils.json_to_sheet(infoRows);
 
-  ws1['!cols'] = [{wch:5},{wch:25},{wch:15},{wch:12},{wch:25},{wch:15},{wch:15}];
-  ws2['!cols'] = [{wch:5},{wch:12},{wch:10},{wch:25},{wch:15},{wch:12},{wch:25},{wch:10},{wch:8},{wch:10},{wch:10},{wch:12}];
-  ws3['!cols'] = [{wch:10},{wch:25},{wch:15},{wch:15},{wch:12},{wch:12},{wch:15}];
-  ws4['!cols'] = [{wch:30},{wch:40}];
-
-  XLSX.utils.book_append_sheet(wb, ws4, 'Info');
+  XLSX.utils.book_append_sheet(wb, ws5, 'Info');
   XLSX.utils.book_append_sheet(wb, ws1, 'Daftar Siswa');
-  XLSX.utils.book_append_sheet(wb, ws2, 'Riwayat Kuis');
-  XLSX.utils.book_append_sheet(wb, ws3, 'Nilai Terbaik');
+  XLSX.utils.book_append_sheet(wb, ws2, 'Progress Per Level');
+  XLSX.utils.book_append_sheet(wb, ws3, 'Riwayat Kuis');
+  XLSX.utils.book_append_sheet(wb, ws4, 'Nilai Terbaik');
 
   const tgl = new Date().toISOString().slice(0,10).replace(/-/g,'');
   const sekolahNama = teacher ? teacher.sekolah.nama.replace(/[^a-zA-Z0-9]/g,'_') : 'Sekolah';
   const fileName = `Nilai_PKn_Kelas11_${sekolahNama}_${kelasAktif.replace(/\s/g,'_')}_${tgl}.xlsx`;
-
   XLSX.writeFile(wb, fileName);
   showToast('✅ File Excel berhasil didownload!');
 }
@@ -2689,6 +3117,7 @@ function renderProfile() {
   const student = getCurrentStudent();
 
   if (state.session.role === 'guru') {
+    document.getElementById('profileTitle').textContent = '⚙️ Profil Guru';
     document.getElementById('profileGuruForm').style.display = 'block';
     document.getElementById('profileSiswaForm').style.display = 'none';
     document.getElementById('profileInfoBanner').innerHTML = '💡 Ubah data profil guru & sekolah Anda.';
@@ -2698,7 +3127,9 @@ function renderProfile() {
     document.getElementById('profPasswordGuru').value = '';
     document.getElementById('profilePhotoPlaceholder').textContent = '👨‍🏫';
     updateUploadPreview('profileUploadPreview', 'profileUploadItem', teacher.foto, '👨‍🏫');
+    updateUploadPreview('profileLogoPreview', 'profileLogoItem', teacher.sekolah.logo, '🏫');
   } else {
+    document.getElementById('profileTitle').textContent = '⚙️ Profil Saya';
     document.getElementById('profileGuruForm').style.display = 'none';
     document.getElementById('profileSiswaForm').style.display = 'block';
     document.getElementById('profileInfoBanner').innerHTML = '💡 Ubah data profil Anda. Foto profil akan muncul di beranda.';
@@ -2710,28 +3141,21 @@ function renderProfile() {
     updateUploadPreview('profileUploadPreview', 'profileUploadItem', student.foto, '👨‍🎓');
   }
 }
-
 function backFromProfile() {
   if (state.session && state.session.role === 'siswa') goTo('screenSemesterSiswa');
   else goTo('screenSemester');
 }
-
 function handleProfilePhotoUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   processImage(file, 300, (dataUrl) => {
-    if (state.session.role === 'guru') {
-      getCurrentTeacher().foto = dataUrl;
-    } else {
-      getCurrentStudent().foto = dataUrl;
-    }
+    if (state.session.role === 'guru') getCurrentTeacher().foto = dataUrl;
+    else getCurrentStudent().foto = dataUrl;
     saveState();
     updateUploadPreview('profileUploadPreview', 'profileUploadItem', dataUrl, state.session.role === 'guru' ? '👨‍🏫' : '👨‍🎓');
     updateHeader();
     showToast('📷 Foto profil diperbarui!');
   });
 }
-
 function removeProfilePhoto() {
   if (state.session.role === 'guru') {
     getCurrentTeacher().foto = '';
@@ -2740,11 +3164,26 @@ function removeProfilePhoto() {
     getCurrentStudent().foto = '';
     updateUploadPreview('profileUploadPreview', 'profileUploadItem', '', '👨‍🎓');
   }
-  saveState();
-  updateHeader();
+  saveState(); updateHeader();
   document.getElementById('profilePhotoFile').value = '';
 }
-
+function handleProfileLogoUpload(e) {
+  const file = e.target.files[0]; if (!file) return;
+  processImage(file, 300, (dataUrl) => {
+    getCurrentTeacher().sekolah.logo = dataUrl;
+    saveState();
+    updateUploadPreview('profileLogoPreview', 'profileLogoItem', dataUrl, '🏫');
+    updateHeader();
+    showToast('🏫 Logo sekolah diperbarui!');
+  });
+}
+function removeProfileLogo() {
+  getCurrentTeacher().sekolah.logo = '';
+  saveState();
+  updateUploadPreview('profileLogoPreview', 'profileLogoItem', '', '🏫');
+  updateHeader();
+  document.getElementById('profileLogoFile').value = '';
+}
 function saveProfile() {
   if (state.session.role === 'guru') {
     const teacher = getCurrentTeacher();
@@ -2752,26 +3191,13 @@ function saveProfile() {
     const namaGuru = document.getElementById('profNamaGuru').value.trim();
     const email = document.getElementById('profEmailGuru').value.trim();
     const newPwd = document.getElementById('profPasswordGuru').value;
-
     if (!namaSekolah) { alert('Nama sekolah tidak boleh kosong!'); return; }
     if (!namaGuru) { alert('Nama guru tidak boleh kosong!'); return; }
-
-    const dup = state.teachers.find(t =>
-      t.id !== teacher.id &&
-      t.nama.toLowerCase() === namaGuru.toLowerCase() &&
-      t.sekolah.nama.toLowerCase() === namaSekolah.toLowerCase()
-    );
+    const dup = state.teachers.find(t => t.id !== teacher.id && t.nama.toLowerCase() === namaGuru.toLowerCase() && t.sekolah.nama.toLowerCase() === namaSekolah.toLowerCase());
     if (dup) { alert('Sudah ada guru dengan nama & sekolah yang sama!'); return; }
-
-    teacher.sekolah.nama = namaSekolah;
-    teacher.nama = namaGuru;
-    teacher.email = email;
-    if (newPwd) {
-      if (newPwd.length < 4) { alert('Password minimal 4 karakter!'); return; }
-      teacher.password = newPwd;
-    }
-    saveState();
-    updateHeader();
+    teacher.sekolah.nama = namaSekolah; teacher.nama = namaGuru; teacher.email = email;
+    if (newPwd) { if (newPwd.length < 4) { alert('Password minimal 4 karakter!'); return; } teacher.password = newPwd; }
+    saveState(); updateHeader();
     showToast('✅ Profil guru tersimpan!');
     document.getElementById('profPasswordGuru').value = '';
   } else {
@@ -2779,23 +3205,14 @@ function saveProfile() {
     const nama = document.getElementById('profNamaSiswa').value.trim();
     const nisn = document.getElementById('profNisnSiswa').value.trim();
     const email = document.getElementById('profEmailSiswa').value.trim();
-
     if (!nama) { alert('Nama tidak boleh kosong!'); return; }
     if (!nisn) { alert('NISN tidak boleh kosong!'); return; }
     if (!/^[0-9]+$/.test(nisn)) { alert('NISN hanya boleh angka!'); return; }
-
     const cd = getActiveClassData();
     const studentInClass = cd.students.find(s => s.nama === student.nama && s.nisn === student.nisn);
-    if (studentInClass) {
-      studentInClass.nama = nama;
-      studentInClass.nisn = nisn;
-    }
-
-    student.nama = nama;
-    student.nisn = nisn;
-    student.email = email;
-    saveState();
-    updateHeader();
+    if (studentInClass) { studentInClass.nama = nama; studentInClass.nisn = nisn; }
+    student.nama = nama; student.nisn = nisn; student.email = email;
+    saveState(); updateHeader();
     showToast('✅ Profil siswa tersimpan!');
   }
 }
@@ -2810,11 +3227,8 @@ function processImage(file, maxSize, callback) {
     const img = new Image();
     img.onload = function() {
       let w = img.width, h = img.height;
-      if (w > h) {
-        if (w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; }
-      } else {
-        if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; }
-      }
+      if (w > h) { if (w > maxSize) { h = Math.round(h * maxSize / w); w = maxSize; } }
+      else { if (h > maxSize) { w = Math.round(w * maxSize / h); h = maxSize; } }
       const canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
       const ctx = canvas.getContext('2d');
@@ -2828,30 +3242,21 @@ function processImage(file, maxSize, callback) {
   reader.onerror = function() { alert('Gagal membaca file'); };
   reader.readAsDataURL(file);
 }
-
 function updateUploadPreview(previewId, itemId, dataUrl, emoji) {
   const preview = document.getElementById(previewId);
   const item = document.getElementById(itemId);
   if (!preview || !item) return;
-  if (dataUrl) {
-    preview.innerHTML = `<img src="${dataUrl}" alt="Preview">`;
-    item.classList.add('has-image');
-  } else {
-    preview.innerHTML = `<span class="placeholder">${emoji}</span>`;
-    item.classList.remove('has-image');
-  }
+  if (dataUrl) { preview.innerHTML = `<img src="${dataUrl}" alt="Preview">`; item.classList.add('has-image'); }
+  else { preview.innerHTML = `<span class="placeholder">${emoji}</span>`; item.classList.remove('has-image'); }
 }
-
 function goTo(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
+  updateHeader();
 }
 function backToLevels() {
-  if (state.session && state.session.role === 'siswa') {
-    renderLevelsSiswa(state.currentSemester);
-  } else {
-    renderLevels(state.currentSemester);
-  }
+  if (state.session && state.session.role === 'siswa') renderLevelsSiswa(state.currentSemester);
+  else renderLevels(state.currentSemester);
   goTo('screenLevels');
 }
 
@@ -2860,40 +3265,20 @@ function backToLevels() {
    ========================================================= */
 function init() {
   loadState();
-
   if (state.session) {
     if (state.session.role === 'guru') {
       const teacher = getCurrentTeacher();
-      if (teacher && state.session.kelas) {
-        updateHeader();
-        goTo('screenSemester');
-      } else if (teacher) {
-        updateHeader();
-        renderPilihKelas();
-        goTo('screenPilihKelas');
-      } else {
-        state.session = null;
-        saveState();
-        goTo('screenAuth');
-      }
+      if (teacher && state.session.kelas) { updateHeader(); goTo('screenSemester'); }
+      else if (teacher) { updateHeader(); renderPilihKelas(); goTo('screenPilihKelas'); }
+      else { state.session = null; saveState(); goTo('screenAuth'); }
     } else if (state.session.role === 'siswa') {
       const student = getCurrentStudent();
-      if (student) {
-        updateHeader();
-        renderSemesterSiswa();
-        goTo('screenSemesterSiswa');
-      } else {
-        state.session = null;
-        saveState();
-        goTo('screenAuth');
-      }
+      if (student) { updateHeader(); renderSemesterSiswa(); goTo('screenSemesterSiswa'); }
+      else { state.session = null; saveState(); goTo('screenAuth'); }
     }
-  } else {
-    goTo('screenAuth');
-  }
+  } else { goTo('screenAuth'); }
 
   updateHeader();
-
   document.getElementById('logoutBtn').onclick = handleLogout;
   document.getElementById('badgeDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
   document.getElementById('xpDisplay').onclick = () => { renderBadges(); goTo('screenBadges'); };
